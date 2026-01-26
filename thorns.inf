@@ -111,7 +111,7 @@ Object BellTower "Bell Tower"
           "West lies the path that to the small village nestled far down in the vale.";
         if (noun == e_obj)
           "East, you can make out the infirmary and its chapel near the cliffs,
-          and the dorter's small winow breaking the upper story wall.";
+          and the dorter's small window breaking the upper story wall.";
         if (noun == u_obj)
           "The great bell hangs above you, dark against the sky.";
         if (noun == d_obj)
@@ -124,25 +124,46 @@ Object BellTower "Bell Tower"
 
 Object -> Bell "bell"
   with
-    name 'bell' 'bronze' 'great',
+    ! name 'bell' 'bronze' 'great',
     description 
       "A bronze bell, green with age. Cast nearly two centuries ago, 
       its surface bears a Latin inscription: ~VOX DOMINI~",
+    parse_name [ w;
+      w = NextWord();
+      ! Match just "bell" or "bronze bell" or "great bell"
+      if (w == 'bell' or 'bronze' or 'great') {
+        if (w ~= 'bell') {
+          if (NextWord() ~= 'bell') return 0;
+          return 2;
+        }
+        return 1;
+      }
+      return 0;
+    ],
     before [;
-      Touch, Push, Pull:
-        <<Pull BellRope>>;
-      Take:
-        "The bell weighs more than you do.";
+      Touch, Pull, Attack, Push:
+        "The bell is far above you. You can only reach the rope.";
     ],
   has
     static scenery;
 
 Object -> BellRope "bell rope"
   with
-    name 'bell' 'rope' 'cord',
+    ! name 'bell' 'rope' 'cord',
     description 
       "The cord reaches up to the bell, far above. Ringing the bell yourself
       would earn severe punishment. That duty belongs to the bell-ringer, not to novices.",
+    parse_name [ w;
+      w = NextWord();
+      ! Match "rope", "cord", "bell rope", "bell cord"
+      if (w == 'bell') {
+        w = NextWord();
+        if (w == 'rope' or 'cord') return 2;
+        return 0;  ! "bell" alone doesn't match rope
+      }
+      if (w == 'rope' or 'cord') return 1;
+      return 0;
+    ],
     before [;
       Climb, Tie: 
         StartTimer(self, 3);
@@ -201,14 +222,16 @@ Object HighAltar "High Altar"
     description
       "The altar stands on a raised platform of worn stone. A simple wooden 
       cross rises above it--no gold, no jewels.^^
-      Behind the altar, three small chantry chapels stand in shadow. 
-      Behind a locked gate, narrow stair descends into darkness--the 
+      Behind the altar, three small chapels stand in shadow to the east. 
+      Behind a locked gate to the north, narrow stair descends into darkness--the 
       entrance to the crypt.",
     w_to Quire,
-    ne_to ChapelA,
-    e_to ChapelB,
-    se_to ChapelC,
+    ne_to FitzAlanChantry,
+    e_to LadyChapel,
+    se_to StJudeChapel,
     d_to CryptStairs,
+    n_to CryptStairs,
+    s_to Sacristy,
   has
     light;
 
@@ -245,43 +268,190 @@ Object -> AltarCloth "cloth"
   has
     static scenery;
 
-Object ChapelA "Chapel A"
+Object Sacristy "Sacristy"
   with
+    name 'sacristy' 'vestry',
     description
-      "",
-    sw_to HighAltar,
+      "A small room where vestments and sacred 
+      vessels are kept. Shelves hold neatly folded linens, spare candles, 
+      and the priory's few precious chalices. The smell of beeswax and 
+      old incense lingers.
+      Brother XXX-SACRIST maintains this space with meticulous care.",
+    n_to HighAltar,
   has
     light;
 
-Object ChapelB "Chapel B"
+Object FitzAlanChantry "FitzAlan Chantry"
   with
+    name 'fitzalan' 'chantry' 'family' 'arms',
     description
-      "",
+      "The FitzAlan family chantry, endowed long ago for 
+      masses. But the FitzAlans are gone now - their line ended in the 
+      pestilence - and no masses are said here anymore. Dust gathers on 
+      the simple stone altar.
+      The family arms are carved above: a red lion rampant on white.",
+    sw_to HighAltar,
     w_to HighAltar,
   has
     light;
 
-Object ChapelC "Chapel C"
+Object StJudeChapel "St Jude Chapel"
   with
-    description
-      "",
+    name 'st' 'saint' 'jude' 'chapel',
+    description [;
+      print "A small chapel dedicated to St Jude, patron of desperate causes. 
+      The stone floor before the altar is worn smooth - many desperate souls 
+      have knelt here over the centuries, praying for impossible things.
+      A crude painted wooden statue shows the saint with a staff.";
+      if (RoseHips in JudeAltar) {
+        print "^^Fresh red berries lie on the altar as an offering.";
+      }
+      rtrue;
+    ],
+    w_to HighAltar,
     nw_to HighAltar,
+    before [;
+      Pray: "You murmur a brief prayer to St Jude.";
+    ],
   has
-     light;
+    light;
+
+Object -> PrayerMat "prayer mat"
+  with
+    name 'prayer' 'mat' 'kneeler' 'cushion',
+    description
+      "A rough flax mat before the altar, worn thin by countless hours 
+      of kneeling. Someone has been using it recently - very recently.",
+    before [;
+      Take: "It belongs here.";
+      Enter: "You kneel briefly on the worn mat, then rise.";
+    ],
+  has
+    scenery static enterable supporter;
+
+Object -> JudeAltar "altar"
+  with
+    name 'altar' 'stone',
+    description [;
+      print "A simple stone altar, worn smooth by centuries of prayer.";
+      if (RoseHips in self) {
+        print " Someone has placed an offering of small red berries here.";
+      }
+      rtrue;
+    ],
+  has
+    supporter static scenery;
+
+Object -> -> RoseHips "berries"
+  with
+    name 'rose' 'hip' 'hips' 'rosehip' 'rosehips' 'berries' 'berry' 
+         'red' 'offering',
+    initial "Small red berries rest on the altar.",
+    description
+      "Small red seed pods.
+      Someone has carefully gathered these and placed them here as an offering. 
+      They're fresh - left within the last day or two.",
+    before [;
+      Take, Remove:
+        "They were left here as an offering. It would be wrong to take them.";
+      Eat, Taste: 
+        "You shouldn't eat an offering left for a saint.";
+      Smell: 
+        "A faint, sweet scent - like roses remembered.";
+    ],
+  has
+    ; ! Not edible - they're an offering
+
+Object -> JudeStatue "statue"
+  with
+    name 'statue' 'saint' 'st' 'jude' 'staff',
+    description
+      "A wooden statue of St Jude, simply carved and crudely painted. 
+      The saint holds a staff in one hand. His painted eyes seem to 
+      gaze down at those who kneel before him in desperation.",
+    before [;
+      Take, Push, Pull: "The statue is fixed to its niche.";
+    ],
+  has
+    scenery static;
+
+Object LadyChapel "Lady Chapel"
+  with
+    name 'lady' 'chapel' 'mary' 'virgin',
+    description
+      "The largest of the three chapels behind the altar, dedicated to 
+      the Blessed Virgin. A statue of Mary stands in a niche, 
+      her hands open in welcome. 
+      This chapel sees more use than the others - the brothers pray here 
+      for the priory's patroness, Our Lady of Thorns.",
+    w_to HighAltar,
+    before [;
+      Pray: "You make the sign of the cross and murmur an Ave Maria.";
+    ],
+  has
+    light;
+
+Object -> MaryStatue "statue"
+  with
+    name 'statue' 'mary' 'virgin' 'stone' 'blessed',
+    description
+      "A stone statue of the Blessed Virgin Mary. Her stone hands are 
+      open in a gesture of welcome and mercy. Her carved face is serene, 
+      weathered by the prayers of generations.^^
+      Carved into the stone below the statue:^^
+        @@32@@32BEATAE MARIAE MATRIS DEI^
+        @@32@@32(Blessed Mary, Mother of God)",
+    before [;
+      Take, Push, Pull: "The statue has stood here for two hundred years.";
+      Kiss: "You reverently kiss the hem of her stone robe.";
+    ],
+  has
+    scenery static animate;
 
 
 ! ================================================ West Wing
 
-Object NWCloister "NW Cloister"
+Global night_time = 1;
+Global morning = 0;
+
+class Cloister
   with
-    description
-      "",
-    s_to WCloister,
-    e_to Garth,
-    w_to PriorDoor
+    name 'cloister' 'arcade',
+    description [;
+      print 
+        "The cloister walk - a covered stone arcade surrounding the garth. 
+        Arched openings admit ";
+      if (night_time) {
+        print "cold night air and pale moonlight";
+      } else if (morning) {
+        print "morning light";
+      } else {
+        print "grey autumn daylight";
+      }
+      print ".^^";
+      self.cloister_detail();
+    ],
+    d_to Garth,
   has
     light;
 
+Cloister NCloister "Cloister (N)"
+  with
+    cloister_detail 
+      "The wall of the nave rises imposingly to the north.",
+    w_to NWCloister,
+    s_to Garth,
+    e_to NECloister;
+
+Cloister NWCloister "Cloister (NW)"
+  with
+    cloister_detail
+      "The wall of the nave rises imposingly to the north,
+      and an imposing door lies to the west.",
+    s_to WCloister,
+    e_to NCloister,
+    w_to PriorDoor;
+  
 Object -> PriorDoor "prior door"
   with
     name 'prior' 'door',
@@ -290,9 +460,9 @@ Object -> PriorDoor "prior door"
     door_to PriorsSolar,
     with_key PriorKey
   has
-    static door openable ~open lockable locked;
+    static scenery door openable ~open lockable locked;
 
-Object -> PriorKey "prior key"
+Object PriorKey "prior key"
   with
     name 'silver' 'key',
     description "";
@@ -317,19 +487,23 @@ Object Garth "Garth"
   with
     description
       "",
-    ne_to NECloister,
-    e_to ECloister,
-    se_to SECloister,
     nw_to NWCloister,
+    n_to NCloister,
+    ne_to NECloister,
     w_to WCloister,
     sw_to SWCloister,
+    s_to SCloister,
+    se_to SECloister,
+    e_to ECloister,
+    u_to
+      "Steps lead up in each of the eight directions.",
   has
      light;
 
-Object WCloister "W Cloister"
+Cloister WCloister "Cloister (W)"
   with
-    description
-      "",
+    cloister_detail
+      "The locutory lies the west.",
     s_to SWCloister,
     e_to Garth,
     w_to Locutory,
@@ -337,12 +511,12 @@ Object WCloister "W Cloister"
   has
     light;
 
-Object SWCloister "SW Cloister"
+Cloister SWCloister "Cloister (SW)"
   with
-    description
-      "",
+    cloister_detail
+      "The monk's gate lies to the west. The XXX-laver is to the south, right after the arcade turns to the east.",
     s_to Laver,
-    e_to Garth,
+    e_to SCloister,
     w_to Gate,
     n_to WCloister,
     se_to Refectory,
@@ -374,9 +548,20 @@ Object Refectory "Refectory"
     e_to SECloister,
     w_to Laver,
     nw_to SWCloister,
+    ne_to SECloister,
+    n_to NCloister,
     s_to Kitchen,
-  has
-    light;
+  ;
+
+Cloister SCloister "Cloister (S)"
+  with
+    cloister_detail
+      "The refectory lies to the south.",
+    n_to Garth,
+    w_to SWCloister,
+    e_to SECloister,
+    s_to Refectory,
+  ;
 
 Object Kitchen "Kitchen"
   with
@@ -389,38 +574,38 @@ Object Kitchen "Kitchen"
 
 ! ============================================= East Wing
 
-Object NECloister "NE Cloister"
+Cloister NECloister "Cloister (NE)"
   with
-    description
-      "",
+    cloister_detail
+      "An arched entrance to the church quire lies to the north.
+      The chapter house lies to th eat, and the day stairs to the dorm
+      head upward.",
     n_to Quire,
     e_to ChapterHouse,
-    w_to Garth,
+    w_to NCloister,
     u_to Dorm,
     s_to ECloister,
-  has
-     light;
+  ;
 
-Object ECloister "E Cloister"
+Cloister ECloister "Cloister (E)"
   with
-    description
-      "",
+    cloister_detail
+      "To the east is the entrance to the warmining room.",
     n_to NECloister,
     e_to WarmingRoom,
     w_to Garth,
     s_to SECloister,
-  has
-    light;
+  ;
 
-Object SECloister "SE Cloister"
+Cloister SECloister "Cloister (SE)"
   with
-    description
-      "",
+    cloister_detail
+      "The long slype lies to the east.",
     n_to ECloister,
     e_to Slype,
-    w_to Refectory,
-  has
-     light;
+    w_to SCloister,
+    sw_to Refectory,
+  ;
 
 Object ChapterHouse "Chapter House"
   with
