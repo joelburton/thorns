@@ -1,5 +1,5 @@
 Constant Story "Our Lady of Thorns";
-Constant Headline "^By A Trizbort User^^^";
+Constant Headline "^An interactive mystery.^^^";
 
 Include "Parser";
 Include "VerbLib";
@@ -8,459 +8,459 @@ Include "VerbLib";
 
 Object WestEntrance "West Entrance"
   with
-		description "",
-		e_to Nave,
-		w_to "Message",
-	has 
-		light;
+    description "",
+    e_to Nave,
+    w_to "Message",
+  has
+    light;
 
 Object Nave "Nave"
   with
-		description
-			"",
-		e_to Quire,
-		w_to WestEntrance,
-		u_to TowerStairs,
-	has
-		light;
+    description
+      "",
+    e_to Quire,
+    w_to WestEntrance,
+    u_to TowerStairs,
+  has
+    light;
 
 Object Quire "Quire"
-  with 
-		description
-			"",
-		s_to NECloister,
-		e_to HighAltar,
-		w_to Nave,
-		u_to NightStairs,
-   has
-	 	light;
+  with
+    description
+      "",
+    s_to NECloister,
+    e_to HighAltar,
+    w_to Nave,
+    u_to NightStairs,
+  has
+     light;
 
 Object HighAltar "High Altar"
-  with 
-		description
-			"",
-		w_to Quire,
-		ne_to ChapelA,
-		e_to ChapelB,
-		se_to ChapelC,
-		d_to CryptStairs,
-	has
-		light;
+  with
+    description
+      "",
+    w_to Quire,
+    ne_to ChapelA,
+    e_to ChapelB,
+    se_to ChapelC,
+    d_to CryptStairs,
+  has
+    light;
 
 Object -> CryptStairs "crypt stairs"
-	with
-		name 'crypt' 'gate',
-		description "",
-		door_dir d_to,
-		door_to Crypt,
-		with_key CryptStairsKey
-	has
-		static door openable lockable locked ~open;
+  with
+    name 'crypt' 'gate',
+    description "",
+    door_dir d_to,
+    door_to Crypt,
+    with_key CryptStairsKey
+  has
+    static door openable lockable locked ~open;
 
 Object CryptStairsKey "crypt stairs key"
-	with
-		name 'crypt' 'stairs' 'key';
+  with
+    name 'crypt' 'stairs' 'key';
 
 Object ChapelA "Chapel A"
   with
-		description
-			"",
-		sw_to HighAltar,
-	has
-		light;
+    description
+      "",
+    sw_to HighAltar,
+  has
+    light;
 
 Object ChapelB "Chapel B"
   with
-		description
-			"",
-		w_to HighAltar,
-	has
-		light;
+    description
+      "",
+    w_to HighAltar,
+  has
+    light;
 
 Object ChapelC "Chapel C"
   with
-		description
-			"",
-		nw_to HighAltar,
-	has
-	 	light;
+    description
+      "",
+    nw_to HighAltar,
+  has
+     light;
 
 Object TowerStairs "Tower Stairs"
-	with
-		description "",
-		d_to Nave,
-		u_to BellTower,
-	has
-		light;
+  with
+    description "",
+    d_to Nave,
+    u_to BellTower,
+  has
+    light;
 
 Object BellTower "Bell Tower"
-	with
-		description "",
-		d_to TowerStairs,
-	has 
-		light;
+  with
+    description "",
+    d_to TowerStairs,
+  has
+    light;
 
 ! ================================================ West Wing
 
 Object NWCloister "NW Cloister"
   with
-		description
-			"",
-		s_to WCloister,
-		e_to Garth,
-		w_to PriorDoor
-	has
-		light;
+    description
+      "",
+    s_to WCloister,
+    e_to Garth,
+    w_to PriorDoor
+  has
+    light;
 
 Object -> PriorDoor "prior door"
-	with
-		name 'prior' 'door',
-		description "",
-		door_dir w_to,
-		door_to PriorsSolar,
-		with_key PriorKey
-	has 
-		static door openable ~open lockable locked;
+  with
+    name 'prior' 'door',
+    description "",
+    door_dir w_to,
+    door_to PriorsSolar,
+    with_key PriorKey
+  has
+    static door openable ~open lockable locked;
 
 Object -> PriorKey "prior key"
-	with 
-		name 'silver' 'key',
-		description "";
+  with
+    name 'silver' 'key',
+    description "";
 
 Object PriorsSolar "Prior's Solar"
   with
-		description
-			"",
-		e_to NWCloister,
+    description
+      "",
+    e_to NWCloister,
    has
-	 	light;
+     light;
 
 Object Locutory "Locutory"
   with
-		description
-			"",
-		e_to WCloister,
-	has
-		light;
+    description
+      "",
+    e_to WCloister,
+  has
+    light;
 
 Object Garth "Garth"
   with
-		description
-			"",
-		ne_to NECloister,
-		e_to ECloister,
-		se_to SECloister,
-		nw_to NWCloister,
-		w_to WCloister,
-		sw_to SWCloister,
-	has
-	 	light;
+    description
+      "",
+    ne_to NECloister,
+    e_to ECloister,
+    se_to SECloister,
+    nw_to NWCloister,
+    w_to WCloister,
+    sw_to SWCloister,
+  has
+     light;
 
 Object WCloister "W Cloister"
   with
-		description
-			"",
-		s_to SWCloister,
-		e_to Garth,
-		w_to Locutory,
-		n_to NWCloister,
-	has
-		light;
+    description
+      "",
+    s_to SWCloister,
+    e_to Garth,
+    w_to Locutory,
+    n_to NWCloister,
+  has
+    light;
 
 Object SWCloister "SW Cloister"
-  with 
-		description
-			"",
-		s_to Laver,
-		e_to Garth,
-		w_to Gate,
-		n_to WCloister,
-		se_to Refectory,
-	has
-	 	light;
+  with
+    description
+      "",
+    s_to Laver,
+    e_to Garth,
+    w_to Gate,
+    n_to WCloister,
+    se_to Refectory,
+  has
+     light;
 
 Object Gate "Gate"
   with
-		description
-			"",
-		e_to SWCloister,
-		w_to "Message",
-	has
-	 	light;
+    description
+      "",
+    e_to SWCloister,
+    w_to "Message",
+  has
+     light;
 
 Object Laver "Laver"
   with
-		description
-			"",
-		n_to SWCloister,
-		e_to Refectory,
-	has
-	 	light;
+    description
+      "",
+    n_to SWCloister,
+    e_to Refectory,
+  has
+     light;
 
 Object Refectory "Refectory"
   with
-		description
-			"",
-		e_to SECloister,
-		w_to Laver,
-		nw_to SWCloister,
-		s_to Kitchen,
-	has
-		light;
+    description
+      "",
+    e_to SECloister,
+    w_to Laver,
+    nw_to SWCloister,
+    s_to Kitchen,
+  has
+    light;
 
 Object Kitchen "Kitchen"
   with
-		description
-			"",
-		n_to Refectory,
-		d_to Undercroft,
-	has
-		light;
+    description
+      "",
+    n_to Refectory,
+    d_to Undercroft,
+  has
+    light;
 
 ! ============================================= East Wing
 
 Object NECloister "NE Cloister"
-  with 
-		description
-			"",
-		n_to Quire,
-		e_to ChapterHouse,
-		w_to Garth,
-		u_to Dorm,
-		s_to ECloister,
-	has
-	 	light;
+  with
+    description
+      "",
+    n_to Quire,
+    e_to ChapterHouse,
+    w_to Garth,
+    u_to Dorm,
+    s_to ECloister,
+  has
+     light;
 
 Object ECloister "E Cloister"
   with
-		description
-			"",
-		n_to NECloister,
-		e_to WarmingRoom,
-		w_to Garth,
-		s_to SECloister,
-	has
-		light;
+    description
+      "",
+    n_to NECloister,
+    e_to WarmingRoom,
+    w_to Garth,
+    s_to SECloister,
+  has
+    light;
 
 Object SECloister "SE Cloister"
   with
-		description
-			"",
-		n_to ECloister,
-		e_to Slype,
-		w_to Refectory,
-	has
-	 	light;
+    description
+      "",
+    n_to ECloister,
+    e_to Slype,
+    w_to Refectory,
+  has
+     light;
 
 Object ChapterHouse "Chapter House"
   with
-		description
-			"",
-		w_to NECloister,
-	has
-		light;
+    description
+      "",
+    w_to NECloister,
+  has
+    light;
 
 Object WarmingRoom "Warming Room"
   with
-		description
-			"",
-		w_to ECloister,
-		e_to Scriptorium,
-	has
-		light;
+    description
+      "",
+    w_to ECloister,
+    e_to Scriptorium,
+  has
+    light;
 
 Object Scriptorium "Scriptorium"
   with
-		description
-			"",
-		n_to LibraryDoor,
-		w_to WarmingRoom,
-	has
-	 	light;
+    description
+      "",
+    n_to LibraryDoor,
+    w_to WarmingRoom,
+  has
+     light;
 
 Object -> LibraryDoor "library door"
-	with
-		name 'library' 'door',
-		description "",
-		door_dir n_to,
-		door_to Library,
-		with_key LibraryKey
-	has
-		static door openable ~open lockable locked;
+  with
+    name 'library' 'door',
+    description "",
+    door_dir n_to,
+    door_to Library,
+    with_key LibraryKey
+  has
+    static door openable ~open lockable locked;
 
 Object Library "Library"
   with
-		description
-			"",
-		s_to Scriptorium,
-		d_to SecretStairs,
-	has
-		light;
+    description
+      "",
+    s_to Scriptorium,
+    d_to SecretStairs,
+  has
+    light;
 
 Object LibraryKey "library key"
-	with name 'heavy' 'key';
+  with name 'heavy' 'key';
 
 Object SecretStairs "Secret Stairs"
-	with
-		description "",
-		w_to Crypt,
-		u_to Library,
-	has 
-		light;
+  with
+    description "",
+    w_to Crypt,
+    u_to Library,
+  has
+    light;
 
 Object Slype "Slype"
   with
-		description
-			"",
-		s_to HerbalistWorkroom,
-		e_to Infirmary,
-		w_to SECloister,
-	has
-	 	light;
+    description
+      "",
+    s_to HerbalistWorkroom,
+    e_to Infirmary,
+    w_to SECloister,
+  has
+     light;
 
 Object Infirmary "Infirmary"
   with
-		description
-			"",
-		s_to InfirmaryChapel,
-		w_to Slype,
-	has
-		light;
+    description
+      "",
+    s_to InfirmaryChapel,
+    w_to Slype,
+  has
+    light;
 
 Object InfirmaryChapel "Infirmary Chapel"
   with
-		description
-			"",
-		n_to Infirmary,
-	has  
-		light;
+    description
+      "",
+    n_to Infirmary,
+  has
+    light;
 
 Object HerbalistWorkroom "Herbalist Workroom"
   with
-		description
-			"",
-		n_to Slype,
-		s_to Garden,
+    description
+      "",
+    n_to Slype,
+    s_to Garden,
    has
-	 	light;
+     light;
 
 Object Garden "Garden"
-  with 
-		description
-			"",
-		n_to HerbalistWorkroom,
+  with
+    description
+      "",
+    n_to HerbalistWorkroom,
    has
-	 	light;
+     light;
 
 Object -> GardenGate "garden gate"
-	with
-		description "",
-		door_dir s_to,
-		door_to RestrictedGarden,
-		with_key GardenGateKey
-	has
-		static door openable locked lockable;
+  with
+    description "",
+    door_dir s_to,
+    door_to RestrictedGarden,
+    with_key GardenGateKey
+  has
+    static door openable locked lockable;
 
 Object GardenGateKey "garden gate key";
 
 Object RestrictedGarden "Restricted Garden"
-	with 
-		description "",
-		n_to Garden
-	has 
-		light;
-		
+  with
+    description "",
+    n_to Garden
+  has
+    light;
+
 ! ================================================ Basement
 
 Object CellarerChamber "Cellarer Chamber"
-  with 
-		description
-			"",
-		s_to Undercroft,
-	has
-	 	light;
+  with
+    description
+      "",
+    s_to Undercroft,
+  has
+     light;
 
 Object Undercroft "Undercroft"
   with
-		description
-			"",
-		n_to CellarerChamber,
-		u_to Kitchen,
-	has
-	 	light;
+    description
+      "",
+    n_to CellarerChamber,
+    u_to Kitchen,
+  has
+     light;
 
 Object Crypt "Crypt"
   with
-		description
-			"",
-		u_to HighAltar,
-		e_to SecretStairs,
-	has
-		light;
+    description
+      "",
+    u_to HighAltar,
+    e_to SecretStairs,
+  has
+    light;
 
 ! ============================================== Second Floor
 
 Object Dorter "Dorter"
-	with
-		description "",
-		n_to Dorm,
-		s_to LayCells,
-		d_to NECloister,
-		w_to DorterWindow
-	has 
-		light;
+  with
+    description "",
+    n_to Dorm,
+    s_to LayCells,
+    d_to NECloister,
+    w_to DorterWindow
+  has
+    light;
 
 Object -> DorterWindow "window"
-	with
-		when_closed "The opening is shuttered.",
-		when_open "You can see the roof.",
-		door_to Rooftop,
-		door_dir w_to,
-	has 
-		static door openable;	
+  with
+    when_closed "The opening is shuttered.",
+    when_open "You can see the roof.",
+    door_to Rooftop,
+    door_dir w_to,
+  has
+    static door openable;
 
 Object Rooftop "Rooftop"
-	with
-		description "",
-		e_to Dorter;
+  with
+    description "",
+    e_to Dorter;
 
 Object Dorm "Dorm"
-  with  
-		description
-			"",
-		e_to Reredorter,
-		s_to Dorter,
-		d_to NightStairs,	
-	has
-		light;
+  with
+    description
+      "",
+    e_to Reredorter,
+    s_to Dorter,
+    d_to NightStairs,
+  has
+    light;
 
 Object NightStairs "Night Stairs"
-	with
-		description "",
-		d_to Quire,
-		u_to Dorm;
+  with
+    description "",
+    d_to Quire,
+    u_to Dorm;
 
 Object Reredorter "Reredorter"
-  with 
-		description
-		"",
-		w_to Dorm,
-	has
-		light;
+  with
+    description
+    "",
+    w_to Dorm,
+  has
+    light;
 
 Object LayCells "Lay cells"
   with
-		description
-			"",
-	 	n_to Dorter,
-   has 
-	 	light;
+    description
+      "",
+     n_to Dorter,
+   has
+     light;
 
 ! =============================================== Gamr
 
 [ Initialise;
     location = WestEntrance;
-		give player light;
+    give player light;
     ! "^^Your opening paragraph here...^^";
 ];
 
