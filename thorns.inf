@@ -1,33 +1,179 @@
 Constant Story "Our Lady of Thorns";
-Constant Headline "^An interactive mystery.^^^";
+Constant Headline "^An interactive mystery^";
 
 Include "Parser";
 Include "VerbLib";
 
+Verb 'ring' 'toll' 'peal'
+  * noun -> Pull;
+
 ! ========================================== church
 
-Object WestEntrance "West Entrance"
+! ---------------------- entrance
+
+Object WestPorch "West Porch"
   with
-    description "",
-    e_to Nave,
-    w_to "Message",
+    name 'west' 'porch' 'entrance',
+    description 
+      "This small covered entrance protects the west door from the
+      winds that come across the great cliffs. 
+      Villagers used to gather here before services, 
+      but the number who do so have been declining for years.",
+    e_to WestDoor,
+    cant_go 
+      "It is forbidden for you to leave the Priory grounds without permission
+      of Brother Prior.",
   has
     light;
+
+Object -> WestDoor "west door"
+  with
+    name 'west' 'door' 'sign' 'stone' 'inscription',
+    description [;
+        if (self has open)
+          "The great door is open, revealing the Nave within.";
+        "The great oaken door is closed. Carved deeply into its face:^^
+        @@32@@32NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)^
+        @@32@@32FUNDATUM ANNO DOMINI MCCXLVII.^^
+        Nearly two hundred years of wind and rain have worn the letters smooth.";
+    ],
+    door_dir e_to,
+    door_to Nave
+  has 
+    scenery static door openable open ~lockable ~locked;
+
+! ------------------------------ church
 
 Object Nave "Nave"
   with
     description
-      "",
+      "The public space of the church, where villagers stand for Mass. 
+      The stone floor is worn smooth by centuries of feet. 
+      High above, narrow windows admit pale light.
+      The quire lies to the east, separated by a rood screen. 
+      A narrow doorway in the north wall leads to the bell tower stairs.",
     e_to Quire,
-    w_to WestEntrance,
+    w_to WestPorch,
     u_to TowerStairs,
+    n_to TowerStairs,
   has
     light;
+
+Object RoodScreen "rood screen"
+  with
+    name 'rood' 'screen' 'wooden',
+    description
+      "A wooden screen separates the nave from the quire, dividing the 
+      public space from the sacred. A simple carved cross tops the 
+      screen--the rood that gives it its name. The wood is dark with age and 
+      centuries of candle smoke.",
+    found_in Nave Quire,
+  has
+    scenery static;
+
+Object RoodCross "rood cross"
+  with
+    name 'cross' 'rood',
+    description "Simply carved and without ornamentation.",
+    found_in Nave Quire,
+  has
+    scenery static;
+
+Object TowerStairs "Tower Stairs"
+  with
+    name 'stone' 'stairs', 
+    description 
+      "A narrow spiral staircase winds upward. The stone steps 
+      are worn smooth and treacherously steep - centuries of bell-ringers 
+      have climbed this way. Cold air and dim light flows down from above.",
+    d_to Nave,
+    s_to Nave,
+    u_to BellTower,
+  has
+    light;
+
+Object BellTower "Bell Tower"
+  with
+    description 
+      "The bell chamber. Wind whistles through the open arches on all four sides. 
+      The great bronze bell hangs overhead. 
+      From here, you have clear views in all four directions.",
+    d_to TowerStairs,
+    before [;
+      LookDir: 
+        if (noun == n_obj)
+          "To the north, you can see rough coast and cliffs, dotted with small farms.";
+        if (noun == s_obj)
+          "South of here, you see the cloister surrounding the garth,
+          the priory's roofs, and the herb garden.
+          How you've learned to love that garden.";
+        if (noun == w_obj) 
+          "West lies the path that to the small village nestled far down in the vale.";
+        if (noun == e_obj)
+          "East, you can make out the infirmary and its chapel near the cliffs,
+          and the dorter's small winow breaking the upper story wall.";
+        if (noun == u_obj)
+          "The great bell hangs above you, dark against the sky.";
+        if (noun == d_obj)
+          print "The stone floor of the bell chamber, and through the 
+      opening, the stairs descending.^^";
+        "You can look in any of the four compass directions.";
+    ],
+  has
+    light;
+
+Object -> Bell "bell"
+  with
+    name 'bell' 'bronze' 'great',
+    description 
+      "A bronze bell, green with age. Cast nearly two centuries ago, 
+      its surface bears a Latin inscription: ~VOX DOMINI~",
+    before [;
+      Touch, Push, Pull:
+        <<Pull BellRope>>;
+      Take:
+        "The bell weighs more than you do.";
+    ],
+  has
+    static scenery;
+
+Object -> BellRope "bell rope"
+  with
+    name 'bell' 'rope' 'cord',
+    description 
+      "The cord reaches up to the bell, far above. Ringing the bell yourself
+      would earn severe punishment. That duty belongs to the bell-ringer, not to novices.",
+    before [;
+      Climb, Tie: 
+        StartTimer(self, 3);
+        "As you pull the cord to do that, the bell tolls, echoing across the priory.
+        Instinctively you let go of the cord.";
+      Pull:
+        StartTimer(self, 3);
+        "Pulling the cord emits a great peal that echoes for miles.";
+    ],
+    time_left,
+    time_out [;
+      deadflag = 3;
+      "^Prior Oswald appears, his face dark with anger.^^
+      ~What madness is this? Ringing the bells without cause? 
+      The entire village thinks we're under attack!~^^
+      You are confined to your cell with bread and water for a month. 
+      By the time your penance ends, any chance of solving Brother Aelred's 
+      murder has long passed.^^";
+    ],
+  has 
+    static;
 
 Object Quire "Quire"
   with
     description
-      "",
+      "The heart of monastic worship. Wooden choir stalls face each other 
+      across the narrow space, where the brothers gather 
+      to chant the offices. The stalls are plain but worn smooth by generations 
+      of use. The lectern stands ready for the cantor.
+      The high altar rises to the east. The nave lies west, beyond the screen. 
+      Night stairs ascend to the dormitory, and a passage leads south to the cloister.",
     s_to NECloister,
     e_to HighAltar,
     w_to Nave,
@@ -35,10 +181,29 @@ Object Quire "Quire"
   has
      light;
 
+Object -> Stalls "stalls"
+  with
+    name 'wooden' 'stalls',
+    description 
+      "You've stood by and sat on these for months now during services. 
+      The carpentry is unremarkable and there is nothing these can reveal.",
+    has
+      static scenery;
+
+Object -> Lectern "lectern"
+  with
+    name 'lectern',
+  has
+    static scenery supporter;
+
 Object HighAltar "High Altar"
   with
     description
-      "",
+      "The altar stands on a raised platform of worn stone. A simple wooden 
+      cross rises above it--no gold, no jewels.^^
+      Behind the altar, three small chantry chapels stand in shadow. 
+      Behind a locked gate, narrow stair descends into darkness--the 
+      entrance to the crypt.",
     w_to Quire,
     ne_to ChapelA,
     e_to ChapelB,
@@ -47,19 +212,38 @@ Object HighAltar "High Altar"
   has
     light;
 
+! These stairs will never be unlocked, so there's no need for a key
+! or dynamic descriptions.
+
 Object -> CryptStairs "crypt stairs"
   with
-    name 'crypt' 'gate',
-    description "",
+    name 'crypt' 'gate' 'stairs',
+    description "The gate is a sturdy iron gate with a large lock on it.",
     door_dir d_to,
     door_to Crypt,
-    with_key CryptStairsKey
   has
-    static door openable lockable locked ~open;
+    scenery static door locked ~open;
 
-Object CryptStairsKey "crypt stairs key"
+Object -> Altar "altar"
   with
-    name 'crypt' 'stairs' 'key';
+    name 'altar' 'platform' 'stone',
+    description 
+      "The povery of the priory is evident in the simplicity of the altar.
+      It is a simple stone structure with a plain cloth draped on it.",
+  has scenery static;
+
+Object -> AltarCloth "cloth"
+  with
+    name 'plain' 'cloth',
+    description "Coarse flax and unremarkable.",
+    before [;
+      Examine: ;
+      default: 
+        "There is nothing interesting about the cloth, 
+        and Brother Prior would be outraged if you even touched it.";
+    ],
+  has
+    static scenery;
 
 Object ChapelA "Chapel A"
   with
@@ -85,20 +269,6 @@ Object ChapelC "Chapel C"
   has
      light;
 
-Object TowerStairs "Tower Stairs"
-  with
-    description "",
-    d_to Nave,
-    u_to BellTower,
-  has
-    light;
-
-Object BellTower "Bell Tower"
-  with
-    description "",
-    d_to TowerStairs,
-  has
-    light;
 
 ! ================================================ West Wing
 
@@ -402,13 +572,32 @@ Object Crypt "Crypt"
 
 Object Dorter "Dorter"
   with
-    description "",
+    description
+      "A plain corridor connecting the sleeping chambers. 
+      Wooden floorboards creak underfoot.",
     n_to Dorm,
     s_to LayCells,
     d_to NECloister,
     w_to DorterWindow
   has
     light;
+
+! Object -> DorterWindows "windows"
+!   with
+!     name 'window' 'windows' 'opening' 'openings' 'unglazed',
+!     description
+!       "Simple unglazed openings in the outer wall. Wooden shutters 
+!       hang beside them, currently open. Cold air flows through freely.",
+!     before [;
+!       Enter, Climb, JumpOver:
+!         if (shutters_open) {  ! Or some condition
+!           "The opening is wide enough. You could climb through 
+!           onto the roof... though it would be dangerous.";
+!         }
+!         "The shutters are closed.";
+!     ],
+!   has
+!     scenery static;
 
 Object -> DorterWindow "window"
   with
@@ -459,9 +648,41 @@ Object LayCells "Lay cells"
 ! =============================================== Gamr
 
 [ Initialise;
-    location = WestEntrance;
-    give player light;
-    ! "^^Your opening paragraph here...^^";
+  TitlePage();
+  location = WestPorch;
+  give player light;
+  "^^Murder scene here...^^^";
+];
+
+[ TitlePage i;
+  @erase_window -1; print "^^^^^^^^^^^^^";
+  i = 0->33; if (i > 30) i = (i-30)/2;
+  style bold; font off; spaces(i);
+  print " OUR LADY OF THORNS^";
+  style roman; print "^^"; spaces(i);
+  print "[Press SPACE to begin.]^";
+  font on;
+  box "Behold, how good and how pleasant it is"
+      "for brethren to dwell together in unity."
+      ""
+      "-- Psalm 133";
+  @read_char 1 -> i;
+  @erase_window -1;
+];
+
+[ DeathMessage;
+  if (deadflag == 1) print "You have died";
+  if (deadflag == 3) print "You have failed";
+];
+
+[ LookDirSub;
+  ! do i want to do this? or disable this except in certain places
+  if (noun == n_obj && location.n_to ~= -1)
+    "To the north, you see: ", (name) location.n_to;
 ];
 
 Include "Grammar";
+
+Extend 'look' first 
+  * noun=ADirection -> LookDir;
+
