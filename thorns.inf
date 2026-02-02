@@ -1,6 +1,7 @@
-!% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
+!% +/home/joel/if/puny/lib
+!!% -~S
 
 ! ============================================================================
 ! 1.0 Constants
@@ -19,8 +20,6 @@ Constant Headline
   ^Copyright 2026 by Joel Burton^";
 Release 1;
 
-Global night_time = 1;
-Global morning = 0;
 
 ! Constant STATUSLINE_SCORE; Statusline score;
 Constant INITIAL_LOCATION_VALUE = Quire;
@@ -28,15 +27,25 @@ Constant OPTIONAL_EXTENDED_VERBSET;
 Constant NO_SCORE;
 Constant STATUSLINE_TIME; Statusline time;
 Constant OPTIONAL_FULL_DIRECTIONS;
+Constant OPTIONAL_SIMPLE_DOORS;
 
 ! PunyInform
-! Constant MSG_STRONG_DEFAULT "Jesus wept.";
+Constant MSG_STRONG_DEFAULT "Jesus wept.";
 
 ! Include "Parser";
 ! Include "VerbLib";
 
 Include "globals.h";
+Include "ext_cheap_scenery.h";
+! Library extensions
+! Entry point routines
+! Global variables
+Global night_time = 1;
+Global morning = 0;
+
 Include "puny.h";
+! Verb grammar & actions
+
 
 
 ! ======================================================== 2.0 CHURCH
@@ -62,27 +71,39 @@ Object WestPorch "West Porch"
       Villagers used to gather here before services, 
       but the number who do so have been declining for years.",
     e_to WestDoor,
+    in_to WestDoor,
     cant_go 
       "It is forbidden for you to leave the Priory grounds without permission
       of Brother Prior.",
   has
     light;
 
-Object -> WestDoor "west door"
+Object WestDoor "west door"
   with
-    name 'west' 'door',
-    description [;
-        if (self has open)
-          "The great door is open, revealing the Nave within.";
-        "The great oaken door is closed. Carved deeply into its face:^^
-        @@32@@32NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)^
-        @@32@@32FUNDATUM ANNO DOMINI MCCXLVII.^^
-        Nearly two hundred years of wind and rain have worn the letters smooth.";
+    name 'west' 'door' 'carving',
+    found_in WestPorch Nave,
+    door_dir (e_to) (w_to),
+    when_closed "The great door is closed.",
+    when_open [;
+      print "The great door is open, revealing the ";
+      if (location == WestPorch) "Nave within."; "outside porch.";
     ],
-    door_dir e_to,
-    door_to Nave,
+    description [;
+      if (location == WestPorch && self hasnt open)
+        "Carved deeply into the door's face:^
+        ^  NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)
+        ^  FUNDATUM ANNO DOMINI MCCXLVII^^
+        Nearly two hundred years of wind and rain have worn the letters smooth.";
+      "A large and solid oaken door.";
+    ],
+    after [;
+      Close: 
+        print "You close the west door";
+        if (location == WestPorch) print ", revealing a carving on the face";
+        ".";
+    ],
   has 
-    scenery static door openable open;
+    static door openable open lockable;
 
 ! --------------------------------------------------- 2.0.2 Nave
 ! Nave and rood screen and cross
@@ -97,9 +118,16 @@ Object Nave "Nave"
       The quire lies to the east, separated by a rood screen. 
       A narrow doorway in the north wall leads to the bell tower stairs.",
     e_to Quire,
-    w_to WestPorch,
+    w_to WestDoor,
+    out_to WestDoor,
     u_to TowerStairs,
     n_to TowerStairs,
+     cheap_scenery
+      3 'roody' 'screeny' 'woodeny'  
+        "A wooden screen separates the nave from the quire, dividing the 
+        public space from the sacred. A simple carved cross tops the 
+        screen--the rood that gives it its name. The wood is dark with 
+        centuries of candle smoke.",
   has
     light;
 
@@ -266,7 +294,7 @@ Object Quire "Quire"
       The stalls are plain but worn smooth by generations of use. 
       The lectern stands ready for the cantor. The high altar rises to the
       east. The nave lies west, beyond the screen. Night stairs ascend to the
-      dormitory, and a hall leads south to the  cloister.",
+      dormitory, and a hall leads south to the cloister.",
     s_to CloisterNE,
     e_to HighAltar,
     w_to Nave,
@@ -297,10 +325,11 @@ Object HighAltar "High Altar"
   with
     description
       "The altar stands on a raised platform of worn stone. A simple wooden 
-      cross rises above it--no gold, no jewels.^^
-      Behind the altar, three small chapels stand in shadow to the east. 
+      cross rises above it---no gold, no jewels.^^
+      Behind the altar, three small chapels stand in shadow to the east.
+      The sacristy lies south. 
       Behind a locked gate to the north, narrow stairs descend into
-      darkness--the entrance to the crypt.",
+      darkness---the entrance to the crypt.",
     w_to Quire,
     ne_to FitzAlanChantry,
     e_to LadyChapel,
@@ -398,7 +427,7 @@ Object LadyChapel "Lady Chapel"
 
 Object -> MaryStatue "statue"
   with
-    name 'statue' 'mary' 'virgin' 'stone' 'blessed',
+    name 'statue' 'mary' 'virgin' 'blessed',
     description
       "A stone statue of the Blessed Virgin Mary. Her stone hands are 
       open in a gesture of welcome and mercy. Her carved face is serene, 
@@ -465,8 +494,9 @@ Object -> JudeAltar "altar"
 
 Object -> -> RoseHips "berries"
   with
-    name 'rose' 'hip' 'hips' 'rosehip' 'rosehips' 'berries' 'berry' 
-         'red',
+    name 'berries//p' 'berry' 'red',
+    ! name 'rose' 'hip' 'hips' 'rosehip' 'rosehips' 'berries' 'berry' 
+    !      'red',
     initial "Small red berries rest on the altar.",
     description
       "Small red seed pods.
@@ -485,7 +515,7 @@ Object -> -> RoseHips "berries"
 
 Object -> JudeStatue "statue"
   with
-    name 'statue' 'saint' 'st' 'jude' 'staff',
+    name 'statue' 'saint' 'st' 'jude', ! 'staff',
     description
       "A wooden statue of St Jude, simply carved and crudely painted. 
       The saint holds a staff in one hand. His painted eyes seem to 
@@ -754,7 +784,7 @@ Object -> LocutoryBenches "benches"
 
 Object Lavatorium "Lavatorium"
   with
-    name 'lavatorium' 'trough' 'buckets' 'towel' 'towels',
+    name 'trough' 'buckets' 'towel' 'towels',
     description
       "A small alcove off the cloister where the brothers wash before 
       entering the refectory. A long stone trough runs along the wall, 
@@ -1027,8 +1057,7 @@ Object LayCells "Lay cells"
 ! =============================================== Gamr
 
 [ Initialise;
-  TitlePage();
-  ! location = WestPorch;
+  QuoteBox(quote_1);
   give player light;
 
   "The priory stands on the cliffs above Ashcombe, 
@@ -1039,28 +1068,21 @@ Object LayCells "Lay cells"
   ! "^^XXX Murder scene here...^^^";
 ];
 
-[ TitlePage i;
-  @erase_window -1; print "^^^^^^^^^^^^^";
-  i = 0->33; if (i > 30) i = (i-30)/2;
-  style bold; font off; spaces(i);
-  print " OUR LADY OF THORNS^";
-  style roman; print "^^"; spaces(i);
-  print "[Press SPACE to begin.]^";
-  font on;
-  box "Behold, how good and how pleasant it is"
-      "for brethren to dwell together in unity."
-      ""
-      "-- Psalm 133";
-  @read_char 1 -> i;
-  @erase_window -1;
-];
+Include "ext_quote_box.h";
 
-[ DeathMessage;
-  if (deadflag == 1) print "You have died";
-  if (deadflag == 3) print "You have failed";
-];
+Array quote_1 --> 4 40
+  "Behold, how good and how pleasant it is"
+  "for brethren to dwell together in unity."
+  ""
+  "                           -- Psalm 133";
+  
+! [ DeathMessage;
+!   if (deadflag == 1) print "You have died";
+!   if (deadflag == 3) print "You have failed";
+! ];
 
 ! Include "Grammar";
 
 Verb 'ring' 'toll' 'peal'
   * noun -> Pull;
+
