@@ -324,10 +324,11 @@ Object HighAltar "High Altar"
   with
     description
       "The altar stands on a raised platform of worn stone. A simple wooden
-      cross rises above it--no gold, no jewels.^^
+      cross rises above it---no gold, no jewels.^^
       Behind the altar, three small chapels stand in shadow to the east.
+      The sacristy lies south.
       Behind a locked gate to the north, narrow stairs descend into
-      darkness--the entrance to the crypt.",
+      darkness---the entrance to the crypt.",
     w_to Quire,
     ne_to FitzAlanChantry,
     e_to LadyChapel,
@@ -1073,7 +1074,6 @@ Array quote_1 static --> 4 40
   "for brethren to dwell together in unity."
   ""
   "                           -- Psalm 133";
-
 ! [ DeathMessage;
 !   if (deadflag == 1) print "You have died";
 !   if (deadflag == 3) print "You have failed";
