@@ -1,10 +1,10 @@
 !% -~S
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
-!% +/home/joel/if/puny/lib
+!% +../puny/lib
 
 Constant Story "Our Lady of Thorns";
-Constant Headline 
+Constant Headline
 	"^An interactive mystery
 	^Copyright 2026 by Joel Burton^";
 Release 1;
@@ -54,6 +54,10 @@ Include "ext_cheap_scenery.h";
 Include "ext_talk_menu.h";
 
 Include "puny.h";
+
+Extend 'look' first
+	* 'up' topic 'in' noun                      -> Consult reverse;
+
 
 
 [ ParseNameAir;
@@ -107,7 +111,7 @@ Object Library "The Library"
 Array talk_array_linda -->
   0 300 "Herself" "Tell me more about yourself!" "I'm just an average girl."
   30 "Weather" "How do you like the weather?" "It's too hot for me." 1 300
-  0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk 
+  0 "Heat" "Say, don't you like hot weather?" TM_NO_LINE EnoughTalk
            "Linda looks upset and turns away."
   TM_END;
 
@@ -116,6 +120,15 @@ Object -> Linda "Linda"
 		name 'linda',
     talk_array talk_array_linda,
 	has animate;
+
+Object -> Bible "Bible"
+	with
+		name 'holy' 'bible' 'book',
+		before [;
+			Examine: "It's a bible, all right.";
+			! Read: "You read the whole thing.";
+			Consult: "Wow, it's a long read.";
+		];
 
 Object Lib2 "Library2"
 	with
@@ -130,7 +143,7 @@ Object Lib2 "Library2"
 
 ! =============================================== Game
 
-Object TestRoom "Test Room" 
+Object TestRoom "Test Room"
 	with
 		name 'carpet',
 		description "This is the most boring room in the world.",
@@ -139,7 +152,7 @@ Object TestRoom "Test Room"
 			Jump:
 			  QuoteBox(quote_1, 2);
 		],
-	has 
+	has
 		light;
 
 Object -> Boat "toy boat"
@@ -169,12 +182,12 @@ Object -> BigDoor "door"
 		with_key SilverKey,
 		react_before [;
 			Go:
-				! print "=", noun, " ", self.door_dir, " ", 
-				! 	DoorDir(self), " ", selected_direction, "^"; 
+				! print "=", noun, " ", self.door_dir, " ",
+				! 	DoorDir(self), " ", selected_direction, "^";
 				if (DoorDir(self) == selected_direction) return self.open_me();
 			Enter: if (noun == self) return self.open_me();
 		],
-		open_me [ ks; 
+		open_me [ ks;
 				if (self has locked && SilverKey in player) {
 					ks = keep_silent;
 					print "(first unlocking and opening the door)^";
@@ -192,7 +205,7 @@ Object -> BigDoor "door"
 				<Open self>;
 				keep_silent = ks;
 				if (self hasnt open) rtrue;
-		],		
+		],
 	has
 		door static ~open openable ~locked lockable;
 
@@ -211,7 +224,7 @@ Include "ext_quote_box.h";
 Array quote_1 --> 5 35
 	"When I die, I want to go peacefully"
 	"in my sleep like my grandfather."
-	"Not screaming in terror, like the" 
+	"Not screaming in terror, like the"
 	"passengers in his car."
 	"                 -- Jack Handey";
 
