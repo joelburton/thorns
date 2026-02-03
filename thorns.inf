@@ -67,7 +67,7 @@ Constant MSG_MILD_DEFAULT "Mind your tongue, Brother.";
 Include "globals.h";
 Include "ext_cheap_scenery.h";
 Include "./printtime.h";
-! Include "ext_quote_box.h";
+Include "ext_quote_box.h";
 
 [ DeathMessage;
   if (deadflag == 1) print "You have died";
@@ -76,6 +76,14 @@ Include "./printtime.h";
 
 [ TimePasses ;  ! Call when # turns goes up
   SetTime(the_time + 2);
+];
+
+[ InScope ;
+  if (real_location == Sacristy && location == thedark) {
+    PlaceInScope(SacristyDoor);
+    PlaceInScope(Sacristy);
+  }
+  rfalse;
 ];
 
 Include "puny.h";
@@ -143,6 +151,38 @@ Extend 'look' first
 ! 2.0.7 FitzAlan chantry
 ! 2.0.8 Lady Chapel
 ! 2.0.9 St Jude Chapel
+
+Class Statue
+  with
+    name 'statue',
+    before [;
+      Take:
+        "The statue has stood here for two hundred years.";
+      Push, Pull, Turn:
+        print "With some effort, you ";
+        switch (action) {
+          ##Push: print "push";
+          ##Pull: print "pull";
+          ##Turn: print "rotate";
+        }
+        " the statue a bit, revealing nothing
+        unexpected. Feeling guilty about the potential sacriliege
+        of moving a saint, you reset it as it was.";
+    ],
+    life [;
+      Attack: "Perish the very idea!";
+      Give: "You cannot offer a saint anything but your reverence.";
+      Ask, Tell, Answer, Show: "The statue remains ever-silent.";
+      WakeOther: "Save the miracles for others.";
+      Kiss:
+        print "You reverently kiss the hem of ";
+        if (self has female) print "her"; else print "his";
+        " stone robe.";
+      Order:
+        "If anything, a statue of a saint would order you around.";
+    ],
+  has
+    scenery animate proper;
 
 ! --------------------------------------------------- 2.0.1 Entrance
 ! West Porch, door
@@ -519,8 +559,14 @@ Object SacristyDoor "sacristy door"
     description "A narrow wooden door without any lock.",
     found_in HighAltar Sacristy,
     door_dir (n_to) (s_to),
+    before [;
+      Examine:
+        if (location == thedark)
+          "Have faith, Brother. You can't see it, but you know it's there.";
+    ],
     after [;
-      Open, Close: <<Look>>;
+        Open: give Sacristy light;
+        Close: give Sacristy ~light;
     ],
   has
     static scenery door openable ~open;
@@ -528,14 +574,12 @@ Object SacristyDoor "sacristy door"
 Object Sacristy "Sacristy"
   with
     name 'sacristy' 'vestry',
-    description [;
-       if (Sacristy.is_dark())
-        "You are in pitch darkness. You can feel the door to the north.";
+    description
+      ! XXX should we remove candles from description since "beeswex" lingers?
       "A small room where vestments and sacred vessels are kept.
       Shelves hold neatly folded linens, spare candles, and the priory's
       few precious chalices. The smell of beeswax and old incense lingers.
-      Brother XXX-SACRIST maintains this space with meticulous care.";
-    ],
+      Brother XXX-SACRIST maintains this space with meticulous care.",
     n_to SacristyDoor,
     cheap_scenery
       1 'shelves' "The shelves are neat and tidy."
@@ -543,46 +587,27 @@ Object Sacristy "Sacristy"
         "The linens are worn but clean."
       4 'vessel' 'vessels//p' 'chalice' 'chalices//p'
         "The chalices are used for sacred purpose during Mass."
-      1 'incense' "You can smell it faintly, but don't see any here.",
-    is_dark [;
-      if (SacristyDoor has open) rfalse;
-      if (Candle has light && parent(Candle) == player or self) rfalse;
-      rtrue;
-    ],
+      1 'incense' "You can smell it faintly, but can't find any here.",
     before [;
-      Examine:
-        if (~self.is_dark()) rfalse;
-        if (noun == SacristyDoor)
-          "Have faith, Brother. You can't see it, but you know it's there.";
-        "You can't see anything in this darkness.";
-      Open:
-        if (self.is_dark() && noun ~= SacristyDoor)
-           "You can't do anything in this darkness.";
-      Close:
-        if (self.is_dark()) rfalse; ! allow normal close-attempt
-        ! having this here prevents ##Close from falling into default;
-        ! it's silly to close-a-closed door, but I want to do the normal
-        ! thing (Tell us its already closed) rather than saying
-        ! "you can't do anything in this darkness"
       Smell:
-        if (self.is_dark())
+        if (location == thedark)
           "You smell wax and old incense in the darkness.";
-        "Dusty and fragrant with wax and polished wood.";
-      default:
-        if (self.is_dark() && noun ~= nothing)
-           "You can't do anything in this darkness.";
+        "Dusty and fragrant with wax and wood.";
+      Go:
+        if (location == thedark)
+          "You shouldn't stumble around in the dark.
+          You might damage something.";
     ],
   has
     light;
-
 
   Object -> Candles "candles"
     with
       name 'candles//p',
       describe [; rtrue; ],
       description
-        "Finer than the more common ones made of tallow, these candles are
-        suitable for placing on altars.",
+        "There's a few candles here, finer than the more common ones made of
+        tallow. These candles are used to light the church.",
       before [;
         Burn: "Burning all of these candles would be madness.";
         Take: <<Take Candle>>;
@@ -735,44 +760,12 @@ Object LadyChapel "Lady Chapel"
     name 'lady' 'chapel' 'mary' 'virgin',
     description
       "The largest of the three chapels behind the altar, dedicated to
-      the Blessed Virgin. A statue of Mary stands in a niche,
-      her hands open in welcome.
-      This chapel sees more use than the others--the brothers pray here
+      the Blessed Virgin. A statue of Mary stands in a niche.
+      This chapel sees more use than the others---the brothers pray here
       for the priory's patroness, Our Lady of Thorns.",
     w_to HighAltar,
   has
     light;
-
-Class Statue
-  with
-    name 'statue',
-    before [;
-      Take:
-        "The statue has stood here for two hundred years.";
-      Push, Pull, Turn:
-        print "With some effort, you ";
-        switch (action) {
-          ##Push: print "push";
-          ##Pull: print "pull";
-          ##Turn: print "rotate";
-        }
-        " the statue a bit, revealing nothing
-        unexpected. Feeling guilty about the potential sacriliege
-        of moving a saint, you reset it as it was.";
-    ],
-      life [;
-      Attack: "Perish the very idea!";
-      Give: "You cannot offer a saint anything but your reverence.";
-      Ask, Tell, Answer, Show: "The statue remains ever-silent.";
-      WakeOther: "Save the miracles for others.";
-      Kiss:
-        print "You reverently kiss the hem of ";
-        if (self has female) print "her"; else print "his";
-        " stone robe.";
-      Order: "You can't order around a statue.";
-    ],
-  has
-    scenery animate;
 
 Statue -> MaryStatue "statue"
   with
@@ -795,17 +788,12 @@ Statue -> MaryStatue "statue"
 
 Object StJudeChapel "St Jude Chapel"
   with
-    name 'st' 'saint' 'jude' 'chapel',
-    description [;
-      print "A small chapel dedicated to St Jude, patron of desperate causes.
-      The stone floor before the altar is worn smooth---many desperate souls
+    name 'jude' 'chapel' 'staff',
+    description
+      "A small chapel dedicated to St Jude, patron of desperate causes.
+      The stone floor is worn smooth---many desperate souls
       have knelt here over the centuries, praying for impossible things.
-      A crude painted wooden statue shows the saint with a staff.";
-      if (RoseHips in JudeAltar) {
-        print "^^Fresh red berries lie on the altar as an offering.";
-      }
-      rtrue;
-    ],
+      A painted statue shows the saint.",
     w_to HighAltar,
     nw_to HighAltar,
   has
@@ -816,51 +804,85 @@ Object -> PrayerMat "prayer mat"
     name 'prayer' 'mat',
     description
       "A rough flax mat before the altar, worn thin by countless hours
-      of kneeling. Someone has been using it recently--very recently.",
+      of kneeling. Someone has been using it recently---very recently.",
     before [;
       Take: "It belongs here.";
       Enter: "You kneel briefly on the worn mat, then rise.";
     ],
   has
-    scenery static enterable supporter;
+    static enterable supporter;
 
 Object -> JudeAltar "altar"
   with
     name 'altar' 'stone',
     description [;
       print "A simple stone altar, worn smooth by centuries of prayer.";
-      if (RoseHips in self) {
-        print " Someone has placed an offering of small red berries here.";
+      if (RoseHips hasnt moved) {
+        give RoseHips ~concealed;
+        " Someone has left an offering of ", (object) RoseHips, " here.";
       }
-      rtrue;
+      "";
     ],
   has
-    supporter static scenery;
+    supporter static;
 
-Object -> -> RoseHips "berries"
+! The berries are initially known only as "berries", but they become known
+! as rosehips after smell/tasting them. They're initially concealed, but are
+! revealed after examining the altar (otherwise, they'd get listed in the
+! initial room description, and I want people to have to look at the altar
+! to notice them).
+
+Object -> -> RoseHips "small red berries"
   with
-    name 'berries//p' 'berry' 'red',
-    ! name 'rose' 'hip' 'hips' 'rosehip' 'rosehips' 'berries' 'berry'
-    !      'red',
-    initial "Small red berries rest on the altar.",
-    description
-      "Small red seed pods.
-      Someone has carefully gathered these and placed them as an offering.
-      They're fresh--left within the last day or two.",
+    short_name [;
+      if (self has general) { print "rosehips"; rtrue; }
+    ],
+    parse_name [ w wn ;
+      while (true) {
+        w = NextWord();
+        if (w == 'red' or 'berry' or 'berries') wn++;
+        else if (self has general &&
+            w == 'rose' or 'hip' or 'hips' or 'rosehip' or 'rosehips') wn++;
+        else return wn;
+      }
+    ],
+    description [;
+      if (self hasnt general) print "Small seed pods. ";
+      "Someone carefully gathered these as an offering.
+      They're fresh and fragrant, picked within the last day or two.";
+    ],
+    recall [;
+      if (self hasnt general) {
+        give self general;
+        QuoteBox(quote_rose);
+        "This action brings back a memory from summer: Aelred in the physic
+        garden, showing you a red rose in full bloom. ~Beautiful now, Brother,
+        but its true gift comes later. These petals fall, and by autumn the
+        hip swells with seed---tart and rich. We gather them after the first
+        frost for winter cordials.~ He'd smiled. ~The rose serves us twice:
+        beauty in summer, medicine in autumn.~";
+      }
+      ", reminiscent of roses.";
+    ],
+    ! XXX perhaps they have to both smell and taste before they recognize?
     before [;
-      Take, Remove:
-        "They were left here as an offering. It would be wrong to take them.";
-      Eat, Taste:
-        "You shouldn't eat an offering left for a saint.";
+      Eat:
+        "You shouldn't eat an offering left to a saint.";
+      Taste:
+        print "You nibble at one: a sweet, tangly flavor";
+        self.recall();
+        rtrue;
       Smell:
-        "A faint, sweet scent--like roses remembered.";
+        print "A faint, floral scent";
+        self.recall();
+        rtrue;
     ],
   has
-    ; ! Not edible - they're an offering
+    pluralname edible concealed;
 
 Statue -> JudeStatue "St. Jude"
   with
-    name 'statue' 'saint' 'st' 'jude', ! 'staff',
+    name 'statue' 'saint' 'st' 'jude',
     description
       "A wooden statue of St Jude, simply carved and crudely painted.
       The saint holds a staff in one hand. His painted eyes seem to
@@ -1490,7 +1512,7 @@ Object LayCells "Lay cells"
 ! =============================================== Gamr
 
 [ Initialise;
-  ! QuoteBox(quote_1);
+  QuoteBox(quote_opening);
   SetTime(135, 2);
 
   "The priory stands on the cliffs above Ashcombe,
@@ -1501,12 +1523,12 @@ Object LayCells "Lay cells"
   ! "^^XXX Murder scene here...^^^";
 ];
 
-! Array quote_opening static --> 5 29
-!   "Behold, how good and how"
-!   "pleasant it is for brethren"
-!   "to dwell together in unity."
-!   ""
-!   "    --- The Book of Psalms";
+Array quote_opening static --> 5 34
+  "Behold, how good and pleasant"
+  "it is for brethren"
+  "to dwell together in unity."
+  ""
+  "    --- The Book of Psalms";
 
 ! Array quote_light static --> 4 35
 !   "The light shines in the darkness,"
@@ -1548,6 +1570,11 @@ Object LayCells "Lay cells"
 !   ""
 !   "   --- The Rule of St. Benedict";
 
+Array quote_rose --> 3 32
+  "I am the rose of Sharon,"
+  "and the lily of the valleys."
+  ""
+  "         --- Song of Solomon";
 
 ! before [;
   ! Search:
