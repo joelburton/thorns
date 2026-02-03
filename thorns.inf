@@ -44,7 +44,7 @@ Constant NO_SCORE;
 Constant STATUSLINE_SCORE; Statusline score;
 ! Constant STATUSLINE_TIME; Statusline time;
 
-Constant INITIAL_LOCATION_VALUE = Quire;
+Constant INITIAL_LOCATION_VALUE = Dorm;
 
 Constant MSG_STRONG_DEFAULT "Jesus wept.";
 Constant MSG_TAKE_YOURSELF "You're far too modest for that.";
@@ -63,6 +63,9 @@ Constant MSG_KISS_DEFAULT
   "Such displays of affection are... inappropriate.
   And forbidden. Very forbidden.";
 Constant MSG_MILD_DEFAULT "Mind your tongue, Brother.";
+Constant TODO_AREA
+  "A tiny grey tiger cat, wearing an orange safety vest, holds up a STOP sign,
+  blocking your way. ~Sorry, this area is still UNDER CONSTRUCTION.~";
 
 Include "globals.h";
 Include "ext_cheap_scenery.h";
@@ -139,6 +142,41 @@ Constant CLOCK_EVENING 4;
 Extend 'look' first
 	! * 'up' noun 'in' noun    -> Consult reverse;
 	* 'up' scope=AllMonks 'in' noun    -> Consult reverse;
+
+
+Class Monk
+  with
+    name 'brother',
+    life [;
+      Tell, Answer, Yes:
+        print_ret (The) self, " isn't interested, most because he's
+          NOT IMPLEMENTED YET.";
+      default: "He apologizes. ~I'm NOT IMPLEMENTED YET.~";
+    ],
+  has
+    animate proper;
+
+Monk BrPrior "Brother Prior"
+  with
+    name 'oswald' 'prior',
+    description "Oswald Prior XXX",
+  ;
+
+Monk BrCuthbert "Brother Cuthbert"
+  with
+    name 'cuthbert' 'sacrist',
+    description "Sacrist XXX",
+  has
+  ;
+
+Monk BrHugh "Brother Hugh"
+  with
+    name 'hugh' 'cellarer',
+    description "Cellarer XXX",
+  has
+  ;
+
+
 
 
 ! ======================================================== 2.0 CHURCH
@@ -415,16 +453,31 @@ Object -> BellRope "bell rope"
 
 Object Quire "Quire"
   with
-    description
-      "The heart of monastic worship. Wooden choir stalls face each other
-      across the narrow space, where the brothers gather to chant the offices.
+    description [;
+      if (self hasnt visited) {
+        print
+          "You enter the quire, at the center of the church. As always,
+          your heart is lifted by the vaulted ceiling.^";
+        font off;
+        print "
+          ^   +----|---------|---------|-------+
+          ^   |         .         .         ---|
+          ^  -|-  Nave  .  Quire  .  Altar     |
+          ^   |         .         .         ---|
+          ^   +--------------|---------|-------+^^";
+        font on;
+      }
+      "The quire is the heart of monastic worship. Choir stalls face each other
+      across the narrow gap, where the brothers gather to chant the offices.
       The stalls are plain but worn smooth by generations of use.
       The lectern stands ready for the cantor. The high altar rises to the
-      east. The nave lies west, beyond the screen. Night stairs ascend to the
-      dormitory, and a hall leads south to the cloister.",
+      east. The nave lies west, beyond the screen. Night stairs ascend north
+      to the dormitory, and a hall leads south to the cloister.";
+    ],
     s_to CloisterNE,
     e_to HighAltar,
     w_to Nave,
+    n_to NightStairs,
     u_to NightStairs,
     cheap_scenery
       'high' 'altar'
@@ -898,9 +951,27 @@ class Cloister
   with
     name 'cloister' 'arcade',
     description [;
+      if (CloisterNE hasnt visited) {
+        print
+          "You emerge to the northeast corner of the cloister walk,
+          the covered stone arcade at the
+          center of the priory. It's a continuous square path surrounding
+          the garth, a large open yard. Various rooms and
+          passageways come off of the cloister walk.^";
+        font off;
+        print "
+          ^            @@92 |
+          ^  - NW - N - NE -
+          ^    |    |    |
+          ^  - W -Garth- E -
+          ^    |    |    |
+          ^  - SW - S - SE ----
+          ^    |    |       |^";
+        font on;
+        print "^";
+      }
       print
-        "The cloister walk, a covered stone arcade surrounding the garth.
-        Arched openings admit ";
+        "Arched openings admit ";
       switch (RoughTime()) {
         CLOCK_NIGHT: print "cold night air and pale moonlight";
         CLOCK_MORNING: print "fresh morning breeze";
@@ -910,7 +981,9 @@ class Cloister
       print ".^^";
       self.cloister_detail();
     ],
-    d_to Garth,
+    d_to
+      "The Garth is only one step down from the cloister. To enter it,
+      just walk in that direction through an opening.",
     before [;
       Climb:
         "You eye the effort it would take to scale the cloister
@@ -939,13 +1012,15 @@ Cloister CloisterN "Cloister (N)"
 Cloister CloisterNE "Cloister (NE)"
   with
     cloister_detail
-      "An arched entrance to the church quire lies to the north.
-      The chapter house lies to the east, and the day stairs to the dorm
-      head upward.",
+      "An passageway to the church quire is north.
+      The chapter house is to the east, and the day stairs to the upper floor
+      head upward in the northwest.",
     n_to Quire,
-    e_to ChapterHouse,
+    ! e_to ChapterHouse,
+    e_to TODO_AREA,
     w_to CloisterN,
-    u_to Dorter,
+    u_to DayStairs,
+    nw_to DayStairs,
     s_to CloisterE,
   ;
 
@@ -964,7 +1039,8 @@ Cloister CloisterE "Cloister (E)"
     cloister_detail
       "To the east is the entrance to the warmining room.",
     n_to CloisterNE,
-    e_to WarmingRoom,
+    ! e_to WarmingRoom,
+    e_to TODO_AREA,
     w_to Garth,
     s_to CloisterSE,
   ;
@@ -980,7 +1056,8 @@ Cloister CloisterSW "Cloister (SW)"
       "As a novice, you are confined to the priory until you take
       your final vows.",
     n_to CloisterW,
-    se_to Refectory,
+    se_to TODO_AREA,
+    ! se_to Refectory,
   ;
 
 Cloister CloisterS "Cloister (S)"
@@ -990,7 +1067,8 @@ Cloister CloisterS "Cloister (S)"
     n_to Garth,
     w_to CloisterSW,
     e_to CloisterSE,
-    s_to Refectory,
+    s_to TODO_AREA,
+    ! s_to Refectory,
   ;
 
 Cloister CloisterSE "Cloister (SE)"
@@ -1000,29 +1078,30 @@ Cloister CloisterSE "Cloister (SE)"
     n_to CloisterE,
     e_to Slype,
     w_to CloisterS,
-    sw_to Refectory,
+    sw_to  TODO_AREA,
+    ! sw_to Refectory,
   ;
 
 Object Garth "Garth"
   with
     name 'garth' 'courtyard' 'grass' 'square',
     description
-      "The garth - the small grass courtyard at the heart of the cloister.
+      "The garth---the small grass courtyard at the heart of the cloister.
       The covered cloister walk surrounds it on all sides, its arches
       framing the sky above.^^
       This is the monastery's heart, open to rain and sun, enclosed
       by the daily circuit of monastic life.",
-    nw_to CloisterNW,
     n_to CloisterN,
-    ne_to CloisterNE,
     w_to CloisterW,
-    sw_to CloisterSW,
     s_to CloisterS,
-    se_to CloisterSE,
     e_to CloisterE,
     u_to
       "The cloister walk is raised only a single step. You're already
-      at ground level.",
+      at ground level. Just walk in the direction you want to enter it.",
+    cheap_scenery
+      'grass' 'courtyard'
+        "Sparse grass and a few stubborn herbs. The garth was probably
+        more carefully tended in better times.",
   has
     light;
 
@@ -1048,18 +1127,12 @@ Object -> GarthWell "well"
         "The well is deep and dark. You're not that desperate.";
       Search: ! XXX , LookUnder:
         "Too dark to see the bottom.";
+      Receive:
+        remove noun;
+        print_ret (The) noun, " lands far below with a splash.";
     ],
   has
-    scenery static container open;
-
-Object -> GarthGrass "grass"
-  with
-    name 'grass' 'patch' 'herbs' 'weeds',
-    description
-      "Sparse grass and a few stubborn herbs. The garth was probably
-      more carefully tended in better times.",
-  has
-    scenery;
+    static container open;
 
 ! ======================================================== 2.2 WEST WING
 ! 2.2.1 Prior's Solar
@@ -1072,18 +1145,35 @@ Object -> GarthGrass "grass"
 Object PriorDoor "prior door"
   with
     name 'prior' 'door',
-    description "",
-    door_dir w_to,
-    door_to PriorsSolar,
+    description [;
+      print "A heavy wooden door";
+      if (location == CloisterNW)
+        print " with a strange set of dials on it";
+      print ". It is currently ";
+      if (self hasnt open) "closed."; "open.";
+    ],
+    door_dir (e_to) (w_to),
     with_key PriorKey,
-    found_in CloisterNW,
+    found_in CloisterNW PriorsSolar,
   has
-    static scenery door openable ~open lockable locked;
+    static scenery door openable ~open lockable locked transparent;
+
+Object -> PriorDials "dials"
+  with
+    name 'dials',
+    description "NOT IMPLEMENTED YET. Use tht key.",
+;
 
 Object PriorKey "silver key"
   with
     name 'silver' 'key',
-    description "";
+    description
+      "A large key stamped with the message
+      FOR EMERGENCY USE SINCE THE REAL PUZZLE FOR THIS HASN'T BEEN WRITTEN.
+      Use me to unlock the Prior's door.",
+    found_in CloisterNW,
+    initial "A large key glows in neon red on the stone floor.",
+  ;
 
 Object PriorsSolar "Prior's Solar"
   with
@@ -1092,9 +1182,9 @@ Object PriorsSolar "Prior's Solar"
       "Prior Oswald's private chamber. A narrow bed stands against one wall.
       A writing desk holds account books and correspondence. A wooden
       chest sits at the foot of the bed.
-      The room is austere but private--a privilege of rank in a
+      The room is austere but private---a privilege of rank in a
       community that otherwise shares everything.",
-    e_to CloisterNW,
+    e_to PriorDoor,
   has
     light;
 
@@ -1119,8 +1209,16 @@ Object -> PriorsBed "narrow bed"
   with
     name 'narrow' 'bed' 'pallet',
     description
-      "A simple bed - better than the straw pallets in the dormitory,
+      "A simple bed---better than the straw pallets in the dormitory,
       but hardly luxurious.",
+    react_before [;
+      Sleep: <<Enter self>>;
+    ],
+    before [;
+      Enter:
+        "If the Prior were to catch you in his bed, you'd be expelled.
+        You think better of it.";
+    ],
   has
     scenery static supporter enterable;
 
@@ -1129,12 +1227,14 @@ Object -> PriorsBed "narrow bed"
 Object Locutory "Locutory"
   with
     name 'locutory' 'parlour' 'speaking' 'room',
-    description
-      "The locutory--the speaking room. A plain
+    description [;
+      if (self hasnt visited) QuoteBox(quote_locutory);
+      "The locutory---the speaking room. A plain
       wooden table and benches occupy the center. The walls are bare stone.
       This is where the Prior meets with merchants, where brothers
       discuss monastery business, where the silence of the Rule may
-      be broken for practical needs.",
+      be broken for practical needs.";
+    ],
     e_to CloisterW,
   has
     light;
@@ -1181,7 +1281,7 @@ Object Lavatorium "Lavatorium"
 Object ChapterHouse "Chapter House"
   with
     description
-      "",
+      "XXX",
     w_to CloisterNE,
   has
     light;
@@ -1189,7 +1289,7 @@ Object ChapterHouse "Chapter House"
 Object WarmingRoom "Warming Room"
   with
     description
-      "",
+      "XXX",
     w_to CloisterE,
     e_to Scriptorium,
   has
@@ -1198,7 +1298,7 @@ Object WarmingRoom "Warming Room"
 Object Scriptorium "Scriptorium"
   with
     description
-      "",
+      "XXX",
     n_to LibraryDoor,
     w_to WarmingRoom,
   has
@@ -1207,7 +1307,7 @@ Object Scriptorium "Scriptorium"
 Object -> LibraryDoor "library door"
   with
     name 'library' 'door',
-    description "",
+    description "XXX",
     door_dir n_to,
     door_to Library,
     with_key LibraryKey
@@ -1217,17 +1317,10 @@ Object -> LibraryDoor "library door"
 Object Library "Library"
   with
     description
-      "",
+      "XXX",
     s_to Scriptorium,
-    d_to SecretStairs,
   has
     light;
-
-Object -> BrHugh "Brother Hugh"
-  with
-    name 'brother' 'br' 'hugh',
-  has
-    animate proper;
 
 Object -> MonkGuide "History of the Monks of Our Lady of Thorns",
   with
@@ -1251,18 +1344,12 @@ Object -> MonkGuide "History of the Monks of Our Lady of Thorns",
 Object -> LibraryKey "library key"
   with name 'heavy' 'key';
 
-Object SecretStairs "Secret Stairs"
-  with
-    description "",
-    w_to Crypt,
-    u_to Library,
-  has
-    light;
-
 Object Slype "Slype"
   with
     description
-      "",
+      "A long east-west stone corridor. West is the cloister,
+      east is the infirmary. A small passage heads south to the herbalist
+      workroom.",
     s_to HerbalistWorkroom,
     e_to Infirmary,
     w_to CloisterSE,
@@ -1272,16 +1359,41 @@ Object Slype "Slype"
 Object Infirmary "Infirmary"
   with
     description
-      "",
+      "XXX",
     s_to InfirmaryChapel,
     w_to Slype,
   has
     light;
 
+Object -> Mirror "mirror"
+  with
+    name 'mirror' 'reflective' 'metal' 'plate',
+    react_before [;
+      Examine:
+        if (noun == selfobj) {
+          print "(in the mirror)^";
+          <<Examine Mirror>>;
+        }
+    ],
+    before [;
+      Examine:
+        "A young face, still beardless, stares back at you.
+        Your black Benedictine habit hangs loose on your thin frame.
+        No tonsure marks your crown---you're
+        still a novice, not yet bound by final vows.
+        Brother Aelred used to say you had honest eyes.
+        You hope he was right.";
+      Attack:
+        "Next, you'll want to cross a black cat's path?";
+    ],
+  has
+    ;
+
+
 Object InfirmaryChapel "Infirmary Chapel"
   with
     description
-      "",
+      "XXX",
     n_to Infirmary,
   has
     light;
@@ -1289,7 +1401,7 @@ Object InfirmaryChapel "Infirmary Chapel"
 Object HerbalistWorkroom "Herbalist Workroom"
   with
     description
-      "",
+      "XXX",
     n_to Slype,
     s_to Garden,
    has
@@ -1298,7 +1410,7 @@ Object HerbalistWorkroom "Herbalist Workroom"
 Object Garden "Garden"
   with
     description
-      "",
+      "XXX",
     n_to HerbalistWorkroom,
    has
      light;
@@ -1316,20 +1428,16 @@ Object GardenGateKey "garden gate key";
 
 Object RestrictedGarden "Restricted Garden"
   with
-    description "",
+    description "XXX",
     n_to Garden
   has
     light;
 
 
-
-
-
-
 Object Refectory "Refectory"
   with
     description
-      "",
+      "XXX",
     e_to CloisterSE,
     w_to Lavatorium,
     nw_to CloisterSW,
@@ -1341,7 +1449,7 @@ Object Refectory "Refectory"
 Object Kitchen "Kitchen"
   with
     description
-      "",
+      "XXX",
     n_to Refectory,
     d_to Undercroft,
   has
@@ -1381,20 +1489,35 @@ Object Crypt "Crypt"
     description
       "XXX Crypt",
     u_to CryptStairs,
-    e_to SecretStairs,
   has
     ~light;
 
 ! ============================================== Second Floor
 
+Object DayStairs "Day Stairs"
+  with
+    name 'day' 'stairs',
+    description
+      "Broad stone steps connect the upper living areas to the cloister walk
+      below. These are the day stairs, connecting the dorter to the cloister.
+      The steps are worn smooth in the center by generations of sandaled feet.",
+    d_to CloisterNE,
+    u_to Dorter,
+  has
+    light;
+
+! ---------------------------------------------------- Dorter
+
 Object Dorter "Dorter"
   with
     description
       "A plain corridor connecting the sleeping chambers.
-      Wooden floorboards creak underfoot.",
+      Wooden floorboards creak underfoot. There are passages to the north
+      and south, and broad stairs descend to the east.",
     n_to Dorm,
     s_to LayCells,
-    d_to CloisterNE,
+    d_to DayStairs,
+    e_to DayStairs,
     w_to DorterWindow
   has
     light;
@@ -1418,8 +1541,7 @@ Object Dorter "Dorter"
 
 Object -> DorterWindow "window"
   with
-    when_closed "The opening is shuttered.",
-    when_open "You can see the roof.",
+    describe [; rtrue; ],
     door_to Rooftop,
     door_dir w_to,
   has
@@ -1430,27 +1552,70 @@ Object Rooftop "Rooftop"
     description "",
     e_to Dorter;
 
+! --------------------------------------------------- Dorm
+
 Object Dorm "Dorm"
   with
     description
-      "",
-    e_to Reredorter,
+      "This great room is lined with over three dozen cots, but you know there
+      are far fewer monks currently at the priory. The active cots have a chest
+      at the foot containing the few possesions each brother has.
+      Dim light filters in from an open window high up, reflecting lightly on
+      the wood floor.
+
+      ^^Doorway leads south to the dorter and east to the necessarium.
+      Narrow stairs to the west descend down to the church.",
+    e_to Necessarium,
     s_to Dorter,
     d_to NightStairs,
+    w_to NightStairs,
   has
     light;
 
+Object -> Cots "cots"
+  with
+    name 'cots' 'cot' 'beds' 'bed',
+    description "NOT IMPLEMENTED YET.",
+  has
+    scenery;
+
+Object -> Chests "chests"
+  with
+    name 'chest' 'chests',
+    description "NOT IMPLEMENTED YET.",
+  has
+    scenery;
+
+Object -> DormWindow "window"
+  with
+    name 'window',
+    description "NOT IMPLEMENTED YET.",
+    before [;
+      Examine: ;
+      default:
+        "The window is too high to do anything with it.";
+    ],
+  has
+    scenery;
+
+! ---------------------------------------------------- Night Stairs
+
 Object NightStairs "Night Stairs"
   with
-    description "XXX",
+    description
+      "Midway on the narrow stone stairway connecting the dormitory to the
+      quire. These are the night stairs---three times each night, monks file
+      down in darkness for Matins, Lauds, and Prime. The walls are close,
+      the air still.^^
+
+      A lone candle flickers in its niche.",
     d_to Quire,
-    u_to Dorm;
+    u_to Dorm
+  has
+    light;
 
 ! bell-ringer Cuthbert
 
-Object -> Cuthbert "Brother Cuthbert"
-  with
-  has proper;
 
 Object -> TimeCandle "canonical hour candle"
   with
@@ -1459,7 +1624,7 @@ Object -> TimeCandle "canonical hour candle"
       "A candle sits in a sconce built into the stone wall.",
     description [ hour ;
       hour = the_time / 60;
-      print "A canonical hour candle is used by ", (The) Cuthbert,
+      print "A canonical hour candle is used by ", (The) BrCuthbert,
         " to tell the hours for offices. ";
 
       if (hour == 0)
@@ -1485,7 +1650,7 @@ Object -> TimeCandle "canonical hour candle"
       Smell: "There's an unpleasant aroma of tallow.";
       Squeeze: "Mostly firm, but softer as you get closer to the flame.";
       Take: print_ret
-        (The) Cuthbert, " would be very annoyed if this disappeared,
+        (The) BrCuthbert, " would be very annoyed if this disappeared,
         and if you were suspected, you'd have heavy penance. You think better
         of this act.";
       Turn: "You turn the candle pointlessly in the sconce.";
@@ -1493,13 +1658,51 @@ Object -> TimeCandle "canonical hour candle"
   has
     scenery;
 
-Object Reredorter "Reredorter"
+! ---------------------------------------------------- Neccessarium
+
+Object Necessarium "Necessarium"
   with
     description
-    "",
+      "A narrow stone chamber extending from the dormitory. A wooden bench
+      with several latrine holes runs along the east wall,
+      each opening onto the dung pit far below.
+      The smell is overpowering. Cold, foul air rises from the pit below.",
     w_to Dorm,
+    before [;
+      Smell, Taste: "You dare not.";
+      Climb:
+        if (selected_direction == d_to)
+          "You wouldn't fit in a latrine hole, praise be.";
+    ],
+    cheap_scenery
+      'dung' 'pit' "Happily, you can only barely make it out from up here.",
   has
     light;
+
+Object -> Latrines "latrines"
+  with
+    name 'latrine' 'latrines//p' 'hole' 'holes//p',
+    before [;
+      Enter:
+        "You're don't need to use the latrines just now.";
+      Receive:
+        if (noun has worn)
+          "You'd best not discard what you're wearing.";
+        if (noun == Candle or MonkGuide or MyHood) {
+          print "Are you sure you want to dispose of ", (the) noun, "? ";
+          if (YesOrNo() == false) "You reconsider.";
+        }
+        remove noun;
+        "You drop ", (the) noun, " in ", (the) self,
+        ", losing it in the filth far below.";
+      Search:
+        "Even if you could see anything far down in the pit,
+        you wouldn't want to.";
+    ],
+  has
+    pluralname scenery;
+
+! ---------------------------------------------------- LayCells
 
 Object LayCells "Lay cells"
   with
@@ -1511,16 +1714,61 @@ Object LayCells "Lay cells"
 
 ! =============================================== Gamr
 
+Object MyRobe "robe"
+  with
+    article "your",
+    name 'robe' 'habit',
+    description
+      "A simple black woolen cloth, marking you as a novice of this house.
+      It doesn't have pockets, but a large hood hangs at your back.",
+    before [;
+      Disrobe: "You daren't. A monk must always be ready for office.";
+    ],
+    add_to_scope MyHood,
+  has clothing worn transparent;
+
+Object MyHood "hood"
+  with
+    name 'hood',
+    description
+      "A deep hood attached to your habit, large enough to pull over your
+      head in foul weather.",
+    before [;
+      ! XXX: this isn't right; i don't want to see hood in invetory or have
+      ! "first taking the hood", etc
+      Wear:
+        if (noun == MyHood) {
+          "You pull the hood over your head, covering much of your face.";
+        }
+    ],
+  has clothing container open concealed;
+
 [ Initialise;
   QuoteBox(quote_opening);
   SetTime(135, 2);
+  lookmode = 2;  ! verbose mode by default
 
-  "The priory stands on the cliffs above Ashcombe,
+  move BrCuthbert to Dorm;
+  move BrHugh to Dorm;
+  move BrPrior to HighAltar;
+  move MyRobe to player;
+
+  selfobj.description =
+    "You're a novice in your first year, younger than all of the professed
+    monks. Your black habit marks you as Benedictine, though you haven't yet
+    taken your final vows. Your head remains untonsured---that will come only
+    if you complete your novitiate and join the community fully.";
+
+  "Late Summer, 1346:^
+  The lonely priory stands on the cliffs above Ashcombe,
   on the northeast coast of England, where
   wind and sea have worn the stones for two hundred years.^^
 
-  Late Summer, 1346^";
-  ! "^^XXX Murder scene here...^^^";
+  You awake at midnight to the sound of the great bell.
+  You are lying in your bed, still bleary from sleep.
+  After five months here, you wish you were better acclimated to the schedule.^^
+
+  The other brothers get out of bed, fully dressed in their habits.^";
 ];
 
 Array quote_opening static --> 5 34
@@ -1553,24 +1801,24 @@ Array quote_opening static --> 5 34
 !   ""
 !   "            --- The Book of Genesis";
 
-! Array quote_breakrule static --> 3 31
+! Array quote_breakrule static --> 4 31
 !   "The first degree of humility"
 !   "is prompt obedience."
 !   ""
 !   "  --- The Rule of St. Benedict";
 
-! Array quote_locutory static --> 3 25
-!   "A time to keep silence,"
-!   "and a time to speak."
-!   ""
-!   "      --- Ecclesiastes";
+Array quote_locutory static --> 4 25
+  "A time to keep silence,"
+  "and a time to speak."
+  ""
+  "      --- Ecclesiastes";
 
 ! Array quote_sleep static --> 3 32
 !   "The sleepy like to make excuses."
 !   ""
 !   "   --- The Rule of St. Benedict";
 
-Array quote_rose --> 3 32
+Array quote_rose --> 4 32
   "I am the rose of Sharon,"
   "and the lily of the valleys."
   ""
