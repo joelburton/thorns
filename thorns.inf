@@ -13,9 +13,6 @@
 ! You remember Aelred once quoting St. Bernard: "The church clothes her
 ! stones in gold and leaves her sons naked."
 
-! John 1:5 - "The light shines in the darkness, and the darkness has not overcome it."
-
-
 
 ! =============================================================================
 ! 1.0 Constants
@@ -37,14 +34,36 @@ Release 1;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_FULL_DIRECTIONS;
 Constant OPTIONAL_SIMPLE_DOORS;
-! Constant OPTIONAL_EXTENDED_METAVERBS;
+Constant OPTIONAL_EXTENDED_METAVERBS;
 Constant OPTIONAL_LANGUAGE_NUMBER;       ! for sundial, don't need -- but others?
 
-Constant NO_SCORE;
+Constant NO_PLACES;
+
+! Constant NO_SCORE;
 Constant STATUSLINE_SCORE; Statusline score;
 ! Constant STATUSLINE_TIME; Statusline time;
 
+Constant OPTIONAL_FULL_SCORE;
+Constant TASKS_PROVIDED;
+Constant NUMBER_TASKS = 5;
+Constant MAX_SCORE = 25;
+Array task_scores -> 5 5 5 5 5;
+
+Constant TASK_PERFORM_OFFICE = 0;
+Constant TASK_IDENTIFY_ROSEHIPS = 1;
+Constant TASK_MOVE_ALTAR = 2;
+
+[ PrintTaskName task_number;
+  switch (task_number) {
+      TASK_PERFORM_OFFICE: "performing at an office";
+      TASK_IDENTIFY_ROSEHIPS: "identifying the rosehips";
+      TASK_MOVE_ALTAR: "discovering the secret of the FitzAlan altar";
+  }
+];
+
 Constant INITIAL_LOCATION_VALUE = Dorm;
+Constant MAX_CARRIED = 3;
+Constant SACK_OBJECT = Basket;
 
 Constant MSG_STRONG_DEFAULT "Jesus wept.";
 Constant MSG_TAKE_YOURSELF "You're far too modest for that.";
@@ -63,6 +82,7 @@ Constant MSG_KISS_DEFAULT
   "Such displays of affection are... inappropriate.
   And forbidden. Very forbidden.";
 Constant MSG_MILD_DEFAULT "Mind your tongue, Brother.";
+
 Constant TODO_AREA
   "A tiny grey tiger cat, wearing an orange safety vest, holds up a STOP sign,
   blocking your way. ~Sorry, this area is still UNDER CONSTRUCTION.~";
@@ -71,6 +91,8 @@ Include "globals.h";
 Include "ext_cheap_scenery.h";
 Include "./printtime.h";
 Include "ext_quote_box.h";
+
+Attribute history;
 
 [ DeathMessage;
   if (deadflag == 1) print "You have died";
@@ -89,7 +111,108 @@ Include "ext_quote_box.h";
   rfalse;
 ];
 
+Constant MSG_PROMPT = 1234;  ! anything > 1000
+[LibraryMessages p_msg ; ! p_arg_1 p_arg_2;
+	switch(p_msg) {
+    MSG_PROMPT:
+      if (turns == 0)
+        print "What will you do, Brother?^";
+      print "> ";
+	}
+];
+
+Global g_been_in_dark = false;
+Replace _UpdateDarkness;
+[ _UpdateDarkness p_silent _ceil _old_darkness _darkness;
+	if(location == thedark) _old_darkness = true;
+	_ceil = ScopeCeiling(player);
+	if(_LookForLightInObj(_ceil, _ceil) == false) _darkness = true;
+	if(_darkness ~= _old_darkness) scope_modified = true;
+	if(_darkness) {
+
+    ! only change: quote on first darkness
+    if (g_been_in_dark == false) {
+      QuoteBoxSimple(quote_darkness);
+      g_been_in_dark = true;
+    }
+
+		if(_old_darkness == false && p_silent == false) PrintMsg(MSG_NOW_DARK);
+		location = thedark;
+	} else {
+		location = real_location;
+		if(_old_darkness && p_silent == false) {
+			new_line;
+			<Look>;
+		}
+	}
+];
+
+! doesn't work when place becomes suddenly dark
+!
+! [ LookRoutine ;
+!   if (location == thedark && ~~g_been_in_dark) {
+!     g_been_in_dark = true;
+!     QuoteBoxSimple(quote_darkness);
+!   }
+! ];
+
 Include "puny.h";
+
+
+
+
+! -------------------- Copy the following code to your own game
+
+#Ifv5;
+Property adj_name;
+Property noun_name;
+#Ifnot;
+Property individual adj_name;
+Property individual noun_name;
+#Endif;
+
+#Ifv5;
+[MatchNameList p_obj p_prop _w _matched _an _count _i;
+	_an = p_obj.&p_prop;
+	if(_an == 0) { wn++; return 0; }
+	_count = p_obj.#p_prop;
+	@log_shift _count (-1) -> _count; ! Divide by 2
+	while(true) {
+		_w = NextWord();
+		@scan_table _w _an _count -> _i ?_MNL_match;
+		return _matched;
+._MNL_match;
+		_matched++;
+	}
+];
+#Ifnot;
+[MatchNameList p_obj p_prop _w _matched _base _an _count _i;
+	_an = p_obj.&p_prop;
+	if(_an == 0) { wn++; return 0; }
+	_count = p_obj.#p_prop / 2;
+	while(true) {
+		_w = NextWord();
+		_base = _matched;
+		for(_i = 0 : _i < _count : _i++)
+			if(_w == _an-->_i) { _matched++; break; }
+		if(_matched == _base) return _matched;
+	}
+];
+#Endif;
+
+Class AdjObject
+	with
+		parse_name [ _adj _noun;
+			_adj = MatchNameList(self, adj_name);
+			wn--;
+			_noun = MatchNameList(self, noun_name);
+			if(_noun) return _noun + _adj;
+		];
+
+! -------------------- End of code to copy
+
+
+
 
 Verb 'ring' 'toll' 'peal'
   * noun                    -> Pull;
@@ -98,7 +221,18 @@ Verb 'ring' 'toll' 'peal'
 Verb 'xyzzy' 'plug' * -> Xyzzy;
 
 [ SolveLionSub; give FitzAlanAltar open; "Opened altar."; ];
-Verb 'solvelion' * -> SolveLion;
+Verb 'slion' * -> SolveLion;
+
+[ SolveLightSub; give player light; "You're on FIRE, baby."; ];
+Verb 'slight' * -> SolveLight;
+
+[ SolveLibSub; give LibraryDoor open; "Unlocked librvary."; ];
+Verb 'slib' * -> SolveLib;
+
+[ LookUnderSub; "Nope."; ];
+Extend 'look'
+    * 'beneath' noun -> LookUnder
+    * 'under' noun -> LookUnder;
 
 ! Routines for debugging time
 #IfDef DEBUG;
@@ -132,16 +266,16 @@ Constant CLOCK_EVENING 4;
 ! or could be anything-visible-here, as below
 ! see solution to 25? or can the verb itself take scope?
 
-[AllMonks monk;
+[AllHistorical o;
   switch (scope_stage) {
     1: rfalse;
-    2: objectloop (monk has animate) PlaceInScope(monk); rtrue;
+    2: objectloop (o has history) PlaceInScope(o); rtrue;
   }
 ];
 
 Extend 'look' first
 	! * 'up' noun 'in' noun    -> Consult reverse;
-	* 'up' scope=AllMonks 'in' noun    -> Consult reverse;
+	* 'up' scope=AllHistorical 'in' noun    -> Consult reverse;
 
 
 Class Monk
@@ -156,12 +290,14 @@ Class Monk
   has
     animate proper;
 
+! enforces the rules, has own room
 Monk BrPrior "Brother Prior"
   with
     name 'oswald' 'prior',
     description "Oswald Prior XXX",
   ;
 
+! manages sacristy, time candle
 Monk BrCuthbert "Brother Cuthbert"
   with
     name 'cuthbert' 'sacrist',
@@ -169,14 +305,72 @@ Monk BrCuthbert "Brother Cuthbert"
   has
   ;
 
+! handles cellar and stores. is embezzling.
 Monk BrHugh "Brother Hugh"
   with
     name 'hugh' 'cellarer',
     description "Cellarer XXX",
+    history_text
+      "Left at the monastery at only 8 by his family, Brother Hugh was brought
+      up here. He serves us well as our cellarer, keeping track of our goods
+      and manages the trade with boats.",
+  has
+    history
+  ;
+
+! manages library, scriptorium
+! old, has spectacles
+Monk BrWilfred "Brother Wilfred"
+  with
+    name 'wilfred' 'librarian',
+    description "Librarian XXX",
   has
   ;
 
+! PCs mentor, kindly.
+Monk BrAelred "Brother Aelred"
+  with
+    name 'aelred' 'herbalist',
+    description "Herbalist",
+  has
+      ;
 
+! mid-30s, hearty, friendly
+Monk BrAnselm "Brother Anselm"
+  with
+    name 'anselm' 'cantor',
+    description "Cantor XXX",
+  has
+    ;
+
+Monk BrBenedict "Brother Benedict"
+  with
+    name 'benedict' 'infirmarer',
+    description "Infirmarer XXX",
+  has
+    ;
+
+Monk BrMartin "Brother Martin"
+  with
+    name 'martin' 'kitchener',
+    description "Kitchener XXX",
+  has
+  ;
+
+Monk BrRemigio "Brother Remigio"
+  with
+    name 'remigio',
+    description "Lay monk XXX",
+  has
+  ;
+
+! aelred might call me:
+! "Son" or "my son" - classic mentor address
+! "Child" - affectionate, protective
+! "Brother" - when being more formal/equal
+! "Young friend" - warm but not patronizing
+
+! others "Brother Novice" or "Brother Aldwin"
 
 
 ! ======================================================== 2.0 CHURCH
@@ -244,8 +438,10 @@ Object WestPorch "West Porch"
     light;
 
 Object WestDoor "west door"
+  class AdjObject,
   with
-    name 'west' 'door' 'carving',
+    adj_name 'west',
+    noun_name 'door' 'carving',
     found_in WestPorch Nave,
     door_dir (e_to) (w_to),
     when_closed "The great door is closed.",
@@ -257,8 +453,8 @@ Object WestDoor "west door"
       if (location == WestPorch && self hasnt open)
         "Carved deeply into the door's face:^
         ^  NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)^
-        ^  FUNDATUM ANNO DOMINI MCCXLVII^^
-        Nearly two hundred years of wind and rain have worn the letters
+        ^  FUNDATUM ANNO DOMINI MCXX^^
+        Over two hundred years of wind and rain have worn the letters
         smooth.";
       "A large and solid oaken door.";
     ],
@@ -308,8 +504,10 @@ Object RoodScreen "rood screen"
     scenery static;
 
 Object -> RoodCross "rood cross"
+  class AdjObject,
   with
-    name 'rood' 'cross',
+    noun_name 'cross',
+    adj_name 'rood',
     description "Simply carved and without ornamentation.",
   has
     static;
@@ -385,23 +583,13 @@ Object BellTower "Bell Tower"
     light;
 
 Object -> Bell "bell"
+  class AdjObject,
   with
+    adj_name 'great' 'bronze',
+    noun_name 'bell',
     description
       "A bronze bell, green with age. Cast nearly two centuries ago,
       its surface bears the inscription: ~VOX DOMINI~",
-    parse_name [ w;
-      ! Want "bell" to refer to the bell, and "bell rope" be the rope
-      w = NextWord();
-      ! Match just "bell" or "great bell"
-      if (w == 'bell' or 'great') {
-        if (w ~= 'bell') {
-          if (NextWord() ~= 'bell') return 0;
-          return 2;
-        }
-        return 1;
-      }
-      return 0;
-    ],
     before [;
       Touch, Pull, Attack, Push:
         "The bell is far above you. You can only reach the rope.";
@@ -410,23 +598,14 @@ Object -> Bell "bell"
     static scenery;
 
 Object -> BellRope "bell rope"
+  class AdjObject,
   with
-    ! name 'bell' 'rope' 'cord',
+    adj_name 'bell',
+    noun_name 'rope' 'cord',
     description
       "The cord reaches up to the bell, far above.
       Ringing the bell yourself would earn severe punishment.
       That duty does not belong to novices.",
-    parse_name [ w;
-      w = NextWord();
-      ! Match "rope", "cord", "bell rope", "bell cord"
-      if (w == 'bell') {
-        w = NextWord();
-        if (w == 'rope' or 'cord') return 2;
-        return 0;  ! "bell" alone doesn't match rope
-      }
-      if (w == 'rope' or 'cord') return 1;
-      return 0;
-    ],
     before [;
       Climb, Tie, Pull, Turn, Cut:
         StartTimer(self, 3);
@@ -487,8 +666,10 @@ Object Quire "Quire"
      light;
 
 Object -> Stalls "stalls"
+  class AdjObject,
   with
-    name 'wooden' 'stalls//p' 'stall',
+    adj_name 'wooden',
+    noun_name 'stalls//p' 'stall',
     description
       "You've stood by and sat on these for months now during services.
       The carpentry is unremarkable and there is nothing these can reveal.",
@@ -523,16 +704,20 @@ Object HighAltar "High Altar"
     light;
 
 Object -> Altar "altar"
+  class AdjObject,
   with
-    name 'altar' 'platform' 'stone',
+    adj_name 'stone',
+    noun_name 'altar' 'platform',
     description
       "The povery of the priory is evident in the simplicity of the altar.
       It is a simple stone structure with a plain cloth draped on it.",
   has scenery static;
 
 Object -> AltarCloth "cloth"
+  class AdjObject,
   with
-    name 'plain' 'cloth',
+    adj_name 'plain' 'altar',
+    noun_name 'cloth',
     description "Coarse flax and unremarkable.",
     before [;
       Examine: ;
@@ -578,7 +763,7 @@ Object CryptGate "crypt gate"
 
 Object CryptStairs "Crypt Stairs"
   with
-    name 'narrow' 'crypt' 'stairs',
+    name 'crypt' 'stairs',
     description [;
       print
         "At the midpoint of these stairs, you can sense the damp
@@ -669,7 +854,7 @@ Object Sacristy "Sacristy"
 
 Object -> Candle "candle"
   with
-    name 'candle',
+    name 'candle' 'beeswax',
     describe [;
       if (self hasnt moved) rtrue;
       rfalse;
@@ -700,7 +885,7 @@ Object -> Candle "candle"
 
 Object FitzAlanChantry "FitzAlan Chantry"
   with
-    name 'fitzalan' 'chantry' 'family',
+    name 'chantry',
     description [;
       if (player in FitzAlanAltar)
         "From here you can see the arms closely.";
@@ -711,7 +896,7 @@ Object FitzAlanChantry "FitzAlan Chantry"
         the simple stone altar";
       if (FitzAlanAltar has open)
         ", which has been pushed aside to reveal a dark passage leading down.";
-      ". Above it, the family arms are carved: a red lion on white.";
+      ". Above it, the family arms and motto are carved.";
     ],
     sw_to HighAltar,
     w_to HighAltar,
@@ -724,7 +909,8 @@ Object FitzAlanChantry "FitzAlan Chantry"
     cheap_scenery
       'stone' 'floor' "These almost look like scrapes from moving the altar."
       'gouge' 'gouges//p'
-        "You're not sure what caused them---perhaps the altar was pushed?",
+        "You're not sure what caused them---perhaps the altar was pushed?"
+      1 'motto' "~Leo Viam Custodit~",
   has
     light;
 
@@ -738,7 +924,7 @@ Object -> FitzAlanAltar "altar"
         into darkness.";
       " on the floor against the east wall. Gouges in the floor by the altar
       testify to its weight. Above the altar, carved into
-      the wall, are the FitzAlan arms.";
+      the wall, are the FitzAlan arms and motto.";
     ],
     react_before [;
       Go:
@@ -777,6 +963,7 @@ Object -> FitzAlanAltar "altar"
         }
         if (FitzAlanLion has moved) {
           give self open;
+          Achieved(TASK_MOVE_ALTAR);
           "You push against the altar and it swings away from the wall,
           revealing a small passage and a set of stairs leading downward.";
         }
@@ -787,11 +974,13 @@ Object -> FitzAlanAltar "altar"
      static scenery supporter enterable;
 
 Object -> FitzAlanLion "FitzAlan arms"
+  class AdjObject,
   with
-    name 'fitzalan' 'arms' 'lion' 'red',
+    adj_name 'fitzalan' 'family' 'red' 'rampant',
+    noun_name 'lion' 'arms',
     description [;
       if (self has moved) "The lion is pressed in slightly.";
-      "The lion is carved and painted red against white.";
+      "A red rampant lion against a white background.";
     ],
     before [;
       Push, Turn:
@@ -801,12 +990,17 @@ Object -> FitzAlanLion "FitzAlan arms"
         give self moved;
         "You push against the lion and, surprisingly, the stone moves
         inward slightly. A deep click is heard in the wall.";
+      default:
+        if (player notin FitzAlanAltar)
+          "The carved arms are set high in the wall, well above you.";
     ],
   has
     ~moved scenery;
 
 !---------------------------------------------------- 2.0.8 Lady Chapel
 ! Chapel and statue
+
+! XXX : "In the Lady Chapel, before her sorrowful face, Aldwin feels permission to doubt. She who bore thorns understands the weight of yes."
 
 Object LadyChapel "Lady Chapel"
   with
@@ -841,7 +1035,7 @@ Statue -> MaryStatue "statue"
 
 Object StJudeChapel "St Jude Chapel"
   with
-    name 'jude' 'chapel' 'staff',
+    name 'chapel',
     description
       "A small chapel dedicated to St Jude, patron of desperate causes.
       The stone floor is worn smooth---many desperate souls
@@ -853,8 +1047,10 @@ Object StJudeChapel "St Jude Chapel"
     light;
 
 Object -> PrayerMat "prayer mat"
+  class AdjObject,
   with
-    name 'prayer' 'mat',
+    adj_name 'prayer',
+    noun_name 'mat',
     description
       "A rough flax mat before the altar, worn thin by countless hours
       of kneeling. Someone has been using it recently---very recently.",
@@ -872,7 +1068,7 @@ Object -> JudeAltar "altar"
       print "A simple stone altar, worn smooth by centuries of prayer.";
       if (RoseHips hasnt moved) {
         give RoseHips ~concealed;
-        " Someone has left an offering of ", (object) RoseHips, " here.";
+        " Someone has left an offering of ", (a) RoseHips, " here.";
       }
       "";
     ],
@@ -889,6 +1085,9 @@ Object -> -> RoseHips "small red berries"
   with
     short_name [;
       if (self has general) { print "rosehips"; rtrue; }
+    ],
+    invent [;
+      print (a) self, " (originally left as an offering to St Jude)"; rtrue;
     ],
     parse_name [ w wn ;
       while (true) {
@@ -907,7 +1106,8 @@ Object -> -> RoseHips "small red berries"
     recall [;
       if (self hasnt general) {
         give self general;
-        QuoteBox(quote_rose);
+        Achieved(TASK_IDENTIFY_ROSEHIPS);
+        QuoteBoxSimple(quote_rose);
         "This action brings back a memory from summer: Aelred in the physic
         garden, showing you a red rose in full bloom. ~Beautiful now, Brother,
         but its true gift comes later. These petals fall, and by autumn the
@@ -935,7 +1135,7 @@ Object -> -> RoseHips "small red berries"
 
 Statue -> JudeStatue "St. Jude"
   with
-    name 'statue' 'saint' 'st' 'jude',
+    name 'saint' 'st' 'jude' 'staff',
     description
       "A wooden statue of St Jude, simply carved and crudely painted.
       The saint holds a staff in one hand. His painted eyes seem to
@@ -1084,7 +1284,7 @@ Cloister CloisterSE "Cloister (SE)"
 
 Object Garth "Garth"
   with
-    name 'garth' 'courtyard' 'grass' 'square',
+    name 'garth' 'square',
     description
       "The garth---the small grass courtyard at the heart of the cloister.
       The covered cloister walk surrounds it on all sides, its arches
@@ -1106,8 +1306,10 @@ Object Garth "Garth"
     light;
 
 Object -> Sundial "sundial"
+  class AdjObject,
   with
-    name 'sundial' 'sun' 'dial' 'clock',  ! "sun shouldn't be this TODO:
+    adj_name 'sun',
+    noun_name 'sundial' 'dial' 'clock',
     description [;
       if (the_time < 300 || the_time > 1260)
         "The sundial isn't casting a discernable shadow without sunlight.";
@@ -1117,8 +1319,10 @@ Object -> Sundial "sundial"
     has static;
 
 Object -> GarthWell "well"
+  class AdjObject,
   with
-    name 'well' 'stone' 'old',
+    adj_name 'stone' 'old',
+    noun_name 'well',
     description
       "An old stone well, its edges worn smooth by centuries of drawing
       water. A wooden bucket hangs on a rope.",
@@ -1206,8 +1410,10 @@ Object -> PriorsChest "wooden chest"
     scenery static container openable ~open lockable locked;
 
 Object -> PriorsBed "narrow bed"
+  class AdjObject,
   with
-    name 'narrow' 'bed' 'pallet',
+    adj_name 'narrow',
+    noun_name 'bed',
     description
       "A simple bed---better than the straw pallets in the dormitory,
       but hardly luxurious.",
@@ -1228,7 +1434,7 @@ Object Locutory "Locutory"
   with
     name 'locutory' 'parlour' 'speaking' 'room',
     description [;
-      if (self hasnt visited) QuoteBox(quote_locutory);
+      if (self hasnt visited) QuoteBoxSimple(quote_locutory);
       "The locutory---the speaking room. A plain
       wooden table and benches occupy the center. The walls are bare stone.
       This is where the Prior meets with merchants, where brothers
@@ -1240,16 +1446,20 @@ Object Locutory "Locutory"
     light;
 
 Object -> LocutoryTable "table"
+  class AdjObject,
   with
-    name 'table' 'wooden',
+    adj_name 'wooden',
+    noun_name 'table',
     description
       "A plain wooden table where necessary business is conducted.",
   has
     scenery static supporter;
 
 Object -> LocutoryBenches "benches"
+  class AdjObject,
   with
-    name 'bench' 'benches' 'wooden',
+    adj_name 'wooden',
+    noun_name 'bench' 'benches//p',
     description
       "Simple wooden benches flanking the table.",
   has
@@ -1270,6 +1480,8 @@ Object Lavatorium "Lavatorium"
     e_to Refectory,
   has
      light;
+
+! add cheap_scenery for names
 
 ! towels could be a puzzle -- needing to cover something?
 
@@ -1308,11 +1520,12 @@ Object -> LibraryDoor "library door"
   with
     name 'library' 'door',
     description "XXX",
-    door_dir n_to,
+    found_in Scriptorium Library,
+    door_dir (s_to) (n_to),
     door_to Library,
     with_key LibraryKey
   has
-    static door openable ~open lockable locked;
+    scenery door openable ~open lockable locked;
 
 Object Library "Library"
   with
@@ -1322,24 +1535,33 @@ Object Library "Library"
   has
     light;
 
-Object -> MonkGuide "History of the Monks of Our Lady of Thorns",
+Object -> MonkGuide "The History of the Monks of Our Lady of Thorns",
+  class AdjObject,
   with
-    name 'history' 'monks' 'book',
+    adj_name 'monks',
+    noun_name 'history' 'book',
     description "A small book listing the monks who have served in the priory,
       along with some information on them.",
     before [;
       Consult:
-        switch (second) {
-          BrHugh:
-            "Brother Hugh joined in 1200.";
-          FitzAlanChantry:  ! doesn't work now, is just for animate
-            "The chantry was built in 1205.";
-          default:
-            "Nothing about that monk.";
-        }
+        if (second ~= nothing && second has history)
+          print_ret (string) second.history_text, "^";
     ],
   has
     proper;
+
+Object HistGordian "Prior Gordian"
+  with
+    name 'prior' 'gordian',
+    history_text
+      "The priory was founded in 1248 by Prior Gordian, formerly Master
+      Builder to the Earl of Pembroke. A man of great skill and piety, he
+      designed the church and cloisters himself, incorporating his love of
+      both sacred geometry and cunning devices. It is said he built the
+      priory as penance for worldly pride, each mechanism a reminder that God's
+      mysteries surpass man's cleverness."
+  has
+    history;
 
 Object -> LibraryKey "library key"
   with name 'heavy' 'key';
@@ -1366,8 +1588,10 @@ Object Infirmary "Infirmary"
     light;
 
 Object -> Mirror "mirror"
+  class AdjObject,
   with
-    name 'mirror' 'reflective' 'metal' 'plate',
+    adj_name 'reflective' 'metal',
+    noun_name 'mirror' 'plate',
     react_before [;
       Examine:
         if (noun == selfobj) {
@@ -1389,6 +1613,21 @@ Object -> Mirror "mirror"
   has
     ;
 
+Object -> InfirmaryCabinet "medicine cabinet"
+  with
+    name 'medicine' 'cabinet',
+    description
+      "A wooden cabinet secured with a brass lock mechanism. Four wheels,
+      each engraved with Roman numerals I through X, can be rotated
+      independently. Carved into the wood above the lock: TEMPUS FUGIT.";
+
+! The Clue (flashback/memory)
+! inform6"You remember Brother Godric explaining his lock to Brother Aelred:
+! 'I don't want to keep medicines from my brothers in need, only from
+! the village folk we treat. It's set to something every brother
+! knows—outsiders wouldn't think to look for it.'"
+
+! Historia nostra, fides nostra
 
 Object InfirmaryChapel "Infirmary Chapel"
   with
@@ -1406,6 +1645,13 @@ Object HerbalistWorkroom "Herbalist Workroom"
     s_to Garden,
    has
      light;
+
+Object -> Basket "basket"
+  with
+    name 'basket',
+  has
+    container open
+  ;
 
 Object Garden "Garden"
   with
@@ -1483,14 +1729,185 @@ Object Undercroft "Undercroft"
     has light;
 #EndIf;
 
+Object FitzAlanCrypt "FitzAlan Crypt"
+  with
+    name 'fitzalan' 'crypt',
+    description
+      "A small vaulted chamber, no more than ten feet across. There are three
+      stone sarcophagi, each carved with remarkable detail despite
+      the cramped confines. The central tomb bears the effigy of a knight in
+      full armor, his hands clasped in prayer; his shield displays a red lion:
+      the FitzAlan arms. Flanking him are two smaller tombs,
+      their weathered inscriptions suggesting his wives or children.
+
+      ^^The walls here are finished stone rather than rough-hewn rock, and
+      narrow recesses have been cut into the walls---likely once holding
+      offerings or relics. The air is still, undisturbed for decades
+      or longer. A patina of dust covers everything, unmarred by footprints
+      save your own.
+
+      ^^A doorway to the west seems blocked by heavy fabric.",
+    w_to [;
+      print
+        "With some effort, you push against the fabric and emerge into a
+        much-larger crypt.^^";
+      return Crypt;
+    ],
+  has
+    ;
+
 Object Crypt "Crypt"
   with
     name 'crypt',
     description
-      "XXX Crypt",
+      "The crypt stretches before you, a forest of thick stone pillars
+      supporting low vaulted arches. Rows of stone sarcophagi line the walls,
+      their carved effigies of long-dead monks and benefactors worn smooth by
+      centuries of damp air. Small alcoves between the pillars hold humbler
+      tombs---stone slabs marking the resting places of lesser brethren.
+
+      ^^The air is thick and cold, heavy with the scent of earth and stone. Water
+      has seeped through cracks in the vaulting overhead, leaving dark stains
+      on the pillars and pooling in shallow depressions in the uneven floor.
+      An iron candelabra near the stairs holds stub ends of candles, their wax
+      long since melted into grotesque shapes.
+
+      ^^Against the eastern wall hangs a faded wooden panel depicting the Three
+      Living and the Three Dead, its Latin inscription barely legible in the
+      gloom.",
     u_to CryptStairs,
+    e_to [;
+      if (Frame hasnt general) "You can't go that way.";
+      print "You slip through the opening behind the panel, revealing...^^";
+      return FitzAlanCrypt;
+    ],
   has
     ~light;
+
+! not a tapestry, but wood panel
+! slid, raises fitzalan stairs -- trapping player
+! can they just slide panel from fa crypt? or what's the puzzle?
+! a panel (just art!) but the frame (sep object, brass) has a latch
+
+Object -> Panel "art panel"
+  with
+    name 'art' 'panel' 'youths' 'corpses',
+    initial [;
+      if (latch has open) "The panel is ajar, revealing an opening.";
+      if (frame has general)
+        "The panel is currently closed flush against the wall.";
+      rtrue;  ! hmm, always seems to print blank line.
+    ],
+    description
+      "A large wooden painted panel set in a brass frame, it
+      depicts the Three Living and the Three Dead---three noble youths
+      recoiling from three
+      crowned corpses who gesture toward them. Woven beneath in Gothic script:
+      ~QUOD FUIMUS, ESTIS; QUOD SUMUS, ERITIS~ (What we were, you are; what we
+      are, you will be). Dampness has taken its toll on the ancient
+      pigments.",
+    before [;
+      Take:
+        "Before you even try, you realize this would be much too large to
+        carry.";
+      Burn:
+        "Given how damp it is here, you couldn't catch it alight.";
+      Search:
+        "Besides your search for meaning on a memento mori, you find nothing
+        unexpected in the artwork.";
+      Turn, Push:
+        "The art panel seems affixed to the brass frame.";
+      Open:
+        if (Frame has general) <<Open Latch>>;
+      Close:
+        if (Frame has general) <<Close Latch>>;
+    ],
+    has
+      static;
+
+Object -> Frame "brass frame"
+  with
+    name 'brass' 'frame',
+    before [;
+      Search, Examine:
+        if (Latch has open)
+          "The panel and frame are ajar from the wall, revealing an opening.";
+        print "The brass frame encloses the art panel";
+        if (self hasnt general)
+          print
+            ". Examining it closely, you find
+            a small latch on the right-hand side of the panel";
+        give self general;
+        ".";
+      Push, Turn:
+        if (self has general) "Perhaps if you tried to do that to the latch?";
+        "Nothing unexpected happens.";
+      Open:
+        if (Frame has general) <<Open Latch>>;
+      Close:
+        if (Frame has general) <<Close Latch>>;
+    ],
+  has
+    scenery;
+
+Object -> Latch "latch"
+  with
+    parse_name [ w ;
+      ! don't recognize 'latch' until its found
+      ! prevent evil player from just assuming there's a latch hidden
+      ! somehwere
+      if (Frame hasnt general) return 0;
+      w = NextWord();
+      if (w == 'latch') return 1;
+      return 0;
+    ],
+    when_open
+      "The art panel and frame are ajar.",
+    description [;
+      print
+        "It's a small latch that seems to control something inside of the
+        brass frame. It is currently ";
+      if (self has open) "open."; "closed.";
+    ],
+    before [;
+      Open:
+        if (self hasnt open) {
+          give self open;
+          "You open the latch and feel the frame pop out a bit from the wall.";
+        }
+        "The latch is already opened.";
+      Close:
+        if (self has open) {
+          give self ~open;
+          "You push the frame against the wall and the latch clicks shut.";
+        }
+      Turn, Push:
+        if (self has open) <<Close self>>; <<Open self>>;
+    ],
+  has
+    scenery;
+
+Object -> Sarcophagi "sarcophagi"
+  with
+    name 'sarcophagi//p' 'crypts' 'tombs',
+    description
+      "Each is carved from a single block of stone and sealed with lead along
+       the edges.",
+    nope "Disturbing the Christian dead is mortal sin.",
+    before [;
+      Enter, Attack, Turn:
+        self.nope(); rtrue;
+      Push, Open:
+        self.nope();
+        "^Besides, the lids must
+        weigh several hundredweight. It would take multiple men with levers
+        to shift one.";
+    ],
+  has
+    scenery pluralname;
+
+
+
 
 ! ============================================== Second Floor
 
@@ -1556,15 +1973,21 @@ Object Rooftop "Rooftop"
 
 Object Dorm "Dorm"
   with
-    description
-      "This great room is lined with over three dozen cots, but you know there
+    ! we wake up here, and won't initially show the room name and description
+    short_name [;
+      if (turns == -1) rtrue;
+    ],
+    description [;
+      if (turns == -1) rtrue;
+      "This great room is lined with over two dozen cots, but you know there
       are far fewer monks currently at the priory. The active cots have a chest
       at the foot containing the few possesions each brother has.
       Dim light filters in from an open window high up, reflecting lightly on
       the wood floor.
 
       ^^Doorway leads south to the dorter and east to the necessarium.
-      Narrow stairs to the west descend down to the church.",
+      Narrow stairs to the west descend down to the church.";
+    ],
     e_to Necessarium,
     s_to Dorter,
     d_to NightStairs,
@@ -1618,8 +2041,10 @@ Object NightStairs "Night Stairs"
 
 
 Object -> TimeCandle "canonical hour candle"
+  class AdjObject,
   with
-    name 'candle' 'time' 'canonical' 'hour',
+    adj_name 'canonical' 'hour' 'time',
+    noun_name 'candle',
     initial
       "A candle sits in a sconce built into the stone wall.",
     description [ hour ;
@@ -1743,14 +2168,23 @@ Object MyHood "hood"
     ],
   has clothing container open concealed;
 
+
 [ Initialise;
-  QuoteBox(quote_opening);
+  QuoteBoxSimple(quote_opening);
   SetTime(135, 2);
   lookmode = 2;  ! verbose mode by default
 
-  move BrCuthbert to Dorm;
-  move BrHugh to Dorm;
-  move BrPrior to HighAltar;
+  move BrPrior to PriorsSolar;
+  move BrCuthbert to Sacristy;
+  move BrHugh to Undercroft;
+  move BrBenedict to Infirmary;
+  move BrWilfred to Library;
+  move BrAnselm to Quire;
+  move BrMartin to Kitchen;
+  move BrAelred to HerbalistWorkroom;
+
+  move BrRemigio to LayCells;
+
   move MyRobe to player;
 
   selfobj.description =
@@ -1759,24 +2193,35 @@ Object MyHood "hood"
     taken your final vows. Your head remains untonsured---that will come only
     if you complete your novitiate and join the community fully.";
 
-  "Late Summer, 1346:^
-  The lonely priory stands on the cliffs above Ashcombe,
+  print "Late Summer, 1346:^^
+  The priory stands forlornly on the cliffs above Ashcombe,
   on the northeast coast of England, where
   wind and sea have worn the stones for two hundred years.^^
 
   You awake at midnight to the sound of the great bell.
   You are lying in your bed, still bleary from sleep.
-  After five months here, you wish you were better acclimated to the schedule.^^
+  You hoped that after five months here, you'd be acclimated to the schedule.^^
 
   The other brothers get out of bed, fully dressed in their habits.^";
+
+  ! Don't print the banner at start; print it after service
+  return 2;
 ];
 
+#IfDef RETRO;
 Array quote_opening static --> 5 34
-  "Behold, how good and pleasant"
+  "Behold, how good and how pleasant"
   "it is for brethren"
-  "to dwell together in unity."
+  "to dwell together in unity!"
   ""
   "    --- The Book of Psalms";
+#IfNot;
+Array quote_opening static --> 4 41
+  "Behold, how good and how pleasant it is"
+  "for brethren to dwell together in unity!"
+  ""
+  "            --- The Book of Psalms";
+#EndIf;
 
 ! Array quote_light static --> 4 35
 !   "The light shines in the darkness,"
@@ -1784,10 +2229,10 @@ Array quote_opening static --> 5 34
 !   ""
 !   "              --- The Gospel of John";
 
-! Array quote_darkness static --> 3 35
-!   "They grope in the dark without light."
-!   ""
-!   "                --- The Book of Job";
+Array quote_darkness static --> 3 38
+  "They grope in the dark without light."
+  ""
+  "                --- The Book of Job";
 
 ! Array quote_crypt static --> 3 35
 !   "Son of man, can these bones live?"
@@ -1876,3 +2321,32 @@ Array quote_rose --> 4 32
 !           "You light your candle from the church candles.";
 !         "You have no flame to light the candle with.";
 !     ],
+
+! [ FinalMessages;
+
+!   "You tell Prior Oswald everything. Hugh is taken by the sheriff within
+!   days. He is tried, condemned, and hanged before the month is out. Rose
+!   dies alone that winter, with no brother to tend her.
+
+!   You kept your vows. You served truth. But standing in the herb garden
+!   where Aelred died, you wonder if justice and mercy are truly the same
+!   thing---or if, in choosing one, you betrayed the other.
+
+!   Aelred's words echo: ~One life for two, my son.~ You will never know
+!   if you honored his sacrifice, or squandered it.;"
+
+
+!   "You tell Hugh to leave. Tonight. Before questions are asked. He flees
+!   the island, and you never learn what becomes of him---or Rose.
+
+!   You lied to the Prior. You broke your vows. But when you pray before
+!   the Lady of Thorns, you remember Aelred's last words: ~One life for
+!   two, my son.~ Perhaps mercy, not justice, was what he meant.
+
+!   Still, you wonder. A murderer walks free. Does forgiveness make you
+!   holy, or complicit? You will carry this question all your days.";
+
+! ];
+
+
+

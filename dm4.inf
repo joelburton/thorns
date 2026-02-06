@@ -19,7 +19,7 @@ Constant OPTIONAL_FULL_DIRECTIONS;
 Constant MSG_SCORE_DEFAULT 1234;
 Constant MSG_STRONG_DEFAULT "Jesus wept.";
 
-[LibraryMessages p_msg p_arg_1 p_arg_2;
+[LibraryMessages p_msg; ! p_arg_1 p_arg_2;
 	switch(p_msg) {
     MSG_SCORE_DEFAULT:
         "Only Our Lord keeps score.";
@@ -154,6 +154,12 @@ Object TestRoom "Test Room"
 		],
 	has
 		light;
+
+Object -> Pen "pen"
+	with
+		name 'pen',
+	has
+		scenery;
 
 Object -> Boat "toy boat"
 	with

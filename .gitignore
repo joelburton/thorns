@@ -1,2 +1,4 @@
-thorns.z*
-html/index.html
+*.z*
+test.inf
+index.html
+puzzles.pdf
