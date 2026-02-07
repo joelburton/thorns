@@ -94,6 +94,8 @@ Include "ext_quote_box.h";
 
 Attribute history;
 
+Global suspicion_level = 0;
+
 [ DeathMessage;
   if (deadflag == 1) print "You have died";
   if (deadflag == 3) print "You have failed";
@@ -226,8 +228,13 @@ Verb 'slion' * -> SolveLion;
 [ SolveLightSub; give player light; "You're on FIRE, baby."; ];
 Verb 'slight' * -> SolveLight;
 
-[ SolveLibSub; give LibraryDoor open; "Unlocked librvary."; ];
+[ SolveLibSub; give LibraryDoor open; "Unlocked library."; ];
 Verb 'slib' * -> SolveLib;
+
+[ SuspicionChangeSub;
+  suspicion_level = noun;
+  "Suspicion Level set to ", suspicion_level, "."; ];
+Verb 'suspicion' * number -> SuspicionChange;
 
 [ LookUnderSub; "Nope."; ];
 Extend 'look'
@@ -302,6 +309,7 @@ Monk BrCuthbert "Brother Cuthbert"
   with
     name 'cuthbert' 'sacrist',
     description "Sacrist XXX",
+    possess 'cuthbert^s' 'cuthberts',
   has
   ;
 
@@ -310,6 +318,7 @@ Monk BrHugh "Brother Hugh"
   with
     name 'hugh' 'cellarer',
     description "Cellarer XXX",
+    possess 'hugh^s' 'hughs'
     history_text
       "Left at the monastery at only 8 by his family, Brother Hugh was brought
       up here. He serves us well as our cellarer, keeping track of our goods
@@ -324,6 +333,7 @@ Monk BrWilfred "Brother Wilfred"
   with
     name 'wilfred' 'librarian',
     description "Librarian XXX",
+    possess 'wilfred^s' 'wilfreds',
   has
   ;
 
@@ -332,6 +342,7 @@ Monk BrAelred "Brother Aelred"
   with
     name 'aelred' 'herbalist',
     description "Herbalist",
+    possess 'aelred^s' 'aelreds',
   has
       ;
 
@@ -340,6 +351,7 @@ Monk BrAnselm "Brother Anselm"
   with
     name 'anselm' 'cantor',
     description "Cantor XXX",
+    possess 'anselm^s' 'anselms',
   has
     ;
 
@@ -347,6 +359,7 @@ Monk BrBenedict "Brother Benedict"
   with
     name 'benedict' 'infirmarer',
     description "Infirmarer XXX",
+    possess 'benedict^s' 'benedicts',
   has
     ;
 
@@ -354,6 +367,7 @@ Monk BrMartin "Brother Martin"
   with
     name 'martin' 'kitchener',
     description "Kitchener XXX",
+    possess 'martin^s' 'martins',
   has
   ;
 
@@ -361,6 +375,7 @@ Monk BrRemigio "Brother Remigio"
   with
     name 'remigio',
     description "Lay monk XXX",
+    possess 'remigio^s' 'remigios',
   has
   ;
 
@@ -674,7 +689,7 @@ Object -> Stalls "stalls"
       "You've stood by and sat on these for months now during services.
       The carpentry is unremarkable and there is nothing these can reveal.",
   has
-    static scenery;
+    static scenery pluralname;
 
 Object -> Lectern "lectern"
   with
@@ -841,7 +856,7 @@ Object Sacristy "Sacristy"
 
   Object -> Candles "candles"
     with
-      name 'candles//p',
+      name 'candles',
       describe [; rtrue; ],
       description
         "There's a few candles here, finer than the more common ones made of
@@ -909,7 +924,7 @@ Object FitzAlanChantry "FitzAlan Chantry"
     cheap_scenery
       'stone' 'floor' "These almost look like scrapes from moving the altar."
       'gouge' 'gouges//p'
-        "You're not sure what caused them---perhaps the altar was pushed?"
+        "You're not sure what caused them---perhaps the altar was moved?"
       1 'motto' "~Leo Viam Custodit~",
   has
     light;
@@ -995,7 +1010,7 @@ Object -> FitzAlanLion "FitzAlan arms"
           "The carved arms are set high in the wall, well above you.";
     ],
   has
-    ~moved scenery;
+    ~moved scenery pluralname;
 
 !---------------------------------------------------- 2.0.8 Lady Chapel
 ! Chapel and statue
@@ -1135,7 +1150,7 @@ Object -> -> RoseHips "small red berries"
 
 Statue -> JudeStatue "St. Jude"
   with
-    name 'saint' 'st' 'jude' 'staff',
+    name 'saint' 'st' 'jude',
     description
       "A wooden statue of St Jude, simply carved and crudely painted.
       The saint holds a staff in one hand. His painted eyes seem to
@@ -1979,12 +1994,12 @@ Object Dorm "Dorm"
     ],
     description [;
       if (turns == -1) rtrue;
-      "This great room is lined with over two dozen cots, but you know there
-      are far fewer monks currently at the priory. The active cots have a chest
-      at the foot containing the few possesions each brother has.
-      Dim light filters in from an open window high up, reflecting lightly on
+      "This great room is used by all the choir monks except Brother Prior.
+      It could easily provide rest for twenty brothers, but there are only eight
+      cots in here now. Each cot has a chest at its foot for the any possessions
+      the brother has.
+      ^^Dim light filters in from an window high up, reflecting lightly on
       the wood floor.
-
       ^^Doorway leads south to the dorter and east to the necessarium.
       Narrow stairs to the west descend down to the church.";
     ],
@@ -1995,24 +2010,295 @@ Object Dorm "Dorm"
   has
     light;
 
-Object -> Cots "cots"
+Class Cot
   with
-    name 'cots' 'cot' 'beds' 'bed',
-    description "NOT IMPLEMENTED YET.",
+    parse_name [ w count ;
+      w = NextWord();
+      if (w == 'brother') {
+        count++;
+        NextWord();
+      }
+      if (w ~= self.amonk.&name-->0
+        or self.amonk.&possess-->0
+        or self.amonk.&possess-->1) return 0;
+      w = Nextword();
+      if (w ~= 'cot' or 'bed' or 'mattress') return 0;
+      return count + 2;
+    ],
+    description [;
+      print_ret
+        (The) self,
+        " is like all the others: a simple straw mattress on a plank.";
+    ],
+    short_name [;
+      print (The) self.amonk, "'s cot"; rtrue;
+    ],
+    before [;
+      Search, LookUnder: "A search of ", (The) self, " finds nothing.";
+      Take:
+        "You couldn't carry that easily---and besides, how would ",
+        (The) self.amonk, " sleep?";
+      Push, Turn:
+        "There's nothing underneath it, and it will just frustrate the
+        brothers to move their cots around.";
+    ],
+  has
+    proper scenery;
+
+! hugh: hide letters *under* chest
+! example things that could be in chest: sketch of priory, seashells, glasses
+
+Class Chest
+  with
+    parse_name [ w count ;
+      w = NextWord();
+      if (w == 'brother') {
+        count++;
+        w = NextWord();
+      }
+      if (w ~= self.amonk.&name-->0
+        or self.amonk.&possess-->0
+        or self.amonk.&possess-->1) return 0;
+      w = Nextword();
+      if (w ~= 'chest') return 0;
+      return count + 2;
+    ],
+    description [;
+      print_ret
+        (The) self,
+        " is like all the others: a simple wooden box with a lid.";
+    ],
+    short_name [;
+      print (The) self.amonk, "'s chest"; rtrue;
+    ],
+    before [;
+      Examine: ;
+      Take:
+        "You couldn't carry that easily---and besides, how would ",
+        (The) self.amonk, " store anything?";
+      Push, Turn:
+        "There's nothing underneath it, and it will just frustrate the
+        brothers to move their chests around.";
+      Open:
+        if (suspicion_level == 0)
+          "Searching another brother's property
+          without reason just feels wrong.";
+      default:
+        if (suspicion_level == 0)
+          "Doing anything with another brother's property
+          without reason just feels wrong.";
+    ],
+  has
+    proper container ~open openable scenery;
+
+Cot -> CotCuthbert
+ with amonk BrCuthbert;
+
+! XXX: a map of the priory from the library could show the fitzalan chapel
+
+Cot -> CotHugh
+  with amonk BrHugh;
+
+Cot -> CotWilfred
+  with amonk BrWilfred;
+
+Cot -> CotAelred
+  with amonk BrAelred;
+
+Cot -> CotAnselm
+  with amonk BrAnselm;
+
+Cot -> CotBenedict
+  with amonk BrBenedict;
+
+Cot -> CotMartin
+  with amonk BrMartin;
+
+Object -> MyCot "your cot"
+  class AdjObject,
+  with
+    adj_name 'my',
+    noun_name 'bed' 'mattress' 'cot',
+    description "It's your bed, all right. A simple straw mattress.",
   has
     scenery;
 
+Object -> MyChest "your chest"
+  class AdjObject,
+  with
+    adj_name 'my',
+    noun_name 'chest',
+    description "It's your chest."
+  has
+    scenery ~open openable container;
+
+Chest -> ChestCuthbert
+ with amonk BrCuthbert;
+
+Object -> -> Sketch "sketch"
+  with
+    name 'drawing' 'sketch',
+    description "A simple ink sketch of the priory.",
+    before [;
+      Take:
+        "Surely, you wouldn't want to take his only possession?";
+    ],
+  has
+    ;
+
+Chest -> ChestHugh
+  with amonk BrHugh;
+
+Object -> -> Letters "letters"
+  with
+    name 'letters',
+    description "A set of letters on parchment.",
+    invent [;
+      print "some letters from Rose";
+      rtrue;
+    ],
+    before [;
+      Examine:
+        if (suspicion_level < 2 && RoseHips hasnt general)
+          "A quick glance shows there are two letters, both from Hugh's
+          sister Rose. Even with Brother Aelred's death, reading another
+          brother's letters feels wrong. Perhaps if you had some particular
+          suspicion of Brother Hugh?^^You return them to the chest.";
+        "The first letter reads:
+
+        ^^~~~
+        ^Dearest Brother Hugh,
+
+        ^^I write to you in desperation, though it shames me to beg.
+        The harvest failed again this year, and what little we had
+        has gone to the lord's rent. My William can barely stand now---his
+        leg has worsened terribly since Candlemas.
+        The wound festers and will not heal.
+
+        ^^It must be cut, else the poison will spread to his heart.
+        There is a surgeon in Norwich, but the cost---Hugh, it is
+        three shillings. We have not three pence.
+
+        ^^I have sold all I can: the good kettle, even the winter blankets.
+
+        ^^I know the Rule forbids monks from keeping wealth.
+        I know you have given all to God. But if there is any way,
+        any kindness you might ask of your abbot, any alms the monastery
+        might spare for Christian charity. My William will die without it.
+
+        ^^Your sister in Christ and in blood,
+        ^Rose
+        ^~~~
+
+        ^^The second letter reads:
+
+        ^^~~~
+        ^Dearest Hugh,
+
+        ^^May God bless you a thousand times for your mercy.
+        The two shillings came just as William could no longer
+        rise from bed.
+
+        ^^We took William to the surgeon. He cut the leg below the knee.
+        It was terrible, Hugh, but necessary. William lives, praise God,
+        though he is weak yet.
+
+        ^^But the surgeon demands another shilling and sixpence still owed.
+        He will not wait past Michaelmas. And now William cannot work at
+        all---he who used to haul timber is now fit only to sit and weave
+        baskets, if his strength returns.
+
+        ^^I hate to ask again after your generosity. The shame burns in me.
+        But Hugh, they will take our cottage for the debt. The children will
+        have nowhere. Winter comes.
+
+        ^^If there is anything more you can do---any favor you might ask---I
+        swear by Our Lady I will never ask again.
+        One more shilling would save us.
+
+        ^^Your grateful sister,
+        ^Rose
+        ^~~~";
+      Take:
+        if (suspicion_level < 2)
+          "Surely, you wouldn't take another brother's meagre property.";
+    ],
+  has
+    pluralname;
+
+Chest -> ChestWilfred
+  with amonk BrWilfred;
+
+Chest -> ChestAelred
+  with amonk BrAelred;
+
+Chest -> ChestAnselm
+  with amonk BrAnselm;
+
+Object -> -> seashell "seashell"
+  class AdjObject,
+  with
+    adj_name 'sea' 'scallop',
+    noun_name 'seashell' 'shell',
+    description
+      "A perfectly-shaped scallop shell, perhaps kept as a
+      badge of a pilgrimage.",
+    before [;
+      Take: "Surely, taking such a simple personal item would be wrong.";
+    ],
+  has
+  ;
+
+Chest -> ChestBenedict
+  with amonk BrBenedict;
+
+Object -> -> Rosary "rosary"
+  with
+    name 'rosary',
+    description
+      "A set of plain beads strung together.",
+    before [;
+      Attack, Cut:
+        "Destroying another's property isn't something you'd consider.";
+      Take:
+        "Surely, taking another brother's rosary would be very wrong.";
+    ],
+  has
+    ;
+
+Chest -> ChestMartin
+  with amonk BrMartin;
+
+Object -> Cots "cots"
+  with
+    name 'cots' 'beds',
+    description "The cots are simple straw mattresses on a plank.",
+    before [;
+      Examine: ;
+      default:
+        "(If you want to do something to a cot,
+        specify which one.)";
+    ],
+  has
+    scenery pluralname;
+
 Object -> Chests "chests"
   with
-    name 'chest' 'chests',
-    description "NOT IMPLEMENTED YET.",
+    name 'chests',
+    description "The chests are simple wooden boxes with lids.",
+    before [;
+      Examine: ;
+      default:
+        "(If you want to do something to a chest,
+        specify which one.)";
+    ],
   has
-    scenery;
+    scenery pluralname;
 
 Object -> DormWindow "window"
   with
     name 'window',
-    description "NOT IMPLEMENTED YET.",
+    description "Just an opening in the stone and much too far to reach.",
     before [;
       Examine: ;
       default:
@@ -2106,7 +2392,7 @@ Object Necessarium "Necessarium"
 
 Object -> Latrines "latrines"
   with
-    name 'latrine' 'latrines//p' 'hole' 'holes//p',
+    name 'latrine' 'latrines' 'hole' 'holes',
     before [;
       Enter:
         "You're don't need to use the latrines just now.";
@@ -2269,12 +2555,6 @@ Array quote_rose --> 4 32
   ""
   "         --- Song of Solomon";
 
-! before [;
-  ! Search:
-  !   if (self == HughsLocker && HughSuspicion == false)
-  !     "You have no reason to go through Brother Hugh's belongings.
-  !     That would be a serious violation of his privacy and the Rule.";
-
   ! Object -> VestryCandle "candle"
   ! with
   !   name 'candle' 'tallow',
@@ -2300,12 +2580,6 @@ Array quote_rose --> 4 32
 !     if (need_to_lure_cat == false)
 !       "Taking food from the kitchen would be theft.";
 ! ]
-
-! For trying to take everything:
-! "The sin of avarice takes many forms."
-! For trying to kill something:
-! "Thou shalt not kill. The commandment is quite clear on this."
-
 
 
 ! Object Candle "candle"
