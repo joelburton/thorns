@@ -14,10 +14,12 @@
 	cd html && surge . lady-of-thorns.surge.sh
 	open https://lady-of-thorns.surge.sh
 
-%.up: %.z5
-	cp $< html/
+%.up: %.inf
+	inform -E1 +lib -S $<
+	cp $(<:.inf=).z5 html/
 	cd html && surge . lady-of-thorns.surge.sh
 	open https://lady-of-thorns.surge.sh
+	rm $(<:.inf=).z5
 
 clean:
 	rm *.z5 *.html

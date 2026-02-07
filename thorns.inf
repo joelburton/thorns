@@ -219,6 +219,13 @@ Class AdjObject
 Verb 'ring' 'toll' 'peal'
   * noun                    -> Pull;
 
+Extend 'climb'
+  * 'on' noun               -> Climb;
+
+Extend 'jump'
+  * 'on' noun               -> Climb;
+
+
 [ XyzzySub; "You're in a monastery, not Colossal Cave."; ];
 Verb 'xyzzy' 'plug' * -> Xyzzy;
 
@@ -236,7 +243,11 @@ Verb 'slib' * -> SolveLib;
   "Suspicion Level set to ", suspicion_level, "."; ];
 Verb 'suspicion' * number -> SuspicionChange;
 
-[ LookUnderSub; "Nope."; ];
+[ LookUnderSub;
+  if (ObjectIsUntouchable(noun)) return;
+  "Nope. XXX";
+];
+
 Extend 'look'
     * 'beneath' noun -> LookUnder
     * 'under' noun -> LookUnder;
@@ -277,12 +288,22 @@ Constant CLOCK_EVENING 4;
   switch (scope_stage) {
     1: rfalse;
     2: objectloop (o has history) PlaceInScope(o); rtrue;
+    3: "Zork!";
   }
 ];
 
 Extend 'look' first
 	! * 'up' noun 'in' noun    -> Consult reverse;
-	* 'up' scope=AllHistorical 'in' noun    -> Consult reverse;
+	* 'up' scope=AllHistorical 'in' noun    -> Consult reverse
+  * 'up' topic 'in' noun                  -> Consult reverse
+  * 'in' noun 'about' scope=AllHistorical -> Consult;
+
+Extend 'read' first
+	* 'about' scope=AllHistorical 'in' noun    -> Consult reverse
+	* scope=AllHistorical 'in' noun            -> Consult reverse;
+
+Extend 'consult' first
+	* noun 'about'/'on' scope=AllHistorical    -> Consult;
 
 
 Class Monk
@@ -295,7 +316,7 @@ Class Monk
       default: "He apologizes. ~I'm NOT IMPLEMENTED YET.~";
     ],
   has
-    animate proper;
+    animate proper history;
 
 ! enforces the rules, has own room
 Monk BrPrior "Brother Prior"
@@ -318,13 +339,12 @@ Monk BrHugh "Brother Hugh"
   with
     name 'hugh' 'cellarer',
     description "Cellarer XXX",
-    possess 'hugh^s' 'hughs'
+    possess 'hugh^s' 'hughs',
     history_text
       "Left at the monastery at only 8 by his family, Brother Hugh was brought
       up here. He serves us well as our cellarer, keeping track of our goods
       and manages the trade with boats.",
   has
-    history
   ;
 
 ! manages library, scriptorium
@@ -1550,17 +1570,24 @@ Object Library "Library"
   has
     light;
 
-Object -> MonkGuide "The History of the Monks of Our Lady of Thorns",
+Object -> MonkGuide "The History of the Monks",
   class AdjObject,
   with
     adj_name 'monks',
     noun_name 'history' 'book',
     description "A small book listing the monks who have served in the priory,
       along with some information on them.",
-    before [;
+    before [ i last_word end ;
       Consult:
-        if (second ~= nothing && second has history)
-          print_ret (string) second.history_text, "^";
+        if (second == nothing) {
+          print "You find no entry for ~";
+          last_word = consult_from + consult_words - 1;
+          end = WordAddress(last_word) + WordLength(last_word);
+          for (i = WordAddress(consult_from) : i < end : i++)
+            print (char) i->0;
+          "~ in ", (the) self, ".";
+        }
+        print_ret (string) second.history_text;
     ],
   has
     proper;
@@ -2000,13 +2027,12 @@ Object Dorm "Dorm"
       the brother has.
       ^^Dim light filters in from an window high up, reflecting lightly on
       the wood floor.
-      ^^Doorway leads south to the dorter and east to the necessarium.
-      Narrow stairs to the west descend down to the church.";
+      ^^Doorways lead south to the dorter and east to the necessarium.
+      Narrow stairs descend down to the church.";
     ],
     e_to Necessarium,
     s_to Dorter,
     d_to NightStairs,
-    w_to NightStairs,
   has
     light;
 
@@ -2114,18 +2140,20 @@ Cot -> CotBenedict
 Cot -> CotMartin
   with amonk BrMartin;
 
-Object -> MyCot "your cot"
+Object -> MyCot "cot"
   class AdjObject,
   with
+    article "your",
     adj_name 'my',
     noun_name 'bed' 'mattress' 'cot',
     description "It's your bed, all right. A simple straw mattress.",
   has
     scenery;
 
-Object -> MyChest "your chest"
+Object -> MyChest "chest"
   class AdjObject,
   with
+    article "your",
     adj_name 'my',
     noun_name 'chest',
     description "It's your chest."
@@ -2209,8 +2237,8 @@ Object -> -> Letters "letters"
         baskets, if his strength returns.
 
         ^^I hate to ask again after your generosity. The shame burns in me.
-        But Hugh, they will take our cottage for the debt. The children will
-        have nowhere. Winter comes.
+        But Hugh, they will take our cottage for the debt. We
+        have nowhere. Starvation comes.
 
         ^^If there is anything more you can do---any favor you might ask---I
         swear by Our Lady I will never ask again.
@@ -2456,6 +2484,11 @@ Object MyHood "hood"
 
 
 [ Initialise;
+  #IfDef Debug;
+    <ScriptOn>;
+  #EndIf;
+  ClearScreen();
+
   QuoteBoxSimple(quote_opening);
   SetTime(135, 2);
   lookmode = 2;  ! verbose mode by default
