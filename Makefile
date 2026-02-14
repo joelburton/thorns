@@ -1,4 +1,4 @@
-%.z5: %.inf
+%.z5: %.inf thints.h
 	inform -E1 +lib -S -D $<
 
 %.play: %.z5

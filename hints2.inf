@@ -1,0 +1,108 @@
+!% +../puny/lib
+!% -~S
+!% -e
+!% $MAX_ABBREVS=96
+!% $MAX_DYNAMIC_STRINGS=0
+!% $OMIT_UNUSED_ROUTINES=1
+!% $OMIT_SYMBOL_TABLE=1
+!% $ZCODE_LESS_DICT_DATA=1
+!% $ZCODE_COMPACT_GLOBALS=1
+!% $ZCODE_MAX_INLINE_STRING=9999
+
+Constant CUSTOM_ABBREVIATIONS;
+
+Abbreviate ". ";
+Abbreviate ", ";
+Abbreviate "You ";
+Abbreviate "'t ";
+Abbreviate "thing";
+Abbreviate "There is ";
+Abbreviate "_to/";
+Abbreviate "you ";
+Abbreviate "tion";
+Abbreviate "to ";
+Abbreviate "the";
+Abbreviate "You're";
+Abbreviate "hat ";
+Abbreviate "lready ";
+Abbreviate "are ";
+Abbreviate "can";
+Abbreviate "ave ";
+Abbreviate "But ";
+Abbreviate "would ";
+Abbreviate "ing ";
+Abbreviate "re ";
+Abbreviate "this";
+Abbreviate "The";
+Abbreviate "rea";
+Abbreviate "nderstand ";
+Abbreviate "you";
+Abbreviate "close";
+Abbreviate "which";
+Abbreviate "not ";
+Abbreviate "ome";
+Abbreviate "LookMode";
+Abbreviate "witch";
+Abbreviate "ope";
+Abbreviate "bjects";
+Abbreviate "in ";
+Abbreviate "ints";
+Abbreviate "Inform ";
+Abbreviate "ble";
+Abbreviate "I d";
+Abbreviate "on ";
+Abbreviate "parse";
+Abbreviate "that.";
+Abbreviate "ly ";
+Abbreviate "conta";
+Abbreviate "ve ";
+Abbreviate "when_";
+Abbreviate "put ";
+Abbreviate "ted";
+Abbreviate "ing";
+Abbreviate "en ";
+Abbreviate "ed.";
+Abbreviate "ers";
+Abbreviate "direc";
+Abbreviate "is ";
+Abbreviate "ease ";
+Abbreviate "at ";
+Abbreviate "an ";
+Abbreviate "hink ";
+Abbreviate "ent";
+Abbreviate "er ";
+Abbreviate "first";
+Abbreviate "here.";
+Abbreviate "ate c";
+Abbreviate "ed ";
+
+! Use as little memory as reasonably possible
+Constant INITIAL_LOCATION_VALUE = Room;
+Constant MAX_FLOATING_OBJECTS 1;
+Constant MAX_SCOPE 1;
+Constant MAX_TIMERS 1;
+Constant NO_SCORE;
+Constant OPTIONAL_NO_DARKNESS;
+Constant RUNTIME_ERRORS = 0;
+
+Include "globals.h";
+
+Constant Story "Hints";
+
+Include "puny.h";
+Include "./thints.h";
+
+Object Room " " with description [;
+    if (self has general) quit;
+    give self general;
+    Hints.select();
+];
+
+[ Initialise h ;
+    ! pointless check for HAS_HINTS -- always true -- but silence warning
+    #IfDef HAS_HINTS;
+    ! objectloop (h ofclass Hintobj) HintReady(h);
+    move hint_dragon to Hints;
+    move hint_intro to Hints;
+    #EndIf;
+];
