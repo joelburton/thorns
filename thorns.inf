@@ -27,7 +27,6 @@
 ! stones in gold and leaves her sons naked."
 
 
-! TODO: concealed vs describe-0
 ! inside_description - useful for sitting on things, like stalls
 
 ! =============================================================================
@@ -40,6 +39,9 @@
 ! 2.5 Below Ground
 ! 2.6 Second Floor
 ! 3.0 Grammar
+
+! TODO: add food hanging off bell tower from dorter window
+! TODO: key to restricted garden should be on aelred's body
 
 
 Constant Story "Our Lady of Thorns";
@@ -63,7 +65,7 @@ Constant OPTIONAL_FULL_SCORE;
 Constant TASKS_PROVIDED;
 
 Constant NUMBER_TASKS = 13;
-Constant MAX_SCORE = 60;
+Constant MAX_SCORE = 65;
 Array task_scores -> 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5;
 Constant TASK_PERFORM_OFFICE = 0;
 Constant TASK_IDENTIFY_ROSEHIPS = 1;
@@ -105,6 +107,8 @@ Constant SACK_OBJECT = Basket;
 
 
 Include "globals.h";
+
+Attribute ok_carry;
 
 ! --------------------------------- default messages
 
@@ -161,6 +165,8 @@ Global suspicion_level = 0;
 ! 3 = find coins or shortage or letters
 
 Global f_smelled_aelred = 0;
+Global f_warned_contraband = 0;
+Global f_identified_poison = 0;
 
 ! ============================================================= Hooks
 
@@ -169,11 +175,72 @@ Global f_smelled_aelred = 0;
   if (deadflag == 3) print "You have failed";
 ];
 
+[ CheckForContraband mir o caught_with ;
+  mir = MonkInRoom();
+  if (mir == BrRemigio or BrAelred) mir = 0; ! Remigio's not a narc
+
+  ! safe to carry contraband if not observed
+  if (mir==0 && ~~location ofclass Cloister) rfalse;
+
+  ! check for contraband, first thing becomes 'caught_with':
+  objectloop (o in player) {
+    if (o hasnt ok_carry) {
+      caught_with = o;
+      break;
+    }
+  }
+
+  if (caught_with == 0 && Basket in player && Basket has open) {
+    objectloop (o in Basket) {
+      if (o hasnt ok_carry) {
+        caught_with = o;
+        break;
+      }
+    }
+  }
+
+  ! no contraband, safe
+  if (caught_with == 0) rfalse;
+
+  if (random(3) > 1) f_warned_contraband++;
+
+  if (mir == 0) {
+    if (f_warned_contraband < 2)
+      "^You should be more careful. If any brother saw you carrying ",
+      (the) caught_with, " you'd face severe punishment.";
+    if (f_warned_contraband == 2)
+      "^Again: be careful. Carrying contraband around openly will get you in
+      no end of trouble.";
+  } else {
+    if (f_warned_contraband < 1)
+      "^Luckily, ", (the) mir, " didn't notice you openly carrying ",
+      (the) caught_with, ". If he had, you'd have faced severe punishment.
+      ^^You need to be more careful.";
+  }
+
+  if (mir == 0) {
+    mir = BrOswald;
+    print "^Brother Oswald enters here. He";
+  } else {
+    print "^", (the) mir;
+  }
+
+  print
+    " notices you openly carrying ", (the) caught_with,
+    ". ~Brother Novice, why are you doing with that?
+    That has nothing to do with your duties here.~^^
+    For disobeying the rules of the priory, you are given penance of
+    bread and water for a week.";
+    KillOff();
+];
+
 [ TimePasses ;  ! Call when # turns goes up
   SetTime(the_time + 2);
+  CheckForContraband();
 ];
 
 [ InScope ;
+  PlaceInScope(MyHood);
   ! So player can find sacristy door to open it
   if (real_location == Sacristy && location == thedark) {
     PlaceInScope(SacristyDoor);  ! so we can find door
@@ -219,11 +286,18 @@ Include "puny.h";
 
 ! ================================================================ Verbs
 
-[ HistoryScope o;
+[ ConsultScope o;
   switch (scope_stage) {
     1: rfalse;
-    2: objectloop (o provides history_text) PlaceInScope(o); rtrue;
+    2:
+      objectloop (o provides history_text) PlaceInScope(o);
+      objectloop (o provides herb_text) PlaceInScope(o);
+      rtrue;
   }
+];
+
+[ IsCandle ;
+  return (noun ofclass Candle);
 ];
 
 Extend 'climb' first
@@ -232,7 +306,20 @@ Extend 'climb' first
   * 'down' noun                           -> Exit;
 
 Extend 'consult' first
-	* noun 'about'/'on' scope=HistoryScope  -> Consult;
+	* noun 'about'/'on' scope=ConsultScope  -> Consult;
+
+Verb 'extinguish'
+  * noun=IsCandle                         -> SwitchOff;
+
+Extend 'blow' first
+  * 'out' noun=IsCandle                   -> SwitchOff;
+
+Verb 'plant'
+  * held                                  -> Dig
+  *                                       -> Dig;
+
+Extend 'dig'
+  *                                       -> Dig;
 
 Extend 'get' first
   * 'down'                                -> Exit;
@@ -252,16 +339,16 @@ Extend 'look'
 
 Extend 'look' first
 ! * 'up' noun 'in' noun                   -> Consult reverse;
-	* 'up' scope=HistoryScope 'in' noun     -> Consult reverse
+	* 'up' scope=ConsultScope 'in' noun     -> Consult reverse
   * 'up' topic 'in' noun                  -> Consult reverse
-  * 'in' noun 'about' scope=HistoryScope  -> Consult;
+  * 'in' noun 'about' scope=ConsultScope  -> Consult;
 
 Verb meta 'map'
   *                                       -> Map;
 
 Extend 'read' first
-	* 'about' scope=HistoryScope 'in' noun  -> Consult reverse
-	* scope=HistoryScope 'in' noun          -> Consult reverse;
+	* 'about' scope=ConsultScope 'in' noun  -> Consult reverse
+	* scope=ConsultScope 'in' noun          -> Consult reverse;
 
 Verb 'ring' 'toll' 'peal'
   * noun                                  -> Pull;
@@ -348,9 +435,18 @@ Verb 'xyzzy' 'plug'
       ^  |    Lay Dorm    |
       ^  +----------------+^";
 
-    Slype, Infirmary, InfirmaryChapel, HerbalistWorkroom, Garden:
+    Slype, Infirmary, InfirmaryChapel, Herbarium, Garden:
       font off;
-      print "^   NO MAP FOR THIS AREA YET XXX^";
+      print "
+      ^ +----------------+-----------+
+      ^       Slype      -           |
+      ^ +-+-----  ----+--| Infirmary |
+      ^   | Herbarium |  |           |
+      ^ +-+----   ----+--+----- -----+
+      ^ |                |           |
+      ^ |     Garden     |  Chapel   |
+      ^ |                |           |
+      ^ +----------------+-----------+^";
 
     default: "There is no map for this area.";
   }
@@ -427,13 +523,13 @@ Constant CLOCK_EVENING 4;
   return CLOCK_EVENING;                                         ! 6p-10p
 ];
 
-! Recursively check if a non-PC monk is in an obj, yes=true
-[ MonkInObj loc obj;
+! Recursively check if a non-PC monk is in an obj, yes=return monk
+[ MonkInObj loc obj mir;
   objectloop (obj in loc) {
     if (obj ofclass Monk)
-      rtrue;
-    if (MonkInObj(obj))
-      rtrue;
+      return obj;
+    mir = MonkInObj(obj);
+    if (mir) return mir;
   }
   rfalse;
 ];
@@ -489,6 +585,39 @@ Class Altar
     supporter enterable static;
 
 
+Class Candle
+  class AdjObject,
+  with
+    noun_name 'candle',
+    dont_need [;
+      if (FitzAlanAltar hasnt moved && Kitchen hasnt visited)
+        "There's no reason for this. The monastery is lit,
+        except at late night,
+        and carrying one about would only raise questions.";
+    ],
+    before [ helper ;
+      Burn:
+        if (self has light) "It's already lit.";
+        if (location == NightStairs) helper = TimeCandle;
+        if (location == Kitchen) helper = Hearth;
+        if ( (second == helper) || (second == nothing && helper) ) {
+          give self light;
+          "You light your candle using ", (the) helper, ".";
+        }
+        "You need something appropriate to light your candle.";
+      Take:
+        if (self.dont_need()) rtrue;
+      SwitchOff:
+        if (self hasnt light)
+          "It isn't lit.";
+        give self ~light;
+        "You extinguish the candle.";
+    ],
+  has
+    ~light;
+
+
+
 Class Chest
   with
     parse_name [ w count ;
@@ -534,6 +663,7 @@ Class Chest
     ],
   has
     proper container ~open openable scenery;
+
 
 
 Class Cot
@@ -655,7 +785,7 @@ Class Tincture
       Taste: self.lick(); rtrue;
     ],
   has
-    container openable ~open;
+    container openable ~open ok_carry;
 
 
 ! ================================================= MONKS
@@ -675,67 +805,108 @@ Monk BrAelred "Brother Aelred"
   with
     name 'aelred' 'herbalist',
     description [;
-      if (self hasnt animate)
-        "Dead descrip XXX";
-      "Your beloved mentor. In normal moments, Brother Aelred's eyes
-      twinkled with kindness, a smile framing against his broad face.
-      Right now, though, he looks desperately ill.
-      Sweat beads on his flushed face, and his pupils are enormously
-      dilated, giving his eyes a black, glassy appearance.
-      His limbs are twitching in his habit, making it seem
-      as though trying to remove something that isn't there.";
+      if (self has general)
+        "Your beloved mentor. In normal moments, Brother Aelred's eyes
+        twinkled with kindness, a smile framing against his broad face.
+        Right now, though, he looks desperately ill.
+        Sweat beads on his flushed face, and his pupils are enormously
+        dilated, giving his eyes a black, glassy appearance.
+        His limbs are twitching in his habit, making it seem
+        as though trying to remove something that isn't there.";
+      "Your beloved mentor. Brother Aelred is in his sixties, tall and broad-
+      shouldered, with gentle eyes that often crinkle with quiet amusement.
+      In the five months you've studied under him, his kindness has been
+      matched only by his knowledge of God's healing herbs.";
     ],
     possess 'aelred^s' 'aelreds',
     go_home [;
-      move self to HerbalistWorkroom;
+      move self to Herbarium;
+    ],
+    history_text
+      "Aelred (1280-). Entered the priory 1295 as a youth. Served as
+      Herbalist. Fluent in several languages beyond English and Latin.^^
+      Written below this in fresh ink in Wilfred's scratchy hand, it
+      reads:
+      ~Requiescat in pace, carus frater~.",
+    before [;
+      Smell:
+        if (self has general)
+          "There's something oddly distinctive about his breath:
+          acrid and stale, reminding you of old chamber pots.";
     ],
   has
       animate;  ! turn off when dead
-  ! henbane symptoms = visual hallcuinations
-
 
 Monk BrAnselm "Brother Anselm"
   with
     name 'anselm' 'cantor',
-    description "Cantor XXX",
+    description
+      "Brother Anselm, the Cantor, is barely thirty---young for his office.
+      He has a clear, strong voice and an easy smile. Unlike some of the
+      elder brothers, he seems to enjoy conversation when the Rule permits it.",
     possess 'anselm^s' 'anselms',
     go_home [;
       remove self;
     ],
+    history_text
+      "Anselm (1316-). Entered 1332. Appointed Cantor 1344 despite his
+      youth, owing to the exceptional clarity of his voice. Leads the
+      brothers in the Divine Office.",
   has
     ;
 
 Monk BrBenedict "Brother Benedict"
   with
     name 'benedict' 'infirmarer',
-    description "Infirmarer XXX",
+    description
+      "Brother Benedict, the Infirmarer, is a heavyset man in his forties
+      with gentle hands and a warmer smile than his bulk might suggest.
+      He moves with the careful efficiency of one who tends the suffering
+      daily.",
     possess 'benedict^s' 'benedicts',
     go_home [;
       move self to Infirmary;
     ],
+    history_text
+      "Benedict (1298-). Entered 1318. Served as Infirmarer from 1328.
+      Treats both brothers and villagers who seek healing. Known for his
+      patience with the dying.",
   has
     ;
 
 Monk BrCuthbert "Brother Cuthbert"
   with
     name 'cuthbert' 'sacrist',
-    description "Sacrist XXX",
+    description
+      "Brother Cuthbert, the Sacrist, is in his late forties. Dark-haired
+      and sharp-featured, he keeps the sacred vessels spotless and the
+      canonical hours precise. He rarely smiles.",
     possess 'cuthbert^s' 'cuthberts',
     go_home [;
       remove self;
     ],
+    history_text
+      "Cuthbert (1298-). Entered 1315, son of a nobleman from the south.
+      Appointed Sacrist 1325. Maintains
+      the sacred vessels and vestments with meticulous care. Keeps the
+      canonical hours by ringing the great bell.",
   has
   ;
 
 Monk BrHugh "Brother Hugh"
   with
     name 'hugh' 'cellarer',
-    description "Cellarer XXX",
+    description
+      "Brother Hugh, the Cellarer, is lean and blond, barely thirty but
+      already worry-worn. He manages the priory's worldly goods—trade,
+      stores, accounts—and the weight of it shows in his troubled expression.",
     possess 'hugh^s' 'hughs',
     history_text
-      "Left at the monastery at only 8 by his family, Brother Hugh was brought
-      up here. He serves us well as our cellarer, keeping track of our goods
-      and manages the trade with boats.",
+      "Hugh (1314-). Brought to the priory 1322 as a child of eight, his
+      family unable to feed him after failed harvests. Raised and educated
+      by the brothers. Appointed Cellarer 1342. Manages stores and trade
+      with exceptional diligence. Has a widowed sister in the village of Holt
+      who visited once.",
     go_home [;
       move self to Undercroft;
     ],
@@ -745,28 +916,46 @@ Monk BrHugh "Brother Hugh"
 Monk BrMartin "Brother Martin"
   with
     name 'martin' 'kitchener',
-    description "Kitchener XXX",
+    description
+      "Brother Martin, the Kitchener, is short, round, and quick to laugh---
+      unusual in this somber place. He and Brother Remigio, the lay monk,
+      produce the simple meals that sustain the community.",
     possess 'martin^s' 'martins',
     go_home [;
-      move self to Locutory;
+      move self to Kitchen;
     ],
+    history_text
+      "Martin (1304-). Entered 1322. Appointed Kitchener 1334. Oversees
+      the preparation of meals for the community, assisted by Brother
+      Remigio.",
   has
   ;
 
 Monk BrOswald "Brother Oswald"
   with
     name 'oswald' 'prior',
-    description "Oswald Prior XXX",
+    description
+      "Brother Oswald, the Prior. Lean and grey-haired, in his early fifties,
+      he governs the priory with stern discipline. You've learned to measure
+      your words and deeds carefully in his presence.",
     go_home [;
       move self to PriorsSolar;
-    ]
+    ],
+    history_text
+      "Oswald (1294-). Entered 1312 from a minor noble family. Elected
+      Prior 1338 upon the death of Brother Wilfred's predecessor. Governs
+      with strict adherence to the Rule of St. Benedict.",
   ;
 
 
 Monk BrRemigio "Brother Remigio"
   with
     name 'remigio',
-    description "Lay monk XXX",
+    description
+      "Brother Remigio is a lay brother from Tuscany---not fully professed,
+      but devoted to the work. He's in his late thirties, with sharp features
+      and expressive hands. His English is poor, and he often lapses into
+      his native Tuscan tongue.",
     possess 'remigio^s' 'remigios',
     go_home [;
       move self to Kitchen;
@@ -782,6 +971,11 @@ Monk BrRemigio "Brother Remigio"
           stairs. ~Go below if you must, Brother. I will not question you.~";
         }
     ],
+    history_text
+    history_text
+      "Remigio (c.1308-). A lay brother from Tuscany, came to the priory
+      1340 seeking refuge from troubles in his homeland. Works in the
+      kitchen and performs manual labor. Has not taken full vows.",
   has
   ;
 
@@ -794,10 +988,13 @@ Monk BrWilfred "Brother Wilfred"
       in all directions from his head. His fingers are stained with pigments,
       and his habit has bits of fluff or fur on it.",
     history_text
-      "Wilfred XXXX-. Wilfred joined the monastery as a young man,
-      coming from a well-educated family. From XXXX-XXXX, he served
-      as the Prior, but in his old age, now acts as the master
-      illuminator and librarian.",
+      "Wilfred (1273-). Entered 1290 from a scholarly family in Norwich.
+      Elected Prior 1310, serving until 1338 when he stepped down due to
+      age and failing sight. Now serves as Librarian and master illuminator,
+      though his hands tremble with the years. The oldest brother in living
+      memory, he has seen the priory through plague, famine, and decline.^^
+      You note that this entry was written by Wilfred, but in his
+      way, he tried to maintain a distant and truthful tone.",
     initial [;
       if (BrWilfred in Scriptorium)
         print "Brother Wilfred is seated at the table, close to south wall";
@@ -1081,8 +1278,10 @@ Object Service "service"
       remove self;
       give self ~general;
       StopTimer(self);
-      if (BrAelred has animate) move BrAelred to HerbalistWorkroom;
-      remove BrAnselm;
+      if (BrAelred has animate) {
+        move BrAelred to Slype;
+        give BrAelred general; ! dying
+      }
       move BrBenedict to Infirmary;
       remove BrCuthbert;
       move BrHugh to Undercroft;
@@ -1091,10 +1290,14 @@ Object Service "service"
       move BrRemigio to Kitchen;
       move BrWilfred to Scriptorium;
       print "You join the others in song.^^ - * - * -";
+      QuoteBoxSimple(quote_song);
       Achieved(TASK_PERFORM_OFFICE);
       Quire.description = Quire.old_description;
       give Stalls ~concealed;
-      "^^After a while, the office ends, and the other brothers depart.";
+      print
+        "^^After a while, the office ends, and the other brothers depart,
+        leaving you in the Quire.^^";
+      Banner();
     ],
     add_to_scope [;
       if (BrOswald in HighAltarArea) { PlaceInScope(BrOswald); }
@@ -1374,48 +1577,28 @@ Object -> Candles "candles"
     before [;
       Burn: "Burning all of these candles would be madness.";
       Take:
-        if (Candle.dont_need()) rtrue;
+        if (MyCandle.dont_need()) rtrue;
         "The theft of all of the candles would be quickly discovered.";
     ],
-    add_to_scope Candle,
+    add_to_scope MyCandle,
   has pluralname;
 
-Object Candle "candle"
-  class AdjObject,
+Candle MyCandle "beeswax candle"
   with
     adj_name 'beeswax',
-    noun_name 'candle',
-    describe [;
-      if (self hasnt moved) rtrue;
-      rfalse;
-    ],
-    dont_need [;
-      if (FitzAlanAltar hasnt moved)
-        "There's no reason for this. The monastery is lit,
-        except at late night,
-        and carrying one about would only raise questions.";
-    ],
     description [;
       print "Good quality, made from beeswax from the priory's own bees";
       if (self has light) print ". It is currently lit.";
       ".";
     ],
     before [;
-      Burn:
-        if (self has light) "It's already lit.";
-        if ((second == nothing && location == NightStairs)
-              || second == TimeCandle) {
-          give self light;
-          "You light your candle using ", (the) TimeCandle, ".";
-        }
-        "You need something appropriate to light your candle.";
       Take:
         ! haven't solved lion/crypt: don't let them take
-        if (Candle.dont_need()) rtrue;
+        if (MyCandle.dont_need()) rtrue;
         ! if there's already a candle in room or player, they get this one
         if (IndirectlyContains(location, self)) rfalse;
         ! if it's been removed from the game (destroyed), they get another
-        if (parent(Candle) == nothing) {
+        if (parent(MyCandle) == nothing) {
           move self to player;
           if (self has moved)
             "Feeling even more guilt, you take another candle.";
@@ -1431,14 +1614,10 @@ Object Candle "candle"
 
 
 
-! TODO:
+! TODO: candle
 !
-! candle problem: can't carry lit candle or in-hand candle:
-!   in front of any monk or anywhere on cloister
 ! can douse with water (add water barrel on porch or in sacristry for cleaning)
 ! and then hide in hood or basket
-! or, can throw into latrines (but cant work for undercroft darkness)
-!   since can't light candle there  XXX: wouldn't there be a fire there?
 
 Room FitzAlanChantry "FitzAlan Chantry"
   with
@@ -1714,7 +1893,6 @@ Object -> -> RoseHips "small red berries"
       }
       ", reminiscent of roses.";
     ],
-    ! XXX perhaps they have to both smell and taste before they recognize?
     before [;
       Eat:
         "You shouldn't eat an offering left to a saint.";
@@ -1730,7 +1908,7 @@ Object -> -> RoseHips "small red berries"
         "They're firm. Perhaps you should check their scent?";
     ],
   has
-    pluralname edible concealed;
+    pluralname edible concealed ok_carry;
 
 Statue -> JudeStatue "St. Jude"
   with
@@ -1973,6 +2151,8 @@ Object PriorKey "fake key"
       Use me to unlock the Prior's door.",
     found_in CloisterNW,
     initial "A large key glows in neon red on the stone floor.",
+  has
+    ok_carry
   ;
 
 Room PriorsSolar "Prior's Solar"
@@ -1985,6 +2165,9 @@ Room PriorsSolar "Prior's Solar"
       The room is austere but private---a privilege of rank in a
       community that otherwise shares everything.",
     e_to PriorDoor,
+    every_turn [;
+      Achieved(TASK_OPEN_SOLAR);
+    ],
   has
     ;
 
@@ -2096,8 +2279,8 @@ Object -> Basin "basin"
     after [;
       Receive:
         print (The) noun, " drops into the water";
-        if (noun == Candle && Candle has light)
-          { give Candle ~light; print " and extinguishes"; }
+        if (noun == MyCandle && MyCandle has light)
+          { give MyCandle ~light; print " and extinguishes"; }
         ".";
     ],
   has
@@ -2116,7 +2299,6 @@ Object -> -> Water "water"
   has
     ;
 
-! XXX: can take, but need to put back to exit
 
 Object -> Towel "towel"
   with
@@ -2134,7 +2316,9 @@ Object -> Towel "towel"
       Smell:
         "It smells damp and musty.";
     ],
-  ;
+  has
+    ok_carry;
+
 
 
 ! ============================================= East Wing
@@ -2345,55 +2529,6 @@ Object -> Fireplace "fireplace"
   has
     container open;
 
-Object MandrakeRoot "mandrake root"
-  with
-    name 'mandrake' 'root',
-    description
-      "A pale, forked root twisted into a vaguely human shape.",
-    burn_time 0,
-    daemon [;
-      self.burn_time++;
-      switch (self.burn_time) {
-        1:
-          move self to Fireplace;
-          if (player in Scriptorium)
-            "^An unpleasant, acrid stench starts to fill the room.
-            To be cautious, you move to the north side of the room, far from
-            the fireplace.";
-        2:
-          give BrWilfred general;
-          if (player in Scriptorium) "^Brother Wilfred starts to snore.";
-        3:
-          if (player in Scriptorium) "^Brother Wilfred seems deeply asleep.";
-        5:
-          if (player in Scriptorium)
-            "^The mandrake root has burned, and the air starts to clear.";
-          remove self;
-        7:
-          if (player in Scriptorium)
-            "^Brother Wilfred begins to stir.";
-        8:
-          give BrWilfred ~general;
-          self.burn_time = 0;
-          StopDaemon(self);
-          if (player in Scriptorium)
-            "^Brother Wilfred seems groggily awake now.";
-      }
-    ],
-    before [;
-      Burn:
-        if (player in Scriptorium) { StartDaemon(self); rtrue; }
-      Smell:
-        "An unpleasant, earthy smell.";
-      Taste:
-        "You take a tiny nibble, and find it extremely unpleasant.";
-      Eat:
-        "You've already learned from Brother Aelred enough to know
-        you shouldn't eat this.";
-    ]
-  has
-    ;
-
 ! ----------------------------------------------------------------------------
 
 Object -> LibraryDoor "library door"
@@ -2500,13 +2635,18 @@ Object MonkGuide "Registrum Fratrum",
           "It's too long to read through, but you can look up particular
           entries by name.";
       Consult:
-        if (second == nothing) {
+        if (second == nothing || ~~(second provides history_text)) {
           print "You find no entry for ~";
-          last_word = consult_from + consult_words - 1;
-          end = WordAddress(last_word) + WordLength(last_word);
-          for (i = WordAddress(consult_from) : i < end : i++)
-            print (char) i->0;
-          "~ in ", (the) self, ".";
+          if (second == nothing) {
+            last_word = consult_from + consult_words - 1;
+            end = WordAddress(last_word) + WordLength(last_word);
+            for (i = WordAddress(consult_from) : i < end : i++)
+              print (char) i->0;
+          }
+        else {
+          print (name) second;
+        }
+        "~ in ", (the) self, ".";
         }
         print_ret (string) second.history_text;
     ],
@@ -2539,7 +2679,7 @@ Room Slype "Slype"
     description
       "A long east-west stone corridor. West is the cloister,
       east is the infirmary. A small passage heads south to the herbarium.",
-    s_to HerbalistWorkroom,
+    s_to Herbarium,
     e_to Infirmary,
     w_to CloisterSE,
   has
@@ -2654,7 +2794,8 @@ Tincture -> -> PoppySyrup "poppy syrup"
       "A small bottle of a red-dark, thick liquid. You know from Brother
       Aelred that this is used as a painkiller. If misused, it can be fatal.",
     scent "heady and sweet.",
-    flavor "floral and sweet."
+    flavor "floral and sweet.",
+    herb_text "POPPY XXX",
   ;
 
 Tincture -> -> HenbaneTincture "tincture of henbane"
@@ -2667,8 +2808,10 @@ Tincture -> -> HenbaneTincture "tincture of henbane"
       This bottle is almost entirely empty, with only a bit remaining.",
     scent "overtones of alcohol and urine.",
     flavor "gluey, unpleasant, and bitter.",
+    herb_text "HENBANE XXX",
     identified [;
       Achieved(TASK_IDENTIFY_POISON);
+      f_identified_poison = true;
       if (suspicion_level == 0) suspicion_level = 1;
       "^That's it---you now know that your dear mentor was poisoned with ",
       (the) self, ". You know you'll need to figure out who killed him and
@@ -2696,6 +2839,7 @@ Tincture -> -> Theriac "theriac"
       poisons.",
     scent "complex notes of honey and exotic spices.",
     flavor "overpoweringly sweet and bitter.",
+    herb_text "THERIAC XXX",
   ;
 
 Class Wheel
@@ -2738,6 +2882,8 @@ Wheel -> Wheel4 "fourth wheel"
   with name 'fourth' '4th' 'four' 'wheel';
 
 ! ----------------------------------------------------------- Infirmary Chapel
+! The player can only entere here after the death, so we can
+! write this knowing there will be a body in it, etc.
 
 Room InfirmaryChapel "Infirmary Chapel"
   with
@@ -2748,10 +2894,98 @@ Room InfirmaryChapel "Infirmary Chapel"
         desperately ill make their final prayers. The air is heavy with the
         memory of fear and hope. The infirmary lies to the north.",
     n_to Infirmary,
+    cheap_scenery
+      1 'eyes' [;
+        print "His eyes are wide and dilated";
+        if (f_identified_poison)
+          "---a telltale sign of henbane poisoning";
+        ".";
+      ],
+
+
   has
     ;
 
 Altar -> InfirmaryAltar "altar";
+
+Object -> -> BrAelredBody "Brother Aelred's body"
+  class AdjObject,
+  with
+    adj_name 'brother' 'aelred^s' 'earthly',
+    noun_name 'body' 'corpse' 'remains' 'aelred',
+    initial "On the altar is Brother Aelred's earthly remains.",
+    description [;
+      if (self hasnt moved) {
+        QuoteBoxSimple(quote_body);
+        give self moved;
+      }
+      print
+        "Your beloved mentor lies still on the altar, covered with a simple
+        white shroud. His face is visibly peaceful now, though you remember
+        his agony earlier. His eyes are still open---staring upward as if
+        fixed on Heaven, his hands folded
+        across his chest";
+      if (self hasnt general)
+        print
+          ". Something seems odd about him, though you can't quite place it";
+      else if (f_identified_poison)
+        print
+          ". Now you notice: even in death, his pupils remain enormously
+          dilated---a telltale sign of henbane poisoning.";
+      ".";
+    ],
+    react_before [;
+      Smell:
+        "There is an odd faint odor in the air.";
+      Pray:
+        "You whisper a small sad prayer to your dear mentor.
+        You fervently hope he can hear you.";
+    ],
+    before [;
+            Smell:
+        if (self hasnt general) {
+          give self general;
+          "There's an odd smell about his remains---something like alcohol
+          and urine in his mouth. Unusual.";
+        }
+        "That same odd smell lingers.";
+      Kiss:
+        "You reverently kiss him on the forehead---and then notice an odd
+        odor about his remains.";
+      Touch: "Already cold.";
+      Attack, Cut, Burn: "Absolute blasphemy!";
+      LookUnder:
+        "Shifting the body slightly, you find nothing underneath.";
+      Turn, Push, Pull:
+        "You dare not disturb the dead---particularly
+        not one who was so dear to you.";
+      Take:
+        "Moving him would be deeply inappropriate. Plus, he's much too heavy
+        to carry.";
+    ],
+    life [;
+      Give:
+        "He is beyond earthly needs.";
+      WakeOther:
+        "You've been studying Lazarus too much.";
+      default:
+        "While in life, he overflowed with joyful energy---alas, no more.";
+    ],
+  has animate;
+
+Object -> -> Shroud "shroud"
+  class AdjObject,
+  with
+    adj_name 'white',
+    noun_name 'shroud',
+    description "A simple and dignified white cloth.",
+    before [;
+      Examine: ;
+      Search: "There is nothing underneath it but the body of your mentor.";
+      default: "Leave the shroud be, Brother.";
+    ],
+  has
+    ;
 
 Statue -> RochStatue "statue"
   with
@@ -2763,46 +2997,217 @@ Statue -> RochStatue "statue"
 
 ! ------------------------------------------------------------------- Herbarium
 
-Room HerbalistWorkroom "Herbarium"
+Room Herbarium "Herbarium"
   with
     description
-      "XXX",
+      "This room still carries Brother Aelred's presence in every corner.
+      Bundles of dried herbs hang from the ceiling---thyme, rosemary, basil.
+      The worktable bears the marks of his careful hands: ink-labeled jars
+      in his
+      script, worn grooves where he ground countless remedies.
+      Without him here, the room feels hollow.
+      ^^The slype lies north, and the garden---his garden---waits
+      to the south.",
     n_to Slype,
     s_to Garden,
    has
      ;
 
+Object -> HerbTable "worktable"
+  class AdjObject,
+  with
+    adj_name 'work',
+    noun_name 'worktable' 'table',
+    react_before [;
+      Go:
+        if (player in self) {
+          if (selected_direction == d_to) <<Exit self>>;
+          "You'd have to climb down from ", (the) self, " first.";
+        };
+    ],
+    description [;
+      print "A large, heavy table";
+      PrintContents(". On it ", self, ISARE_BIT);
+      ".";
+    ],
+    find_basket [;
+      if (Basket hasnt moved) {
+        give Basket ~concealed;
+        "Looking below the table, you find Brother Aelred's basket,
+        which he used for gathering and carrying herbs.";
+      }
+    ],
+    before [;
+      Search:
+        if (self.find_basket()) rtrue;
+      Climb: <<Enter self>>;
+      LookUnder:
+        if (self.find_basket()) rtrue;
+    ],
+    after [;
+      Enter: "You climb up onto the worktable.";
+      Exit: "You climb down from the worktable.";
+    ],
+  has
+    supporter enterable;
+
+Object -> Herbal "Aelred's Herbal"
+  class AdjObject,
+  with
+    adj_name 'aelred' 'aelred^s',
+    noun_name 'herbal' 'book',
+    description
+      "A thin volume, but very handy: it lists many herbs and other plants,
+      along with descriptions of them.",
+    before [ end i last_word ;
+      Examine:
+        if (verb_word == 'read')
+          "It's much too dense to read the entire thing. You can consult it
+          by looking up a plant by name.";
+      Consult:
+        if (second == nothing || ~~(second provides herb_text)) {
+          print "You find no entry for ~";
+          if (second == nothing) {
+            last_word = consult_from + consult_words - 1;
+            end = WordAddress(last_word) + WordLength(last_word);
+            for (i = WordAddress(consult_from) : i < end : i++)
+              print (char) i->0;
+          }
+        else {
+          print (name) second;
+        }
+        "~ in ", (the) self, ".";
+        }
+        print_ret (string) second.herb_text;
+    ],
+  has proper;
+
 Object -> Basket "basket"
   with
     name 'basket',
+    description
+      "A deep flax basket with a closable lid---perhaps when
+      harvesting herbs and carrying them to the infirmary.",
+    before [;
+      Receive:
+        if (noun has light)
+          "Placing a lit item in the basket would surely catch it on fire.";
+    ],
   has
-    container open
+    concealed container open openable ok_carry;
+
+Class Herb
+  class AdjObject,
+  with
+    describe 0,
+    article "a spring of",
+    adj_name 'sprig' 'of',
+    before [;
+      Smell: "It smells ", (string) self.scent, ".";
+      Taste: "It tastes ", (string) self.flavor, "'";
+      Take:
+        if (location == Herbarium && parent(player) ~= HerbTable) {
+          print_ret (The) self, " is too high up for your reach.";
+        }
+    ],
+    after [;
+      "You grab a spring of ", (the) noun, ".";
+    ],
+    scent "",
+    flavor "",
+
+  has edible;
+
+Herb Rosemary "rosemary"
+  with
+    found_in Herbarium Garden,
+    noun_name 'rosemary',
+    scent "Sharp and piney.",
+    flavor "overpoweringly sharp.",
+    herb_text "ROSEMARY XXX",
   ;
+
+Herb Thyme "thyme"
+  with
+    found_in Herbarium Garden,
+    noun_name 'thyme',
+    scent "Earthy.",
+    flavor "warm and herbacious.",
+    herb_text "THYME XXX",
+  ;
+
+Herb Parsley "parsley"
+  with
+    found_in Herbarium Garden,
+    noun_name 'parsley',
+    scent "Deep and grassy.",
+    flavor "fresh and herbacious.",
+    herb_text "PARSLEY XXX",
+  ;
+
+
 
 ! --------------------------------------------------------------------- Garden
 
 Room Garden "Garden"
   with
     description
-      "XXX",
-    n_to HerbalistWorkroom,
+      "Aelred's garden. You can still see where his hands touched
+      everything---the carefully weeded beds, the
+      path worn by his daily rounds.
+      ^^You enter the herbarium to the north. A locked gate west guards
+      plants too dangerous for common use.",
+    n_to Herbarium,
     w_to GardenGate,
-   has
-     ;
-
-Object -> Basil
-  with
-    name 'basil',
+    before [;
+      Dig:
+        "You dare not dig or plant in his garden. Not today.";
+    ],
+  has
     ;
-Object -> GardenGateKey "garden gate key";
+
+Herb -> Basil "basil"
+  with
+    noun_name 'basil',
+    ! describe 0,
+    scent "XXX",
+    flavor "XXX",
+    herb_text "Basil XXX",
+  has
+    ok_carry concealed;
+
+Object -> Beds "beds"
+  with
+    name 'beds' 'bed',
+    description
+      "Rows of neatly planted beds. You can see rosemary, parsley,
+      basil, and thyme.",
+  has
+    pluralname scenery;
+
+
+Object -> GardenGateKey "pitted key"
+  with
+    name 'pitted' 'key',
+    description "XXX THIS IS JUST A PLACEHOLDER FOR A PUZZLE.",
+  has ok_carry;
 
 ! -------------------------------------------------------- Restricted Garden
 
-Object -> GardenGate "garden gate"
+Object -> GardenGate "restricted garden gate"
+  class AdjObject,
   with
-    description "XXX",
-    door_dir w_to,
-    door_to RestrictedGarden,
+    adj_name 'restricted' 'garden',
+    noun_name 'gate',
+    when_open "The gate for the restricted garden is open.",
+    when_closed [;
+      print "The gate for the restricted garden is closed";
+      if (self has locked) print " and locked";
+      ".";
+    ],
+    description "A wooden fence protecting access to the dangerous plants.",
+    found_in RestrictedGarden Garden,
+    door_dir (w_to) (e_to),
     with_key GardenGateKey
   has
     static door openable locked lockable;
@@ -2810,11 +3215,117 @@ Object -> GardenGate "garden gate"
 
 Room RestrictedGarden "Restricted Garden"
   with
-    description "XXX",
-    e_to Garden,
-    out_to Garden,
+    description [;
+      print
+        "Here is Aelred's collection of dangerous plants---those
+        too potent for casual use, too deadly for error. The beds here
+        are smaller, more carefully separated.
+
+        You recognize monkshood by its
+        dark leaves, foxglove by its bell-shaped flowers gone to seed.
+        Henbane grows in one corner, its sticky leaves and sickly-sweet smell
+        unmistakable.";
+      if (MandrakeRoot hasnt moved)
+        print
+          " A gnarled mandrake root pushes pale and forked from the
+          earth like a tiny, twisted figure.";
+      "^^Aelred brought you here only twice, making you repeat each plant's
+      name, its use, its danger. ~Respect them, my son,~ he said. ~In the
+      right dose, they heal. In the wrong, they kill.~";
+    ],
+    e_to GardenGate,
+    out_to GardenGate,
   has
     ;
+
+Object -> RestBeds "beds"
+  with
+    name 'beds' 'bed',
+    description [;
+      print "Rows of neatly planted beds. You can see monkshood, foxglove, ";
+      if (MandrakeRoot hasnt moved) print "henbane, and a single mandrake root";
+      else print "henbane";
+      " growing here.";
+    ]
+  has
+    pluralname scenery;
+
+Herb -> Monkshood "monkshood"
+  with
+    noun_name 'monkshood',
+    scent "MONKSHOOD XXX",
+    flavor "MONKSHOOD XXX",
+    description "XXX",
+    herb_text "XXX",
+  ;
+
+Herb -> Foxglove "foxglove"
+  with
+    noun_name 'foxglove',
+    scent "FOXGLOVE XXX",
+    flavor "FOXGLOVE XXX",
+    description "XXX",
+    herb_text "XXX",
+  ;
+
+Herb -> Henbane "henbane"
+  with
+    noun_name 'henbane',
+    scent "HENBANE XXX",
+    flavor "HENBANE XXX",
+    herb_text "XXX",
+  ;
+
+Object -> MandrakeRoot "mandrake root"
+  with
+    name 'mandrake' 'root',
+    description
+      "A pale, forked root twisted into a vaguely human shape.",
+    herb_text "XXX",
+    burn_time 0,
+    daemon [;
+      self.burn_time++;
+      switch (self.burn_time) {
+        1:
+          move self to Fireplace;
+          if (player in Scriptorium)
+            "^An unpleasant, acrid stench starts to fill the room.
+            To be cautious, you move to the north side of the room, far from
+            the fireplace.";
+        2:
+          give BrWilfred general;
+          if (player in Scriptorium) "^Brother Wilfred starts to snore.";
+        3:
+          if (player in Scriptorium) "^Brother Wilfred seems deeply asleep.";
+        5:
+          if (player in Scriptorium)
+            "^The mandrake root has burned, and the air starts to clear.";
+          remove self;
+        7:
+          if (player in Scriptorium)
+            "^Brother Wilfred begins to stir.";
+        8:
+          give BrWilfred ~general;
+          self.burn_time = 0;
+          StopDaemon(self);
+          if (player in Scriptorium)
+            "^Brother Wilfred seems groggily awake now.";
+      }
+    ],
+    before [;
+      Burn:
+        if (player in Scriptorium) { StartDaemon(self); rtrue; }
+      Smell:
+        "An unpleasant, earthy smell.";
+      Taste:
+        "You take a tiny nibble, and find it extremely unpleasant.";
+      Eat:
+        "You've already learned from Brother Aelred enough to know
+        you shouldn't eat this.";
+    ]
+  has
+    concealed ok_carry;
+
 
 ! ------------------------------------------------------------- Refectory
 
@@ -2912,6 +3423,17 @@ Object -> -> Cauldron "cauldron"
         "This is food for you and your brothers. You shouldn't tamper with it.";
     ],
   has static;
+
+Candle -> KitchenCandle "tallow candle"
+  with
+    adj_name 'tallow',
+    description [;
+      print "A poor quality candle made of tallow";
+      if (self has light) print ". It is currently lit.";
+      ".";
+    ],
+  has
+    concealed;
 
 ! ================================================ Basement
 
@@ -3453,11 +3975,9 @@ Room NightStairs "Night Stairs"
 ! bell-ringer Cuthbert
 
 
-Object -> TimeCandle "canonical hour candle"
-  class AdjObject,
+Candle -> TimeCandle "canonical hour candle"
   with
     adj_name 'canonical' 'hour' 'time',
-    noun_name 'candle',
     initial
       "A candle sits in a sconce built into the stone wall.",
     description [ hour ;
@@ -3526,7 +4046,7 @@ Object -> Latrines "latrines"
       Receive:
         if (noun has worn)
           "You'd best not discard what you're wearing.";
-        if (noun == Candle or MonkGuide or MyHood) {
+        if (noun == MyCandle or MonkGuide or MyHood) {
           print "Are you sure you want to dispose of ", (the) noun, "? ";
           if (YesOrNo() == false) "You reconsider.";
         }
@@ -3562,24 +4082,37 @@ Object MyRobe "robe"
     before [;
       Disrobe: "You daren't. A monk must always be ready for office.";
     ],
-    add_to_scope MyHood,
-  has clothing worn transparent;
+  has clothing worn transparent ok_carry;
+
+! slightly-kludgy, but added always to scope in InScope
+!
+! trying to add it as scope of the robe is problem because it would get
+! reported in inventory or otherwise act weird.
 
 Object MyHood "hood"
+  class AdjObject,
   with
-    name 'hood',
+    adj_name 'robe' 'my',
+    noun_name 'hood',
     description
       "A deep hood attached to your habit, large enough to pull over your
       head in foul weather.",
     before [;
-      ! XXX: this isn't right; i don't want to see hood in invetory or have
-      ! "first taking the hood", etc
-      Wear:
-        if (noun == MyHood) {
-          "You pull the hood over your head, covering much of your face.";
-        }
+      Receive:
+        if (noun has light)
+          "Placing a lit item in your hood would surely catch it on fire.";
     ],
-  has clothing container open concealed;
+    after [;
+      Receive:
+        print "You put ", (the) noun, " into the hood";
+        if (self hasnt general)
+          print
+            "---and notice how when the hood is hanging behind you it prevents
+            others from seeing things in it";
+        give self general;
+        ".";
+    ]
+  has container open worn;
 
 
 ! ==================================================================== Quotes
@@ -3650,6 +4183,18 @@ Array quote_rose --> 4 32
   ""
   "         --- Song of Solomon";
 
+Array quote_body --> 4 34
+  "Precious in the sight of the Lord"
+  "is the death of his saints."
+  ""
+  "           --- The Book of Psalms";
+
+Array quote_song --> 5 36
+  "O come, let us sing unto the Lord:"
+  "let us make a joyful noise"
+  "to the rock of our salvation."
+  ""
+  "           --- The Book of Psalms";
 
 ! ============================================================ Initialise
 
@@ -3681,17 +4226,18 @@ Array quote_rose --> 4 32
     taken your final vows. Your head remains untonsured---that will come only
     if you complete your novitiate and join the community fully.";
 
-  print "Late Summer, 1346.
+  print "Late Summer in the year of Our Lord 1346.
   The priory of Our Lady of Thorns stands forlornly on the cliffs above Ashcombe,
   on the northeast coast of England, where
   wind and sea have worn the stones for two hundred years.^^
 
   You awake at 5 AM to the sound of the great bell, calling you to
-  Lauds. You are lying in your cot, still bleary from sleep. You've already been
-  to two offices this morning, the first at 2 AM. Like your brethren,
-  you sleep in your habit, so you're already fully dressed.
-  You hoped that after five months here, you'd be better
-  acclimated to the schedule.^^
+  Lauds. You are lying in your cot, still bleary from sleep.
+  You've already been to two offices this morning, the first at 2 AM.
+  Like your brethren, you sleep in your habit, so you're already fully dressed.
+  While you've been learning a great deal about healing herbs from your
+  mentor, Brother Aelred, you had hoped that after five months here,
+  you'd be better acclimated to the schedule.^^
 
   The other brothers rise from their cots.
 
@@ -3699,8 +4245,8 @@ Array quote_rose --> 4 32
 
   #IfDef HAS_HINTS; HintReady(Hint_intro); #EndIf;
 
-  ! give Service general;  ! service
-  ! Service.start_service();
+  give Service general;  ! service
+  Service.start_service();
   ! Don't print the banner at start; print it after service
   return 2;
 ];
@@ -3709,24 +4255,6 @@ Array quote_rose --> 4 32
 Include "./game_hints.inf";
 #EndIf;
 
-  ! Object -> VestryCandle "candle"
-  ! with
-  !   name 'candle' 'tallow',
-  !   before [;
-  !     Take:
-  !       if (FitzAlanAltar hasnt open)
-  !         "There's no reason to take a candle. The monastery is well-lit,
-  !         and carrying one about would only raise questions.";
-  !       "You slip a candle under your habit, feeling the weight of this
-  !       small theft.";
-  !   ],
-
-  ! Can't take herbs until you have reason to need them
-! before [;
-!   Take:
-!     if (reason_to_drug_monk == false)
-!       "You have no need for these herbs right now.";
-! ]
 
 ! ! Can't steal food until you need to lure someone
 ! before [;
@@ -3735,20 +4263,6 @@ Include "./game_hints.inf";
 !       "Taking food from the kitchen would be theft.";
 ! ]
 
-
-! Object Candle "candle"
-!   with
-!     name 'candle' 'tallow',
-!     before [;
-!       Burn:
-!         if (self has light) "It's already burning.";
-!         ! Check for nearby flame sources
-!         if (TimeCandle in location or parent(location))
-!           "You light your candle from the canonical hour candle.";
-!         if (ChurchCandles in location && ChurchCandles has light)
-!           "You light your candle from the church candles.";
-!         "You have no flame to light the candle with.";
-!     ],
 
 ! [ FinalMessages;
 
