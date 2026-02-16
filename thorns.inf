@@ -597,7 +597,7 @@ Constant CLOCK_EVENING 4;
 
 
 
-Class Altar                                                            ! >Altar
+Class Altar                                                             ! >Altar
   class AdjObject,
   with
     article "an",
@@ -646,7 +646,7 @@ Class Altar                                                            ! >Altar
 ! pro: decent puzzle
 ! con: can't one extinguish a candle with their fingers?
 
-Class Candle                                                          ! >Candle
+Class Candle                                                           ! >Candle
   class AdjObject,
   with
     noun_name 'candle',
@@ -683,7 +683,7 @@ Class Candle                                                          ! >Candle
 
 ! One for every monk; can only search them when suspicious.
 
-Class Chest                                                           ! >Chest
+Class Chest                                                             ! >Chest
   with
     parse_name [ w count ;
       w = NextWord();
@@ -733,7 +733,7 @@ Class Chest                                                           ! >Chest
 
 ! One for every monk; can only search them when suspicious.
 
-Class Cot                                                               ! >Cot
+Class Cot                                                                 ! >Cot
   with
     parse_name [ w count ;
       w = NextWord();
@@ -778,7 +778,7 @@ Class Cot                                                               ! >Cot
 
 ! This is a sprig of any kind of plant (not technically always an herb)
 
-Class Herb                                                            ! >Herb
+Class Herb                                                               ! >Herb
   with
     name 'sprig' 'sprigs//p',
     before [;
@@ -817,7 +817,7 @@ Class Herb                                                            ! >Herb
 !
 ! In all of those places, need to check for illegal-if-monk-here
 
-Class Monk                                                            ! >Monk
+Class Monk                                                               ! >Monk
   with
     name 'brother',
     life [;
@@ -838,7 +838,7 @@ Class Monk                                                            ! >Monk
 ! Base class for plants; player can't take these, but can get a sprig of
 ! each of these, which is an Herb (defined above)
 
-Class Plant                                                         ! >Plant
+Class Plant                                                             ! >Plant
   with
     name 'plant',
     before [ p ;
@@ -870,13 +870,13 @@ Class Plant                                                         ! >Plant
 ! Very light, just here so it's easy to distinguish room vs object
 ! with a ofclass check.
 
-Class Room                                                             ! >Room
+Class Room                                                               ! >Room
   has light;  ! turn off in individual underground rooms
 
 
 ! Statues found in altars and in chapel house: Mary, St Jude, Gordian
 
-Class Statue                                                          ! >Statue
+Class Statue                                                           ! >Statue
   with
     name 'statue',
     before [;
@@ -910,7 +910,7 @@ Class Statue                                                          ! >Statue
 
 ! Medicines in the infirmary
 
-Class Tincture                                                      ! >Tincture
+Class Tincture                                                       ! >Tincture
   with
     name 'tincture' 'tinctures//p',
     article "a bottle of",
@@ -935,7 +935,7 @@ Class Tincture                                                      ! >Tincture
     ok_carry;
 
 
-Class Tomb                                                            ! >Tomb
+Class Tomb                                                               ! >Tomb
   class AdjObject,
   with
     adj_name 'brother' 'prior',
@@ -991,7 +991,7 @@ Class Tomb                                                            ! >Tomb
 ! Aelred, either normal or dying (but not dead, that's separate object)
 ! general = dying
 
-Monk BrAelred "Brother Aelred"                                    ! >BrAelred
+Monk BrAelred "Brother Aelred"                                       ! >BrAelred
   with
     name 'aelred' 'herbalist',
     description [;
@@ -1027,7 +1027,7 @@ Monk BrAelred "Brother Aelred"                                    ! >BrAelred
       animate;  ! turn off when dead & remove him from slype
 
 
-Monk BrAnselm "Brother Anselm"                                      ! >BrAnselm
+Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
   with
     name 'anselm' 'cantor',
     description
@@ -1049,7 +1049,7 @@ Monk BrAnselm "Brother Anselm"                                      ! >BrAnselm
     ;
 
 
-Monk BrBenedict "Brother Benedict"                                ! >BrBenedict
+Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
   with
     name 'benedict' 'infirmarer',
     description
@@ -1070,7 +1070,7 @@ Monk BrBenedict "Brother Benedict"                                ! >BrBenedict
     ;
 
 
-Monk BrCuthbert "Brother Cuthbert"                                ! >BrCuthbert
+Monk BrCuthbert "Brother Cuthbert"                                 ! >BrCuthbert
   with
     name 'cuthbert' 'sacrist',
     description
@@ -1090,7 +1090,7 @@ Monk BrCuthbert "Brother Cuthbert"                                ! >BrCuthbert
   ;
 
 
-Monk BrHugh "Brother Hugh"                                           ! >BrHugh
+Monk BrHugh "Brother Hugh"                                             ! >BrHugh
   with
     name 'hugh' 'cellarer',
     description
@@ -1113,7 +1113,7 @@ Monk BrHugh "Brother Hugh"                                           ! >BrHugh
 
 ! Martin is in the kitchen, but goes to the chapter house whenever PC visits
 
-Monk BrMartin "Brother Martin"                                      ! >BrMartin
+Monk BrMartin "Brother Martin"                                       ! >BrMartin
   with
     name 'martin' 'kitchener',
     description
@@ -1132,7 +1132,7 @@ Monk BrMartin "Brother Martin"                                      ! >BrMartin
   ;
 
 
-Monk BrOswald "Brother Oswald"                                      ! >BrOswald
+Monk BrOswald "Brother Oswald"                                       ! >BrOswald
   with
     name 'oswald' 'prior',
     description
@@ -1156,7 +1156,7 @@ Monk BrOswald "Brother Oswald"                                      ! >BrOswald
 !
 ! general = bribed with basil
 
-Monk BrRemigio "Brother Remigio"                                  ! >BrRemigio
+Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
   with
     name 'remigio',
     description
@@ -1188,7 +1188,7 @@ Monk BrRemigio "Brother Remigio"                                  ! >BrRemigio
   has
   ;
 
-Candle -> TallowCandle "tallow candle"                        ! >TallowCandle
+Candle -> TallowCandle "tallow candle"                           ! >TallowCandle
   with
     adj_name 'tallow',
     description [;
@@ -1206,7 +1206,7 @@ Candle -> TallowCandle "tallow candle"                        ! >TallowCandle
 !
 ! He'll have limited conversation w/PC in the library.
 
-Monk BrWilfred "Brother Wilfred"                                   ! >BrWilfred
+Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
   with
     name 'wilfred' 'librarian',
     description
@@ -1276,7 +1276,7 @@ Monk BrWilfred "Brother Wilfred"                                   ! >BrWilfred
 ! --------------------------------------------------- 2.0.1 Entrance
 ! West Porch, door
 
-Room WestPorch "West Porch"                                       ! >WestPorch
+Room WestPorch "West Porch"                                         ! >WestPorch
   class AdjObject,
   with
     adj_name 'west',
@@ -1299,7 +1299,7 @@ Room WestPorch "West Porch"                                       ! >WestPorch
 
 ! PUZZLE: one way to find the founding date is on the door
 
-Object WestDoor "west door"                                       ! >WestDoor
+Object WestDoor "west door"                                          ! >WestDoor
   class AdjObject,
   with
     adj_name 'west',
@@ -1332,7 +1332,7 @@ Object WestDoor "west door"                                       ! >WestDoor
 ! --------------------------------------------------- 2.0.2 Nave
 ! Nave and rood screen and cross
 
-Room Nave "Nave"                                                        ! >Nave
+Room Nave "Nave"                                                         ! >Nave
   with
     name 'nave',
     description
@@ -1356,7 +1356,7 @@ Room Nave "Nave"                                                        ! >Nave
 ! TODO: needs description and reference in nave room description
 ! PUZZLE: this will reveal one of the Gordian's themes for the solar door
 
-Object StainedGlass "stained glass"
+Object StainedGlass "stained glass"                              ! >StainedGlass
   with
     name 'stained' 'glass',
     description "XXX",
@@ -1364,7 +1364,7 @@ Object StainedGlass "stained glass"
     scenery;
 
 
-Object RoodScreen "rood screen"
+Object RoodScreen "rood screen"                                    ! >RoodScreen
   with
     name 'rood' 'screen',
     found_in Nave Quire,
@@ -1381,7 +1381,7 @@ Object RoodScreen "rood screen"
     scenery;
 
 
-Object -> RoodCross "rood cross"
+Object -> RoodCross "rood cross"                                    ! >RoodCross
   class AdjObject,
   with
     adj_name 'rood',
@@ -1395,7 +1395,7 @@ Object -> RoodCross "rood cross"
 ! Tower stairs, tower, bell, and views
 
 
-Room TowerStairs "Tower Stairs"
+Room TowerStairs "Tower Stairs"                                   ! >TowerStairs
   with
     name 'stone' 'steps' 'stairs',
     description
@@ -1408,7 +1408,7 @@ Room TowerStairs "Tower Stairs"
   has ;
 
 
-Room BellTower "Bell Tower"
+Room BellTower "Bell Tower"                                         ! >BellTower
   with
     description
       "The bell chamber. Wind whistles through the open arches on
@@ -1444,7 +1444,7 @@ Room BellTower "Bell Tower"
   has ;
 
 
-Object -> Bell "bell"
+Object -> Bell "bell"                                                    ! >Bell
   class AdjObject,
   with
     adj_name 'great' 'bronze',
@@ -1460,7 +1460,7 @@ Object -> Bell "bell"
     static scenery;
 
 
-Object -> BellRope "bell rope"
+Object -> BellRope "bell rope"                                       ! >BellRope
   class AdjObject,
   with
     adj_name 'bell',
@@ -1517,7 +1517,7 @@ Object -> BellRope "bell rope"
 ! PUZZLE: need to perform first service
 ! PUZZLE: if wander through area during service, will get sucked into it
 
-Object Service "service"
+Object Service "service"                                              ! >Service
   with
     start_service [;
       move self to Quire;
@@ -1605,7 +1605,7 @@ Object Service "service"
     concealed;
 
 
-Room Quire "Quire"
+Room Quire "Quire"                                                      ! >Quire
   with
     description
       "The quire is the heart of monastic worship and the center of the church.
@@ -1637,7 +1637,7 @@ Room Quire "Quire"
     ;
 
 
-Object -> Stalls "stalls"
+Object -> Stalls "stalls"                                              ! >Stalls
   class AdjObject,
   with
     adj_name 'wooden',
@@ -1661,7 +1661,7 @@ Object -> Stalls "stalls"
 ! HighAltar, crypt stairs
 
 
-Room HighAltarArea "High Altar Area"
+Room HighAltarArea "High Altar Area"                            ! >HighAltarArea
   with
     description [;
       print
@@ -1691,7 +1691,7 @@ Room HighAltarArea "High Altar Area"
 ! It feels deeply sacriligeous, but you climb onto the altar.
 
 
-Altar -> HighAltar
+Altar -> HighAltar                                                  ! >HighAltar
   with
     short_name "high altar",
     article "the",
@@ -1703,7 +1703,7 @@ Altar -> HighAltar
   has ;
 
 
-Object -> -> AltarCloth "cloth"
+Object -> -> AltarCloth "cloth"                                    ! >AltarCloth
   class AdjObject,
   with
     adj_name 'plain' 'altar',
@@ -1720,7 +1720,7 @@ Object -> -> AltarCloth "cloth"
     ;
 
 
-Object -> -> AltarCross "altar cross"
+Object -> -> AltarCross "altar cross"                              ! >AltarCross
   class AdjObject
   with
     article "the",
@@ -1747,7 +1747,7 @@ Object -> -> AltarCross "altar cross"
 !  - can ring the bell, hide, wait for cuthbert to search, then run
 !    upstairs when he goes to crypt vestry
 
-Object CryptGate "crypt gate"
+Object CryptGate "crypt gate"                                       ! >CryptGate
   with
     name 'crypt' 'gate' 'stairs',
     description [;
@@ -1761,7 +1761,7 @@ Object CryptGate "crypt gate"
     scenery door locked ~open openable;
 
 
-Room CryptStairs "Crypt Stairs"
+Room CryptStairs "Crypt Stairs"                                   ! >CryptStairs
   with
     name 'crypt' 'stairs',
     description [;
@@ -1795,7 +1795,7 @@ Room CryptStairs "Crypt Stairs"
 ! --------------------------------------------------- 2.0.6 Sacristy
 
 
-Object SacristyDoor "sacristy door"
+Object SacristyDoor "sacristy door"                              ! >SacristyDoor
   with
     name 'sacristy' 'door',
     description "A narrow wooden door without any lock.",
@@ -1817,7 +1817,7 @@ Object SacristyDoor "sacristy door"
 ! PUZZLE: can only get the candle if has proven it's needed
 ! PUZZLE: has to hide candle as its contraband
 
-Room Sacristy "Sacristy"
+Room Sacristy "Sacristy"                                             ! >Sacristy
   with
     name 'sacristy' 'vestry',
     description
@@ -1850,7 +1850,7 @@ Room Sacristy "Sacristy"
     ;
 
 
-Object -> Candles "candles"
+Object -> Candles "candles"                                           ! >Candles
   class AdjObject,
   with
     adj_name 'beeswax',
@@ -1902,7 +1902,7 @@ Candle MyCandle "beeswax candle"
 ! PUZZLE: find hidden ladder to FA Crypt
 ! PUZZLE: how to get out of that area, since ladder is one-way
 
-Room FitzAlanChantry "FitzAlan Chantry"
+Room FitzAlanChantry "FitzAlan Chantry"                       ! >FitzAlanChantry
   with
     name 'chantry',
     description [;
@@ -1948,7 +1948,7 @@ Room FitzAlanChantry "FitzAlan Chantry"
 ! open = open, can climb down
 ! moved = ever been opened
 
-Altar -> FitzAlanAltar
+Altar -> FitzAlanAltar                                          ! >FitzAlanAltar
   class AdjObject,
   with
     adj_name 'stone' 'fitzalan',
@@ -2016,7 +2016,7 @@ Altar -> FitzAlanAltar
 ! moved = lion is pushed in now
 ! general = lion has ever been pushed in
 
-Object -> FitzAlanLion "FitzAlan arms"
+Object -> FitzAlanLion "FitzAlan arms"                           ! >FitzAlanLion
   class AdjObject,
   with
     adj_name 'fitzalan' 'family' 'brass' 'rampant',
@@ -2049,7 +2049,7 @@ Object -> FitzAlanLion "FitzAlan arms"
 !---------------------------------------------------- 2.0.8 Lady Chapel
 ! Chapel and statue
 
-Room LadyChapel "Lady Chapel"
+Room LadyChapel "Lady Chapel"                                      ! >LadyChapel
   with
     name 'lady' 'chapel' 'mary' 'virgin',
     description
@@ -2065,7 +2065,7 @@ Room LadyChapel "Lady Chapel"
     ;
 
 
-Statue -> MaryStatue "statue"
+Statue -> MaryStatue "statue"                                      ! >MaryStatue
   with
     name 'mary' 'virgin' 'blessed',
     initial "A statue of Mary stands in a niche.",
@@ -2082,7 +2082,7 @@ Statue -> MaryStatue "statue"
     female;
 
 
-Altar -> MaryAltar "stone altar"
+Altar -> MaryAltar "stone altar"                                    ! >MaryAltar
   class AdjObject,
   with
     adj_name 'stone' 'mary',
@@ -2095,7 +2095,7 @@ Altar -> MaryAltar "stone altar"
 ! PUZZLE: can pray to st jude for later help in crypt
 ! PUZZLE: identify the rosehips
 
-Room StJudeChapel "St Jude Chapel"
+Room StJudeChapel "St Jude Chapel"                               ! >StJudeChapel
   with
     name 'chapel',
     description [;
@@ -2113,7 +2113,7 @@ Room StJudeChapel "St Jude Chapel"
 ! general = has a prayer
 ! moved = ever had a prayer (can't get a second)
 
-Object -> PrayerMat "prayer mat"
+Object -> PrayerMat "prayer mat"                                    ! >PrayerMat
   class AdjObject,
   with
     adj_name 'prayer',
@@ -2144,7 +2144,7 @@ Object -> PrayerMat "prayer mat"
     supporter enterable;
 
 
-Altar -> JudeAltar "altar"
+Altar -> JudeAltar "altar"                                          ! >JudeAltar
   with
     description [;
       print "A simple stone altar, worn smooth by centuries of prayer.";
@@ -2164,7 +2164,7 @@ Altar -> JudeAltar "altar"
 ! initial room description, and I want people to have to look at the altar
 ! to notice them).
 
-Object -> -> RoseHips "small red berries"
+Object -> -> RoseHips "small red berries"                            ! >RoseHips
   with
     short_name [;
       if (self has general) { print "rosehips"; rtrue; }
@@ -2218,7 +2218,7 @@ Object -> -> RoseHips "small red berries"
     pluralname edible concealed ok_carry;
 
 
-Statue -> JudeStatue "St. Jude"
+Statue -> JudeStatue "St. Jude"                                    ! >JudeStatue
   with
     name 'saint' 'st' 'jude',
     description
@@ -2268,7 +2268,7 @@ class Cloister
     light;
 
 
-Cloister CloisterNW "Cloister Northwest"
+Cloister CloisterNW "Cloister Northwest"                           ! >CloisterNW
   with
     cloister_detail
       "The wall of the nave rises imposingly to the north,
@@ -2278,7 +2278,7 @@ Cloister CloisterNW "Cloister Northwest"
     w_to PriorDoor;
 
 
-Cloister CloisterN "Cloister North"
+Cloister CloisterN "Cloister North"                                 ! >CloisterN
   with
     cloister_detail
       "The wall of the nave rises imposingly to the north.",
@@ -2287,7 +2287,7 @@ Cloister CloisterN "Cloister North"
     e_to CloisterNE;
 
 
-Cloister CloisterNE "Cloister Northeast"
+Cloister CloisterNE "Cloister Northeast"                           ! >CloisterNE
   with
     cloister_detail
       "An passageway to the church quire is north.
@@ -2301,7 +2301,7 @@ Cloister CloisterNE "Cloister Northeast"
   ;
 
 
-Cloister CloisterW "Cloister West"
+Cloister CloisterW "Cloister West"                                  ! >CloisterW
   with
     cloister_detail
       "The locutory lies to the west.",
@@ -2312,7 +2312,7 @@ Cloister CloisterW "Cloister West"
   ;
 
 
-Cloister CloisterE "Cloister East"
+Cloister CloisterE "Cloister East"                                  ! >CloisterE
   with
     cloister_detail
       "To the east is the entrance to the warmining room.",
@@ -2323,7 +2323,7 @@ Cloister CloisterE "Cloister East"
   ;
 
 
-Cloister CloisterSW "Cloister Southwest"
+Cloister CloisterSW "Cloister Southwest"                           ! >CloisterSW
   with
     cloister_detail
       "The monk's gate lies to the west. A small alcove, the lavatorium,
@@ -2344,7 +2344,7 @@ Cloister CloisterSW "Cloister Southwest"
   ;
 
 
-Cloister CloisterS "Cloister South"
+Cloister CloisterS "Cloister South"                                 ! >CloisterS
   with
     cloister_detail
       "The refectory lies to the south.",
@@ -2355,7 +2355,7 @@ Cloister CloisterS "Cloister South"
   ;
 
 
-Cloister CloisterSE "Cloister Southeast"
+Cloister CloisterSE "Cloister Southeast"                           ! >CloisterSE
   with
     cloister_detail
       "The long slype lies to the east.",
@@ -2368,7 +2368,7 @@ Cloister CloisterSE "Cloister Southeast"
   ;
 
 
-Room Garth "Garth"
+Room Garth "Garth"                                                      ! >Garth
   with
     name 'garth' 'square',
     description
@@ -2394,7 +2394,7 @@ Room Garth "Garth"
   has
     ;
 
-Object -> Sundial "sundial"
+Object -> Sundial "sundial"                                           ! >Sundial
   class AdjObject,
   with
     adj_name 'sun',
@@ -2408,7 +2408,7 @@ Object -> Sundial "sundial"
     has static;
 
 
-Object -> GarthWell "well"
+Object -> GarthWell "well"                                          ! >GarthWell
   class AdjObject,
   with
     adj_name 'stone' 'old',
@@ -2444,7 +2444,9 @@ Object -> GarthWell "well"
 
 ! --------------------------------------------------- 2.2.1 Prior's Solar
 
-! stained glass windows in the nave (which he designed) show these three symbols. The door to the solar has brass plates with various symbols, and you must press the three that represent Gordian's creeds.
+! stained glass windows in the nave (which he designed) show these three
+! symbols. The door to the solar has brass plates with various symbols, and you
+! must press the three that represent Gordian's creeds.
 ! Possible symbols/creeds:
 
 ! Compass/Square - Sacred geometry, God's order in creation
@@ -2467,7 +2469,7 @@ Object -> GarthWell "well"
 ! and an open book. Beneath each, barely legible Latin inscriptions.
 
 
-Object PriorDoor "prior door"
+Object PriorDoor "prior door"                                       ! >PriorDoor
   with
     name 'prior' 'door',
     description [;
@@ -2484,13 +2486,13 @@ Object PriorDoor "prior door"
     static scenery door openable ~open lockable locked transparent;
 
 
-Object -> PriorDials "dials"
+Object -> PriorDials "dials"                                       ! >PriorDials
   with
     name 'dials',
     description "NOT IMPLEMENTED YET. Use the key for noe.",
 ;
 
-Object PriorKey "magic key"
+Object PriorKey "magic key"                                          ! >PriorKey
   with
     name 'magic' 'key',
     description
@@ -2504,7 +2506,7 @@ Object PriorKey "magic key"
   ;
 
 
-Room PriorsSolar "Prior's Solar"
+Room PriorsSolar "Prior's Solar"                                  ! >PriorsSolar
   with
     name 'solar' 'room',
     description
@@ -2521,7 +2523,7 @@ Room PriorsSolar "Prior's Solar"
     ;
 
 
-Object -> PriorsDesk "desk"
+Object -> PriorsDesk "desk"                                        ! >PriorsDesk
   with
     name 'desk' 'writing' 'table',
     description
@@ -2531,7 +2533,7 @@ Object -> PriorsDesk "desk"
     scenery static supporter;
 
 
-Object -> PriorsChest "wooden chest"
+Object -> PriorsChest "wooden chest"                              ! >PriorsChest
   with
     name 'wooden' 'chest' 'box',
     description
@@ -2540,7 +2542,7 @@ Object -> PriorsChest "wooden chest"
     scenery static container openable ~open lockable locked;
 
 
-Object -> PriorsBed "narrow bed"
+Object -> PriorsBed "narrow bed"                                    ! >PriorsBed
   class AdjObject,
   with
     adj_name 'narrow',
@@ -2562,7 +2564,7 @@ Object -> PriorsBed "narrow bed"
 
 ! ---------------------------------------------------  2.2.2 Locutory
 
-Room Locutory "Locutory"
+Room Locutory "Locutory"                                             ! >Locutory
   with
     name 'locutory' 'parlour' 'speaking' 'room',
     description [;
@@ -2578,7 +2580,7 @@ Room Locutory "Locutory"
     ;
 
 
-Object -> LocutoryTable "table"
+Object -> LocutoryTable "table"                                 ! >LocutoryTable
   class AdjObject,
   with
     adj_name 'wooden',
@@ -2589,7 +2591,7 @@ Object -> LocutoryTable "table"
     scenery static supporter;
 
 
-Object -> LocutoryBenches "benches"
+Object -> LocutoryBenches "benches"                           ! >LocutoryBenches
   class AdjObject,
   with
     adj_name 'wooden',
@@ -2606,7 +2608,7 @@ Object -> LocutoryBenches "benches"
 
 ! --------------------------------------------------- 2.2.3 Lavatorium
 
-Room Lavatorium "Lavatorium"
+Room Lavatorium "Lavatorium"                                       ! >Lavatorium
   with
     name 'lavatorium',
     description
@@ -2617,7 +2619,7 @@ Room Lavatorium "Lavatorium"
      ;
 
 
-Object -> Basin "basin"
+Object -> Basin "basin"                                                 ! >Basin
   class AdjObject
   with
     adj_name 'large' 'stone',
@@ -2648,7 +2650,7 @@ Object -> Basin "basin"
     static container open transparent;
 
 
-Object -> -> Water "water"
+Object -> -> Water "water"                                              ! >Water
   with
     article "some",
     name 'water',
@@ -2662,7 +2664,7 @@ Object -> -> Water "water"
     ;
 
 
-Object -> Towel "towel"
+Object -> Towel "towel"                                                 ! >Towel
   with
     name 'towel',
     initial "A threadbare towel hangs on a peg by the basin.",
@@ -2687,7 +2689,7 @@ Object -> Towel "towel"
 
 !---------------------------------------------------------- Chapter House
 
-Room ChapterHouse "Chapter House"
+Room ChapterHouse "Chapter House"                                ! >ChapterHouse
   with
     description
       "The chapter house is a modest, rectangular room where the brothers
@@ -2702,7 +2704,7 @@ Room ChapterHouse "Chapter House"
     ;
 
 
-Object -> ChapterFurniture "table and benches"
+Object -> ChapterFurniture "table and benches"               ! >ChapterFurniture
   with
     name 'table' 'tables' 'chair' 'chairs',
     describe 0,
@@ -2722,7 +2724,7 @@ Object -> ChapterFurniture "table and benches"
   has supporter enterable pluralname;
 
 
-Statue -> GordianStatue "statue"
+Statue -> GordianStatue "statue"                                ! >GordianStatue
   with
     name 'gordian' 'statue',
     describe 0,
@@ -2739,7 +2741,7 @@ Statue -> GordianStatue "statue"
     static ~proper;
 
 
-Object -> OfficeHours "painted panel"
+Object -> OfficeHours "painted panel"                             ! >OfficeHours
   class AdjObject,
   with
     adj_name 'painted' 'office',
@@ -2761,7 +2763,7 @@ Object -> OfficeHours "painted panel"
 
 ! --------------------------------------------------------- Scriptorium
 
-Room Scriptorium "Scriptorium"
+Room Scriptorium "Scriptorium"                                    ! >Scriptorium
   with
     description
       "This chamber is where three of the brothers typically work, creating
@@ -2793,7 +2795,7 @@ Room Scriptorium "Scriptorium"
      ;
 
 
-Object -> ScriptoriumTable "table"
+Object -> ScriptoriumTable "table"                           ! >ScriptoriumTable
   with
     name 'table',
     description [;
@@ -2810,7 +2812,7 @@ Object -> ScriptoriumTable "table"
     scenery supporter;
 
 
-Object -> -> Manuscript "manuscript"
+Object -> -> Manuscript "manuscript"                               ! >Manuscript
   with
     name 'manuscript',
     description
@@ -2834,7 +2836,7 @@ Object -> -> Manuscript "manuscript"
   has ;
 
 
-Object -> -> WritingImplements "writing implements"
+Object -> -> WritingImplements "writing implements"         ! >WritingImplements
   class AdjObject,
   with
     adj_name 'writing',
@@ -2848,7 +2850,7 @@ Object -> -> WritingImplements "writing implements"
   has pluralname;
 
 
-Object -> -> LibraryKey "silver key"
+Object -> -> LibraryKey "silver key"                               ! >LibraryKey
   class AdjObject,
   with
     adj_name 'library' 'silver',
@@ -2878,7 +2880,7 @@ Object -> -> LibraryKey "silver key"
   has ;
 
 
-Object -> Fireplace "fireplace"
+Object -> Fireplace "fireplace"                                     ! >Fireplace
   with
     name 'fireplace' 'fire',
     initial
@@ -2902,7 +2904,7 @@ Object -> Fireplace "fireplace"
 
 ! ----------------------------------------------------------------------------
 
-Object -> LibraryDoor "library door"
+Object -> LibraryDoor "library door"                              ! >LibraryDoor
   with
     name 'library' 'door',
     description "A heavy wooden door with a keyhole.",
@@ -2925,7 +2927,7 @@ Object -> LibraryDoor "library door"
     scenery door openable ~open lockable locked;
 
 
-Room Library "Library"
+Room Library "Library"                                                ! >Library
   with
     description
       "This is a small private room. There is a bookshelf on the north wall
@@ -2942,7 +2944,7 @@ Room Library "Library"
     light;
 
 
-Object -> BrassMap "brass map"
+Object -> BrassMap "brass map"                                       ! >BrassMap
   class AdjObject,
   with
     adj_name 'brass',
@@ -2956,7 +2958,7 @@ Object -> BrassMap "brass map"
     scenery;
 
 
-Object TwoCryptsOnMap "two crypts"
+Object TwoCryptsOnMap "two crypts"                             ! >TwoCryptsOnMap
   with
     name 'two' 'crypts',
     description
@@ -2972,7 +2974,7 @@ Object TwoCryptsOnMap "two crypts"
       ;
 
 
-Object -> Bookshelf "bookshelf"
+Object -> Bookshelf "bookshelf"                                     ! >Bookshelf
   class AdjObject,
   with
     adj_name 'book',
@@ -2998,7 +3000,7 @@ Object -> Bookshelf "bookshelf"
   has scenery supporter;
 
 
-Object MonkGuide "Registrum Fratrum",
+Object MonkGuide "Registrum Fratrum",                               ! >MonkGuide
   with
     name 'register' 'registrum' 'fratrum' 'book',
     description
@@ -3038,7 +3040,7 @@ Object MonkGuide "Registrum Fratrum",
 
 ! ----------------------------------------------------------------- Slype
 
-Room Slype "Slype"
+Room Slype "Slype"                                                      ! >Slype
   with
     description
       "A long east-west stone corridor. West is the cloister,
@@ -3054,7 +3056,7 @@ Room Slype "Slype"
 ! PUZZLE: opening the cabinet
 ! PUZZLE: identifying the poison
 
-Room Infirmary "Infirmary"
+Room Infirmary "Infirmary"                                          ! >Infirmary
   with
     description
       "The infirmary serves both the brothers and visiting villagers who seek
@@ -3081,7 +3083,7 @@ Room Infirmary "Infirmary"
     ;
 
 
-Object -> Mirror "mirror"
+Object -> Mirror "mirror"                                              ! >Mirror
   class AdjObject,
   with
     adj_name 'reflective' 'metal',
@@ -3108,7 +3110,7 @@ Object -> Mirror "mirror"
     ;
 
 
-Object -> InfirmaryCabinet "medicine cabinet"
+Object -> InfirmaryCabinet "medicine cabinet"                ! >InfirmaryCabinet
   with
     name 'medicine' 'cabinet',
     description [;
@@ -3158,7 +3160,7 @@ Object -> InfirmaryCabinet "medicine cabinet"
     container openable ~open;
 
 
-Tincture -> -> FoxgloveTincture "tincture of foxglove"
+Tincture -> -> FoxgloveTincture "tincture of foxglove"       ! >FoxgloveTincture
   with
     name 'poppy' 'syrup' 'opium',
     description
@@ -3170,7 +3172,7 @@ Tincture -> -> FoxgloveTincture "tincture of foxglove"
   ;
 
 
-Tincture -> -> HenbaneTincture "tincture of henbane"
+Tincture -> -> HenbaneTincture "tincture of henbane"          ! >HenbaneTincture
   with
     name 'hen' 'bane' 'henbane',
     description
@@ -3200,7 +3202,7 @@ Tincture -> -> HenbaneTincture "tincture of henbane"
   ;
 
 
-Tincture -> -> Theriac "theriac"
+Tincture -> -> Theriac "theriac"                                      ! >Theriac
   with
     name 'theriac',
     description
@@ -3212,7 +3214,7 @@ Tincture -> -> Theriac "theriac"
   ;
 
 
-Class Wheel
+Class Wheel                                                             ! >Wheel
   with
     setting 0,  ! starts at I
     set_me [;
@@ -3239,16 +3241,16 @@ Class Wheel
   has
     scenery;
 
-Wheel -> Wheel1 "first wheel"
+Wheel -> Wheel1 "first wheel"                                          ! >Wheel1
   with name 'first' '1st' 'one' 'wheel';
 
-Wheel -> Wheel2 "second wheel"
+Wheel -> Wheel2 "second wheel"                                         ! >Wheel2
   with name 'second' '2nd' 'two' 'wheel';
 
-Wheel -> Wheel3 "third wheel"
+Wheel -> Wheel3 "third wheel"                                          ! >Wheel3
   with name 'third' '3rd' 'three' 'wheel';
 
-Wheel -> Wheel4 "fourth wheel"
+Wheel -> Wheel4 "fourth wheel"                                         ! >Wheel4
   with name 'fourth' '4th' 'four' 'wheel';
 
 
@@ -3256,7 +3258,7 @@ Wheel -> Wheel4 "fourth wheel"
 ! The player can only entere here after the death, so we can
 ! write this knowing there will be a body in it, etc.
 
-Room InfirmaryChapel "Infirmary Chapel"
+Room InfirmaryChapel "Infirmary Chapel"                       ! >InfirmaryChapel
   with
     description
         "A tiny chapel attached to the infirmary, barely large enough for a
@@ -3275,13 +3277,13 @@ Room InfirmaryChapel "Infirmary Chapel"
   has ;
 
 
-Altar -> InfirmaryAltar "altar";
+Altar -> InfirmaryAltar "altar";                               ! >InfirmaryAltar
 
 
 ! PUZZLE: find the key for the restricted garden
 ! PUZZLE: identify the poison
 
-Object -> -> BrAelredBody "Brother Aelred's body"
+Object -> -> BrAelredBody "Brother Aelred's body"                ! >BrAelredBody
   class AdjObject,
   with
     adj_name 'brother' 'aelred^s' 'earthly',
@@ -3354,7 +3356,7 @@ Object -> -> BrAelredBody "Brother Aelred's body"
   has animate;
 
 
-Object -> -> Shroud "shroud"
+Object -> -> Shroud "shroud"                                           ! >Shroud
   class AdjObject,
   with
     adj_name 'white',
@@ -3368,7 +3370,7 @@ Object -> -> Shroud "shroud"
   has ;
 
 
-Statue -> RochStatue "statue"
+Statue -> RochStatue "statue"                                      ! >RochStatue
   with
     name 'roch',
     description
@@ -3379,7 +3381,7 @@ Statue -> RochStatue "statue"
 
 ! ------------------------------------------------------------------- Herbarium
 
-Room Herbarium "Herbarium"
+Room Herbarium "Herbarium"                                          ! >Herbarium
   with
     description
       "This room still carries Brother Aelred's presence in every corner.
@@ -3407,7 +3409,7 @@ Room Herbarium "Herbarium"
 
 ! PUZZLE: another way to get the restricted garden key
 
-Object -> Pot "plant pot"
+Object -> Pot "plant pot"                                                 ! >Pot
   class AdjObject,
   with
     adj_name 'large' 'terracotta' 'plant',
@@ -3426,7 +3428,7 @@ Object -> Pot "plant pot"
     container open;
 
 
-Object -> Jars "jars"
+Object -> Jars "jars"                                                    ! >Jars
   with
     name 'jars',
     description
@@ -3440,7 +3442,7 @@ Object -> Jars "jars"
   has concealed pluralname;
 
 
-Object -> HerbTable "worktable"
+Object -> HerbTable "worktable"                                     ! >HerbTable
   class AdjObject,
   with
     adj_name 'work',
@@ -3482,7 +3484,7 @@ Object -> HerbTable "worktable"
 
 ! PUZZLE: need to handle dangerous plants
 
-Object -> -> Gloves "gloves"
+Object -> -> Gloves "gloves"                                           ! >Gloves
   with
     name 'gloves',
     description "A pair of rough gloves, used by Aelred in the gardens.",
@@ -3495,7 +3497,7 @@ Object -> -> Gloves "gloves"
 
 ! PUZZLE: need to identify poison
 
-Object -> -> Herbal "Aelred's Herbal"
+Object -> -> Herbal "Aelred's Herbal"                                  ! >Herbal
   class AdjObject,
   with
     adj_name 'aelred' 'aelred^s',
@@ -3529,7 +3531,7 @@ Object -> -> Herbal "Aelred's Herbal"
 
 ! PUZZLE: need for carrying contraband
 
-Object -> Basket "basket"
+Object -> Basket "basket"                                              ! >Basket
   with
     name 'basket',
     description [;
@@ -3551,7 +3553,7 @@ Object -> Basket "basket"
 ! PUZZLE: hints more about basil; it's the only thing not hanging here,
 !   so it might help them decide to look at it in garden
 
-Object -> Rafters "rafters"
+Object -> Rafters "rafters"                                           ! >Rafters
   with
     name 'rafters' 'bunches' 'herbs',
     description [;
@@ -3569,7 +3571,7 @@ Object -> Rafters "rafters"
 ! --------------------------------------------------------------------- Garden
 
 
-Room Garden "Garden"
+Room Garden "Garden"                                                   ! >Garden
   with
     description
       "Aelred's garden. You can still see where his hands touched
@@ -3609,7 +3611,7 @@ Room Garden "Garden"
     ;
 
 
-Object -> Beds "beds"
+Object -> Beds "beds"                                                    ! >Beds
   with
     name 'beds' 'bed',
     description
@@ -3629,7 +3631,7 @@ Object -> Beds "beds"
     pluralname scenery container open;
 
 
-Plant -> -> RosemaryPlant "rosemary plant"
+Plant -> -> RosemaryPlant "rosemary plant"                      ! >RosemaryPlant
   with
     name 'rosemary',
     description
@@ -3642,7 +3644,7 @@ Plant -> -> RosemaryPlant "rosemary plant"
   ;
 
 
-Herb -> -> -> Rosemary "rosemary sprig"
+Herb -> -> -> Rosemary "rosemary sprig"                              ! >Rosemary
   with
     name 'rosemary',
     description "A stalk of needle-like leaves.",
@@ -3658,7 +3660,7 @@ Herb -> -> -> Rosemary "rosemary sprig"
   ;
 
 
-Plant -> -> ThymePlant "thyme plant"
+Plant -> -> ThymePlant "thyme plant"                               ! >ThymePlant
   with
     name 'thyme',
     description
@@ -3672,7 +3674,7 @@ Plant -> -> ThymePlant "thyme plant"
   ;
 
 
-Herb -> -> -> Thyme "thyme sprig"
+Herb -> -> -> Thyme "thyme sprig"                                       ! >Thyme
   with
     name 'thyme',
     description
@@ -3688,7 +3690,7 @@ Herb -> -> -> Thyme "thyme sprig"
   ;
 
 
-Plant -> -> FeverfewPlant "feverfew plant"
+Plant -> -> FeverfewPlant "feverfew plant"                      ! >FeverfewPlant
   with
     name 'feverfew',
     description
@@ -3702,7 +3704,7 @@ Plant -> -> FeverfewPlant "feverfew plant"
   ;
 
 
-Herb -> -> -> Feverfew "feverfew sprig"
+Herb -> -> -> Feverfew "feverfew sprig"                              ! >Feverfew
   with
     name 'feverfew',
     description
@@ -3726,7 +3728,7 @@ Herb -> -> -> Feverfew "feverfew sprig"
 ! general = player has observed this; the flashback about basil use the right
 !   name
 
-Plant -> -> BasilPlant "basil plant"
+Plant -> -> BasilPlant "basil plant"                               ! >BasilPlant
   with
     name 'basil',
     description [;
@@ -3743,7 +3745,7 @@ Plant -> -> BasilPlant "basil plant"
   ;
 
 
-Herb -> -> -> Basil "basil"
+Herb -> -> -> Basil "basil"                                             ! >Basil
   with
     name 'basil',
     description "A cluster of large green leaves with pointed tips.",
@@ -3764,7 +3766,7 @@ Herb -> -> -> Basil "basil"
 
 ! -------------------------------------------------------- Restricted Garden
 
-Object -> GardenGate "restricted garden gate"
+Object -> GardenGate "restricted garden gate"                      ! >GardenGate
   class AdjObject,
   with
     adj_name 'restricted' 'garden',
@@ -3793,7 +3795,7 @@ Object -> GardenGate "restricted garden gate"
     static door openable locked lockable;
 
 
-Object GardenGateKey "iron key"
+Object GardenGateKey "iron key"                                 ! >GardenGateKey
   class AdjObject,
   with
     article "an",
@@ -3806,7 +3808,7 @@ Object GardenGateKey "iron key"
     has ok_carry;
 
 
-Room RestrictedGarden "Restricted Garden"
+Room RestrictedGarden "Restricted Garden"                    ! >RestrictedGarden
   with
     description [;
       print
@@ -3827,7 +3829,7 @@ Room RestrictedGarden "Restricted Garden"
     ;
 
 
-Object -> RestBeds "beds"
+Object -> RestBeds "beds"                                            ! >RestBeds
   with
     name 'beds' 'bed',
     description [;
@@ -3849,7 +3851,7 @@ Object -> RestBeds "beds"
     pluralname scenery container open;
 
 
-Plant -> -> MonkshoodPlant "monkshood plant"
+Plant -> -> MonkshoodPlant "monkshood plant"                   ! >MonkshoodPlant
   with
     name 'monkshood',
     description
@@ -3872,7 +3874,7 @@ Plant -> -> MonkshoodPlant "monkshood plant"
 ! TODO: can't take foxglove or monkshood, but it reports you've already taken
 !   it
 
-Plant -> -> FoxglovePlant "foxglove plant"
+Plant -> -> FoxglovePlant "foxglove plant"                      ! >FoxglovePlant
   with
     name 'foxglove',
     description
@@ -3890,7 +3892,7 @@ Plant -> -> FoxglovePlant "foxglove plant"
   has toxic ;
 
 
-Plant -> -> HenbanePlant "henbane plant"
+Plant -> -> HenbanePlant "henbane plant"                         ! >HenbanePlant
   with
     name 'henbane',
     description
@@ -3902,7 +3904,7 @@ Plant -> -> HenbanePlant "henbane plant"
   has toxic ;
 
 
-Herb -> -> -> Henbane "henbane sprig"
+Herb -> -> -> Henbane "henbane sprig"                                 ! >Henbane
   with
     name 'henbane',
     description "The flowers are dirty yellow and streaked with purple.",
@@ -3919,7 +3921,7 @@ Herb -> -> -> Henbane "henbane sprig"
 
 ! PUZZLE: putting Wilfred to sleep to enter library
 
-Object -> -> MandrakeRoot "mandrake root"
+Object -> -> MandrakeRoot "mandrake root"                        ! >MandrakeRoot
   with
     name 'mandrake' 'root',
     description
@@ -3986,7 +3988,7 @@ Object -> -> MandrakeRoot "mandrake root"
 ! ------------------------------------------------------------- Refectory
 
 ! only meal would be after None (at 3pm)
-Room Refectory "Refectory"
+Room Refectory "Refectory"                                          ! >Refectory
   with
     description
       "The refectory is a long, austere hall where the community takes its
@@ -4009,19 +4011,19 @@ Room Refectory "Refectory"
 ! TODO: maybe just cut the lunch scene? and remove this furniture as
 !   not important?
 
-Object -> RefectoryLectern "lectern"
+Object -> RefectoryLectern "lectern"                         ! >RefectoryLectern
   has static;
-Object -> RefectoryTableA "table"
+Object -> RefectoryTableA "table"                             ! >RefectoryTableA
   has static;
-Object -> RefectoryTableB "table"
+Object -> RefectoryTableB "table"                             ! >RefectoryTableB
   has static;
-Object -> RefectoryBenches "benches"
+Object -> RefectoryBenches "benches"                         ! >RefectoryBenches
   has static;
 
 
 ! ------------------------------------------------------------------ Kitchen
 
-Room Kitchen "Kitchen"
+Room Kitchen "Kitchen"                                                ! >Kitchen
   with
     description
       "A large room, lit by high windows. A door leads north
@@ -4039,7 +4041,7 @@ Room Kitchen "Kitchen"
     ;
 
 
-Object -> KitchenTable "table"
+Object -> KitchenTable "table"                                   ! >KitchenTable
   with
     name 'working' 'table',
     description [;
@@ -4052,7 +4054,7 @@ Object -> KitchenTable "table"
   has supporter;
 
 
-Object -> Hearth "hearth"
+Object -> Hearth "hearth"                                              ! >Hearth
   with
     name 'hearth' 'fire',
     description "A stone block built into the wall, with a fire burning in it.",
@@ -4071,7 +4073,7 @@ Object -> Hearth "hearth"
   has static container open;
 
 
-Object -> -> Cauldron "cauldron"
+Object -> -> Cauldron "cauldron"                                     ! >Cauldron
   with
     name 'cauldron' 'pot' 'pottage',
     description
@@ -4090,7 +4092,7 @@ Object -> -> Cauldron "cauldron"
 
 ! ================================================ Basement
 
-Room CellarerChamber "Cellarer Chamber"
+Room CellarerChamber "Cellarer Chamber"                       ! >CellarerChamber
   with
     description
       "XXX",
@@ -4099,7 +4101,7 @@ Room CellarerChamber "Cellarer Chamber"
      ~light;
 
 
-Room Undercroft "Undercroft"
+Room Undercroft "Undercroft"                                       ! >Undercroft
   with
     name 'undercroft',
     description
@@ -4111,7 +4113,7 @@ Room Undercroft "Undercroft"
 
 ! ---------------------------------------------------- FitzAlan Crypt
 
-Object Ladder "ladder"
+Object Ladder "ladder"                                                 ! >Ladder
   with
     name 'ladder',
     describe 0,
@@ -4134,7 +4136,7 @@ Object Ladder "ladder"
   has static open;
 
 
-Room FitzAlanCrypt "FitzAlan Crypt"
+Room FitzAlanCrypt "FitzAlan Crypt"                             ! >FitzAlanCrypt
   with
     name 'stone' 'walls',
     description
@@ -4171,7 +4173,7 @@ Room FitzAlanCrypt "FitzAlan Crypt"
     ~light;
 
 
-Tomb -> FitzAlanLargeTomb "larger tomb"
+Tomb -> FitzAlanLargeTomb "larger tomb"                     ! >FitzAlanLargeTomb
   with
     adj_name 'large' 'larger' 'central',
     description
@@ -4182,7 +4184,7 @@ Tomb -> FitzAlanLargeTomb "larger tomb"
       ~proper;
 
 
-Object -> -> FitzAlanKnight "carvings"
+Object -> -> FitzAlanKnight "carvings"                         ! >FitzAlanKnight
   class AdjObject,
   with
     adj_name 'fitzalan',
@@ -4198,7 +4200,7 @@ Object -> -> FitzAlanKnight "carvings"
     has scenery;
 
 
-Tomb -> FitzAlanSmallTomb "smaller tomb"
+Tomb -> FitzAlanSmallTomb "smaller tomb"                    ! >FitzAlanSmallTomb
   with
     adj_name
       'small' 'smaller' 'wive' 'wive^s' 'children' 'child'
@@ -4210,7 +4212,7 @@ Tomb -> FitzAlanSmallTomb "smaller tomb"
     ~proper;
 
 
-Object -> Panel "art panel"
+Object -> Panel "art panel"                                             ! >Panel
   class AdjObject,
   with
     adj_name 'wooden' 'wood',
@@ -4250,7 +4252,7 @@ Object -> Panel "art panel"
       static;
 
 
-Object -> Frame "brass frame"
+Object -> Frame "brass frame"                                           ! >Frame
   with
     name 'brass' 'frame',
     before [;
@@ -4278,7 +4280,7 @@ Object -> Frame "brass frame"
     scenery;
 
 
-Object -> Latch "latch"
+Object -> Latch "latch"                                                 ! >Latch
   with
     name ',,', ! can refer to until found
     when_open
@@ -4311,7 +4313,7 @@ Object -> Latch "latch"
 ! ---------------------------------------------------------- Crypt
 
 
-Room Crypt "Crypt"
+Room Crypt "Crypt"                                                      ! >Crypt
   with
     name 'crypt',
     description
@@ -4335,7 +4337,7 @@ Room Crypt "Crypt"
     ~light;
 
 
-Object -> Tombs "tombs"
+Object -> Tombs "tombs"                                                 ! >Tombs
   with
     name 'tombs',
     description
@@ -4353,7 +4355,7 @@ Object -> Tombs "tombs"
     scenery pluralname;
 
 
-Tomb -> TombGordian "Brother Gordian's tomb"
+Tomb -> TombGordian "Brother Gordian's tomb"                      ! >TombGordian
   with
     noun_name 'gordian' 'gordian^s' 'tomb',
     history_text
@@ -4366,7 +4368,7 @@ Tomb -> TombGordian "Brother Gordian's tomb"
       founding until his death.";
 
 
-Tomb -> TombEzra "Brother Ezra's tomb"
+Tomb -> TombEzra "Brother Ezra's tomb"                               ! >TombEzra
   with
     noun_name 'ezra' 'ezra^s' 'tomb',
     history_text
@@ -4377,7 +4379,7 @@ Tomb -> TombEzra "Brother Ezra's tomb"
       for his flaming orange hair and for his kindness.";
 
 
-Tomb -> TombCrispin "Brother Crispin's tomb"
+Tomb -> TombCrispin "Brother Crispin's tomb"                      ! >TombCrispin
   with
     noun_name 'crispin' 'crispin^s' 'tomb',
     history_text
@@ -4388,7 +4390,7 @@ Tomb -> TombCrispin "Brother Crispin's tomb"
       meet the man who had taken the cross with such honor.";
 
 
-Tomb -> TombDunstane "Brother Dunstan's tomb"
+Tomb -> TombDunstane "Brother Dunstan's tomb"                    ! >TombDunstane
   with
     noun_name 'dunstan' 'dunstan^s' 'tomb',
     history_text
@@ -4399,7 +4401,7 @@ Tomb -> TombDunstane "Brother Dunstan's tomb"
       decline in the prestige of the priory.";
 
 
-Tomb -> TombGodric "Brother Godric's tomb"
+Tomb -> TombGodric "Brother Godric's tomb"                         ! >TombGodric
   with
     noun_name 'godric' 'godric^s' 'tomb',
     history_text
@@ -4410,7 +4412,7 @@ Tomb -> TombGodric "Brother Godric's tomb"
       death.";
 
 
-Tomb -> TombAmbrose "Brother Ambrose's tomb"
+Tomb -> TombAmbrose "Brother Ambrose's tomb"                      ! >TombAmbrose
   with
     noun_name 'ambrose' 'ambrose^s' 'tomb',
     history_text
@@ -4423,7 +4425,7 @@ Tomb -> TombAmbrose "Brother Ambrose's tomb"
       praying in memory of his lost brothers.";
 
 
-Object -> CryptBell "crypt bell"
+Object -> CryptBell "crypt bell"                                    ! >CryptBell
   class AdjObject,
   with
     adj_name 'crypt',
@@ -4441,7 +4443,7 @@ Object -> CryptBell "crypt bell"
 
 ! -------------------------------------------------------- Crypt Vestry
 
-Room CryptVestry "Crypt Vestry"
+Room CryptVestry "Crypt Vestry"                                   ! >CryptVestry
   with
     description "A long vertical passage of rough stone.
     This may have originally been
@@ -4458,7 +4460,7 @@ Room CryptVestry "Crypt Vestry"
     ~light;
 
 
-Object -> VestryLedge "ledge"
+Object -> VestryLedge "ledge"                                     ! >VestryLedge
   with
     name 'ledge' 'shelf',
     describe 0,
@@ -4480,7 +4482,7 @@ Object -> VestryLedge "ledge"
     supporter enterable;
 
 
-Object -> -> Coins "sack of coins"
+Object -> -> Coins "sack of coins"                                      ! >Coins
   class AdjObject,
   with
     short_name [;
@@ -4553,7 +4555,7 @@ Object -> -> Coins "sack of coins"
 
 ! ============================================== Second Floor
 
-Room DayStairs "Day Stairs"
+Room DayStairs "Day Stairs"                                         ! >DayStairs
   with
     name 'day' 'stairs',
     description
@@ -4567,7 +4569,7 @@ Room DayStairs "Day Stairs"
 
 ! ---------------------------------------------------- Dorter
 
-Room Dorter "Dorter"
+Room Dorter "Dorter"                                                   ! >Dorter
   with
     description
       "A plain corridor connecting the sleeping chambers.
@@ -4600,7 +4602,7 @@ Room Dorter "Dorter"
 !   has
 !     scenery static;
 
-Object -> DorterWindow "window"
+Object -> DorterWindow "window"                                  ! >DorterWindow
   with
     describe [; rtrue; ],
     door_to Rooftop,
@@ -4609,14 +4611,14 @@ Object -> DorterWindow "window"
     static door openable;
 
 
-Room Rooftop "Rooftop"
+Room Rooftop "Rooftop"                                                ! >Rooftop
   with
     description "XXX",
     e_to Dorter;
 
 ! --------------------------------------------------- Dorm
 
-Room Dorm "Dorm"
+Room Dorm "Dorm"                                                         ! >Dorm
   with
     ! we wake up here, and won't initially show the room name and description
     ! short_name [;
@@ -4639,7 +4641,7 @@ Room Dorm "Dorm"
   has
     ;
 
-Object -> Cots "cots"
+Object -> Cots "cots"                                                    ! >Cots
   with
     name 'cots' 'beds' 'mattresses',
     description "The cots are simple straw mattresses.",
@@ -4653,7 +4655,7 @@ Object -> Cots "cots"
     scenery pluralname;
 
 
-Object -> MyCot "your cot"
+Object -> MyCot "your cot"                                              ! >MyCot
   class AdjObject,
   with
     adj_name 'my',
@@ -4664,30 +4666,30 @@ Object -> MyCot "your cot"
     proper scenery supporter enterable;
 
 
-Cot -> CotCuthbert
+Cot -> CotCuthbert                                                ! >CotCuthbert
  with amonk BrCuthbert;
 
-Cot -> CotHugh
+Cot -> CotHugh                                                        ! >CotHugh
   with amonk BrHugh;
 
-Cot -> CotWilfred
+Cot -> CotWilfred                                                  ! >CotWilfred
   with amonk BrWilfred;
 
-Cot -> CotAelred
+Cot -> CotAelred                                                    ! >CotAelred
   with amonk BrAelred;
 
-Cot -> CotAnselm
+Cot -> CotAnselm                                                    ! >CotAnselm
   with amonk BrAnselm;
 
-Cot -> CotBenedict
+Cot -> CotBenedict                                                ! >CotBenedict
   with amonk BrBenedict;
 
-Cot -> CotMartin
+Cot -> CotMartin                                                    ! >CotMartin
   with amonk BrMartin;
 
 
 
-Object -> Chests "chests"
+Object -> Chests "chests"                                              ! >Chests
   with
     name 'chests',
     description "The chests are simple wooden boxes with lids.",
@@ -4701,7 +4703,7 @@ Object -> Chests "chests"
     scenery pluralname;
 
 
-Object -> MyChest "your chest"
+Object -> MyChest "your chest"                                        ! >MyChest
   class AdjObject,
   with
     adj_name 'my',
@@ -4712,10 +4714,10 @@ Object -> MyChest "your chest"
     proper scenery ~open openable container;
 
 
-Chest -> ChestCuthbert
+Chest -> ChestCuthbert                                          ! >ChestCuthbert
  with amonk BrCuthbert;
 
-Object -> -> Sketch "sketch"
+Object -> -> Sketch "sketch"                                           ! >Sketch
   with
     name 'drawing' 'sketch',
     description "A simple ink sketch of the priory.",
@@ -4727,10 +4729,10 @@ Object -> -> Sketch "sketch"
     ;
 
 
-Chest -> ChestHugh
+Chest -> ChestHugh                                                  ! >ChestHugh
   with amonk BrHugh;
 
-Object -> -> Letters "letters"
+Object -> -> Letters "letters"                                        ! >Letters
   with
     name 'letters',
     description "A set of letters on parchment.",
@@ -4811,18 +4813,18 @@ Object -> -> Letters "letters"
     pluralname;
 
 
-Chest -> ChestWilfred
+Chest -> ChestWilfred                                            ! >ChestWilfred
   with amonk BrWilfred;
 
 
-Chest -> ChestAelred
+Chest -> ChestAelred                                              ! >ChestAelred
   with amonk BrAelred;
 
 
-Chest -> ChestAnselm
+Chest -> ChestAnselm                                              ! >ChestAnselm
   with amonk BrAnselm;
 
-Object -> -> seashell "seashell"
+Object -> -> seashell "seashell"                                     ! >seashell
   class AdjObject,
   with
     adj_name 'sea' 'scallop',
@@ -4837,10 +4839,10 @@ Object -> -> seashell "seashell"
   ;
 
 
-Chest -> ChestBenedict
+Chest -> ChestBenedict                                          ! >ChestBenedict
   with amonk BrBenedict;
 
-Object -> -> Rosary "rosary"
+Object -> -> Rosary "rosary"                                           ! >Rosary
   with
     name 'rosary',
     description
@@ -4855,11 +4857,11 @@ Object -> -> Rosary "rosary"
     ;
 
 
-Chest -> ChestMartin
+Chest -> ChestMartin                                              ! >ChestMartin
   with amonk BrMartin;
 
 
-Object -> DormWindow "window"
+Object -> DormWindow "window"                                      ! >DormWindow
   with
     name 'window',
     description "Just an opening in the stone and much too far to reach.",
@@ -4873,7 +4875,7 @@ Object -> DormWindow "window"
 
 ! ---------------------------------------------------- Night Stairs
 
-Room NightStairs "Night Stairs"
+Room NightStairs "Night Stairs"                                   ! >NightStairs
   with
     description [;
       print
@@ -4936,7 +4938,7 @@ Candle -> TimeCandle "canonical hour candle"
 
 ! ---------------------------------------------------- Neccessarium
 
-Room Necessarium "Necessarium"
+Room Necessarium "Necessarium"                                    ! >Necessarium
   with
     description
       "A narrow stone chamber extending from the dormitory. A wooden bench
@@ -4956,7 +4958,7 @@ Room Necessarium "Necessarium"
     ;
 
 
-Object -> Latrines "latrines"
+Object -> Latrines "latrines"                                        ! >Latrines
   with
     name 'latrine' 'latrines' 'hole' 'holes',
     before [;
@@ -4981,7 +4983,7 @@ Object -> Latrines "latrines"
 
 ! ---------------------------------------------------- LayCells
 
-Room LayCells "Lay cells"
+Room LayCells "Lay cells"                                            ! >LayCells
   with
     description
       "XXX",
@@ -4993,7 +4995,7 @@ Room LayCells "Lay cells"
 
 ! ================================================================= Game
 
-Object MyRobe "robe"
+Object MyRobe "robe"                                                   ! >MyRobe
   with
     article "your",
     name 'robe' 'habit',
@@ -5011,7 +5013,7 @@ Object MyRobe "robe"
 ! trying to add it as scope of the robe is problem because it would get
 ! reported in inventory or otherwise act weird.
 
-Object MyHood "hood"
+Object MyHood "hood"                                                   ! >MyHood
   class AdjObject,
   with
     adj_name 'robe' 'my',
@@ -5040,14 +5042,14 @@ Object MyHood "hood"
 ! ==================================================================== Quotes
 
 #IfDef RETRO;
-Array quote_opening static --> 5 34
+Array quote_opening static --> 5 34                             ! >quote_opening
   "Behold, how good and how pleasant"
   "it is for brethren"
   "to dwell together in unity!"
   ""
   "    --- The Book of Psalms";
 #IfNot;
-Array quote_opening static --> 4 41
+Array quote_opening static --> 4 41                             ! >quote_opening
   "Behold, how good and how pleasant it is"
   "for brethren to dwell together in unity!"
   ""
@@ -5060,22 +5062,22 @@ Array quote_opening static --> 4 41
 !   ""
 !   "              --- The Gospel of John";
 
-Array quote_darkness static --> 3 38
+Array quote_darkness static --> 3 38                           ! >quote_darkness
   "They grope in the dark without light."
   ""
   "                --- The Book of Job";
 
-Array quote_crypt static --> 3 35
+Array quote_crypt static --> 3 35                                 ! >quote_crypt
   "Son of man, can these bones live?"
   ""
   "         --- The Book of Ezekiel";
 
-Array quote_stone static --> 3 31
+Array quote_stone static --> 3 31                                 ! >quote_stone
   "Roll a great stone to me here."
   ""
   " --- The First Book of Kings";
 
-Array quote_ladder static --> 5 37
+Array quote_ladder static --> 5 37                               ! >quote_ladder
   "And he dreamed, and behold"
   "a ladder set up on the earth,"
   "and the top of it reached to heaven."
@@ -5088,30 +5090,30 @@ Array quote_ladder static --> 5 37
 !   ""
 !   "  --- The Rule of St. Benedict";
 
-Array quote_locutory static --> 4 25
+Array quote_locutory static --> 4 25                           ! >quote_locutory
   "A time to keep silence,"
   "and a time to speak."
   ""
   "      --- Ecclesiastes";
 
-Array quote_sleep static --> 3 33
+Array quote_sleep static --> 3 33                                 ! >quote_sleep
   "The sleepy like to make excuses."
   ""
   "   --- The Rule of St. Benedict";
 
-Array quote_rose static --> 4 32
+Array quote_rose static --> 4 32                                   ! >quote_rose
   "I am the rose of Sharon,"
   "and the lily of the valleys."
   ""
   "         --- Song of Solomon";
 
-Array quote_body static --> 4 34
+Array quote_body static --> 4 34                                   ! >quote_body
   "Precious in the sight of the Lord"
   "is the death of his saints."
   ""
   "           --- The Book of Psalms";
 
-Array quote_song static --> 5 36
+Array quote_song static --> 5 36                                   ! >quote_song
   "O come, let us sing unto the Lord:"
   "let us make a joyful noise"
   "to the rock of our salvation."
