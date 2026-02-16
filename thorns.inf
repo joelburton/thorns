@@ -118,7 +118,7 @@ Constant MSG_KISS_DEFAULT
   And forbidden. Very forbidden.";
 Constant MSG_MILD_DEFAULT "Mind your tongue, Brother.";
 Constant MSG_PROMPT = 1234;  ! anything > 1000
-[LibraryMessages p_msg ; ! p_arg_1 p_arg_2;
+[ LibraryMessages p_msg ; ! p_arg_1 p_arg_2;
 	switch(p_msg) {
     MSG_PROMPT:
       #IfDef HAS_HINTS; if (turns == 4) HintReady(hint_dragon); #EndIf;
@@ -596,7 +596,8 @@ Constant CLOCK_EVENING 4;
 ! Altar, Chest, Cot, Monk, Room, Statue
 
 
-Class Altar
+
+Class Altar                                                            ! >Altar
   class AdjObject,
   with
     article "an",
@@ -645,7 +646,7 @@ Class Altar
 ! pro: decent puzzle
 ! con: can't one extinguish a candle with their fingers?
 
-Class Candle
+Class Candle                                                          ! >Candle
   class AdjObject,
   with
     noun_name 'candle',
@@ -682,7 +683,7 @@ Class Candle
 
 ! One for every monk; can only search them when suspicious.
 
-Class Chest
+Class Chest                                                           ! >Chest
   with
     parse_name [ w count ;
       w = NextWord();
@@ -732,7 +733,7 @@ Class Chest
 
 ! One for every monk; can only search them when suspicious.
 
-Class Cot
+Class Cot                                                               ! >Cot
   with
     parse_name [ w count ;
       w = NextWord();
@@ -777,7 +778,7 @@ Class Cot
 
 ! This is a sprig of any kind of plant (not technically always an herb)
 
-Class Herb
+Class Herb                                                            ! >Herb
   with
     name 'sprig' 'sprigs//p',
     before [;
@@ -816,7 +817,7 @@ Class Herb
 !
 ! In all of those places, need to check for illegal-if-monk-here
 
-Class Monk
+Class Monk                                                            ! >Monk
   with
     name 'brother',
     life [;
@@ -837,7 +838,7 @@ Class Monk
 ! Base class for plants; player can't take these, but can get a sprig of
 ! each of these, which is an Herb (defined above)
 
-Class Plant
+Class Plant                                                         ! >Plant
   with
     name 'plant',
     before [ p ;
@@ -869,13 +870,13 @@ Class Plant
 ! Very light, just here so it's easy to distinguish room vs object
 ! with a ofclass check.
 
-Class Room
+Class Room                                                             ! >Room
   has light;  ! turn off in individual underground rooms
 
 
 ! Statues found in altars and in chapel house: Mary, St Jude, Gordian
 
-Class Statue
+Class Statue                                                          ! >Statue
   with
     name 'statue',
     before [;
@@ -909,7 +910,7 @@ Class Statue
 
 ! Medicines in the infirmary
 
-Class Tincture
+Class Tincture                                                      ! >Tincture
   with
     name 'tincture' 'tinctures//p',
     article "a bottle of",
@@ -934,7 +935,7 @@ Class Tincture
     ok_carry;
 
 
-Class Tomb
+Class Tomb                                                            ! >Tomb
   class AdjObject,
   with
     adj_name 'brother' 'prior',
@@ -990,7 +991,7 @@ Class Tomb
 ! Aelred, either normal or dying (but not dead, that's separate object)
 ! general = dying
 
-Monk BrAelred "Brother Aelred"
+Monk BrAelred "Brother Aelred"                                    ! >BrAelred
   with
     name 'aelred' 'herbalist',
     description [;
@@ -1026,7 +1027,7 @@ Monk BrAelred "Brother Aelred"
       animate;  ! turn off when dead & remove him from slype
 
 
-Monk BrAnselm "Brother Anselm"
+Monk BrAnselm "Brother Anselm"                                      ! >BrAnselm
   with
     name 'anselm' 'cantor',
     description
@@ -1048,7 +1049,7 @@ Monk BrAnselm "Brother Anselm"
     ;
 
 
-Monk BrBenedict "Brother Benedict"
+Monk BrBenedict "Brother Benedict"                                ! >BrBenedict
   with
     name 'benedict' 'infirmarer',
     description
@@ -1069,7 +1070,7 @@ Monk BrBenedict "Brother Benedict"
     ;
 
 
-Monk BrCuthbert "Brother Cuthbert"
+Monk BrCuthbert "Brother Cuthbert"                                ! >BrCuthbert
   with
     name 'cuthbert' 'sacrist',
     description
@@ -1089,7 +1090,7 @@ Monk BrCuthbert "Brother Cuthbert"
   ;
 
 
-Monk BrHugh "Brother Hugh"
+Monk BrHugh "Brother Hugh"                                           ! >BrHugh
   with
     name 'hugh' 'cellarer',
     description
@@ -1112,7 +1113,7 @@ Monk BrHugh "Brother Hugh"
 
 ! Martin is in the kitchen, but goes to the chapter house whenever PC visits
 
-Monk BrMartin "Brother Martin"
+Monk BrMartin "Brother Martin"                                      ! >BrMartin
   with
     name 'martin' 'kitchener',
     description
@@ -1131,7 +1132,7 @@ Monk BrMartin "Brother Martin"
   ;
 
 
-Monk BrOswald "Brother Oswald"
+Monk BrOswald "Brother Oswald"                                      ! >BrOswald
   with
     name 'oswald' 'prior',
     description
@@ -1155,7 +1156,7 @@ Monk BrOswald "Brother Oswald"
 !
 ! general = bribed with basil
 
-Monk BrRemigio "Brother Remigio"
+Monk BrRemigio "Brother Remigio"                                  ! >BrRemigio
   with
     name 'remigio',
     description
@@ -1187,7 +1188,7 @@ Monk BrRemigio "Brother Remigio"
   has
   ;
 
-Candle -> KitchenCandle "tallow candle"
+Candle -> TallowCandle "tallow candle"                        ! >TallowCandle
   with
     adj_name 'tallow',
     description [;
@@ -1205,7 +1206,7 @@ Candle -> KitchenCandle "tallow candle"
 !
 ! He'll have limited conversation w/PC in the library.
 
-Monk BrWilfred "Brother Wilfred"
+Monk BrWilfred "Brother Wilfred"                                   ! >BrWilfred
   with
     name 'wilfred' 'librarian',
     description
@@ -1275,7 +1276,7 @@ Monk BrWilfred "Brother Wilfred"
 ! --------------------------------------------------- 2.0.1 Entrance
 ! West Porch, door
 
-Room WestPorch "West Porch"
+Room WestPorch "West Porch"                                       ! >WestPorch
   class AdjObject,
   with
     adj_name 'west',
@@ -1298,7 +1299,7 @@ Room WestPorch "West Porch"
 
 ! PUZZLE: one way to find the founding date is on the door
 
-Object WestDoor "west door"
+Object WestDoor "west door"                                       ! >WestDoor
   class AdjObject,
   with
     adj_name 'west',
@@ -1331,7 +1332,7 @@ Object WestDoor "west door"
 ! --------------------------------------------------- 2.0.2 Nave
 ! Nave and rood screen and cross
 
-Room Nave "Nave"
+Room Nave "Nave"                                                        ! >Nave
   with
     name 'nave',
     description
