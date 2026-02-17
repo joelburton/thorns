@@ -154,6 +154,20 @@ Global f_identified_poison = 0;
 
 ! ============================================================= Hooks
 
+[ DarkToDark ;
+  ! During the crypt escape, can move dark-to-dark
+  if (CryptBell has general) rfalse;
+  print
+    "You've always been a bit scared of the dark, having heard tales of
+    careless men being attacked by demons where there is no light.
+    ^^After a few minutes trying to grope around and failing to get your
+    bearings, you lose all hope and begin screaming.
+    ^^After a few minutes, you are rescued by Brother Cuthbert, bearing a
+    candle. ~What on earth are you doing here, Brother Novice?~
+    ^^When he hears of this, Brother Oswald sentences you to a week of bread
+    and water.";
+  KillOff();
+];
 
 [ DeathMessage;
   if (deadflag == 3) print "You have failed";
@@ -176,6 +190,9 @@ Global f_identified_poison = 0;
 ! - with a narc monk in the room (any but Remigio, Aelred, Wilfred)
 
 [ CheckForContraband mir o caught_with ;
+  ! Don't do this during the crypt rescue
+  if (CryptBell has general) rfalse;
+
   mir = MonkInRoom();
   if (mir == BrRemigio or BrAelred or BrWilfred) mir = 0; ! not narcs
   ! safe to carry contraband if not observed
@@ -226,7 +243,7 @@ Global f_identified_poison = 0;
 
   print
     " notices you openly carrying ", (the) caught_with,
-    ". ~Brother Novice, why are you doing with that?
+    ". ~Brother Novice, what are you doing with that?
     That has nothing to do with your duties here.~^^
     For disobeying the rules of the priory, you are given penance of
     bread and water for a week.";
@@ -244,6 +261,15 @@ Global f_identified_poison = 0;
   if (real_location == Sacristy && location == thedark) {
     PlaceInScope(SacristyDoor);  ! so we can find door
     PlaceInScope(Sacristy);      ! so room actions, like smell, work
+  }
+  if (real_location == FitzAlanCrypt && Frame has general) {
+    PlaceInScope(FitzAlanPanel);
+    PlaceInScope(Frame);
+    PlaceInScope(Button);
+  }
+  if (real_location == Crypt) {
+    PlaceInScope(CryptBell);
+    PlaceInScope(TombEzra);
   }
   rfalse;
 ];
@@ -312,6 +338,10 @@ Verb 'extinguish'
 
 Extend 'blow' first
   * 'out' noun=IsCandle                   -> SwitchOff;
+
+Verb 'hide'
+  * 'by'/'behind' noun                    -> Hide
+  *                                       -> Hide;
 
 Verb 'plant'
   * held                                  -> Dig
@@ -383,6 +413,16 @@ Verb 'xyzzy' 'plug'
 
   ^^Special thanks to: Fredrik Ramsberg, andrewj, curiousdannii, Garry Francis,
   and ~Pontus I~ for answering my questions on forums.";
+];
+
+[ HideSub ;
+  if (noun == nothing) "Hide behind what, exactly?";
+  if (noun ~= TombEzra)
+    "You try, but you realize you could still be easily seen.";
+  if (TombEzra has general)
+    "You are already crouching down and hiding.";
+  give TombEzra general;  ! hidden
+  "You crouch far down on the darkest side of ", (the) TombEzra, ".";
 ];
 
 [ LookUnderSub;
@@ -470,13 +510,14 @@ Verb 'xyzzy' 'plug'
   Verb meta 'settime'   * number number -> HourAdvance;
   Verb meta 'time'      *               -> Time;
   Verb meta 'suspicion' * number        -> SuspicionChange;
-  Verb meta '_//'       *               -> SolveList;
-  Verb meta '_cabinet'  *               -> SolveCabinet;
-  Verb meta '_library'  *               -> SolveLibrary;
-  Verb meta '_light'    *               -> SolveLight;
-  Verb meta '_lion'     *               -> SolveLion;
-  Verb meta '_office'   *               -> SolveOffice;
-  Verb meta '_aelred'   *               -> SolveAelredDead;
+  Verb '_//'            *               -> SolveList;
+  Verb '_cabinet'       *               -> SolveCabinet;
+  Verb '_library'       *               -> SolveLibrary;
+  Verb '_light'         *               -> SolveLight;
+  Verb '_lion'          *               -> SolveLion;
+  Verb '_office'        *               -> SolveOffice;
+  Verb '_aelred'        *               -> SolveAelredDead;
+  Verb '_crypt'         *               -> SolveCrypt;
 
   [ SuspicionChangeSub;
     suspicion_level = noun;
@@ -514,8 +555,9 @@ Verb 'xyzzy' 'plug'
     PlayerTo(Library);
   ];
   [ SolveLightSub;
-    move MagicLightGem to player;
-    "DEBUG: You have the magic gem.^";
+    move MyCandle to player;
+    MyCandle.start_light();
+    "DEBUG: You have the beeswax candle.^";
   ];
   [ SolveLionSub;
     <SolveOffice>;
@@ -526,6 +568,14 @@ Verb 'xyzzy' 'plug'
   [ SolveOfficeSub;
     Service.stop_service();
     "DEBUG: Service solved.^";
+  ];
+  [ SolveCryptSub;
+    <SolveLight>;
+    <SolveLion>;
+    <Go FAKE_D_OBJ>;
+    <Examine Frame>;
+    <Push Button>;
+    <Go FAKE_S_OBJ>;
   ];
 
   Object MagicLightGem "gem"
@@ -649,12 +699,23 @@ Class Altar                                                             ! >Altar
 Class Candle                                                           ! >Candle
   class AdjObject,
   with
-    noun_name 'candle',
+    noun_name 'candle' 'light',
     dont_need [;
       if (FitzAlanAltar hasnt moved && Kitchen hasnt visited)
         "There's no reason for this. The monastery is lit,
         except at late night,
         and carrying one about would only raise questions.";
+    ],
+    after [;
+      Drop:
+        self.stop_light();
+        "You drop the candle and, in doing so, extinguish it.";
+    ],
+    start_light [;
+      give self light;
+    ],
+    stop_light [;
+      give self ~light;
     ],
     before [ helper ;
       Burn:
@@ -665,7 +726,7 @@ Class Candle                                                           ! >Candle
         if (location == NightStairs) helper = TimeCandle;
         if (location == Kitchen) helper = Hearth;
         if ( (second == helper) || (second == nothing && helper) ) {
-          give self light;
+          self.start_light();
           "You light your candle using ", (the) helper, ".";
         }
         "You need something appropriate to light your candle.";
@@ -674,7 +735,7 @@ Class Candle                                                           ! >Candle
       SwitchOff:
         if (self hasnt light)
           "It isn't lit.";
-        give self ~light;
+        self.stop_light();
         "You extinguish the candle.";
     ],
   has
@@ -1869,12 +1930,12 @@ Object -> Candles "candles"                                           ! >Candles
   has pluralname;
 
 
-Candle MyCandle "beeswax candle"
+Candle MyCandle "beeswax candle"                                     ! >MyCandle
   with
     adj_name 'beeswax',
     description [;
       print "Good quality, made from beeswax from the priory's own bees";
-      if (self has light) print ". It is currently lit.";
+      if (self has light) print ". It is currently lit";
       ".";
     ],
     before [;
@@ -2642,8 +2703,8 @@ Object -> Basin "basin"                                                 ! >Basin
     after [;
       Receive:
         print (The) noun, " drops into the water";
-        if (noun == MyCandle && MyCandle has light)
-          { give MyCandle ~light; print " and extinguishes"; }
+        if (noun ofclass Candle && noun has light)
+          { noun.stop_light(); print " and extinguishes"; }
         ".";
     ],
   has
@@ -2941,7 +3002,7 @@ Room Library "Library"                                                ! >Library
       'manuscript' 'manuscripts'
         "There are many, but none seem significant."
   has
-    light;
+    ;
 
 
 Object -> BrassMap "brass map"                                       ! >BrassMap
@@ -2985,7 +3046,8 @@ Object -> Bookshelf "bookshelf"                                     ! >Bookshelf
         used for the work in the scriptorium";
       if (MonkGuide hasnt moved)
         print
-          ". One that draws your attention is titled ~Registrum Fratrum~";
+          ". One that draws your attention because of its thin size and
+          small format is titled ~Registrum Fratrum~";
       ".";
     ],
     before [;
@@ -3006,7 +3068,9 @@ Object MonkGuide "Registrum Fratrum",                               ! >MonkGuide
     description
       "The ~Registrum Fratrum~ (~Register of the Brothers~).
       A small leather-bound book providing information on the monks who
-      have served in the priory.",
+      have served in the priory. It was started decades ago, when Brother
+      Wilfred became the prior, but it contains information on some of the
+      monks before then, also.",
     before [ i last_word end ;
       Examine:
         if (verb_word == 'read')
@@ -4148,12 +4212,8 @@ Room FitzAlanCrypt "FitzAlan Crypt"                             ! >FitzAlanCrypt
       narrow recesses have been cut into the walls---likely once holding
       offerings or relics. The air is still, undisturbed for decades
       or longer. A patina of dust covers everything, unmarred by footprints
-      save your own.
-
-      ^^Against the western wall hangs a faded wooden panel depicting the Three
-      Living and the Three Dead, its Latin inscription barely legible in the
-      gloom.",
-    w_to [;
+      save your own.",
+    s_to [;
       if (Frame hasnt general) "You can't go that way.";
       print "You slip through the opening behind the panel, revealing...^^";
       return Crypt;
@@ -4212,26 +4272,31 @@ Tomb -> FitzAlanSmallTomb "smaller tomb"                    ! >FitzAlanSmallTomb
     ~proper;
 
 
-Object -> Panel "art panel"                                             ! >Panel
+! open = open
+Object -> FitzAlanPanel "art panel"                             ! >FitzAlanPanel
   class AdjObject,
   with
-    adj_name 'wooden' 'wood',
+    adj_name 'wooden' 'wood' 'faded',
     noun_name 'art' 'panel' 'youths' 'corpses' 'inscription',
     initial [;
-      if (latch has open)
-        "The panel is ajar, revealing an opening to the west.";
+      if (self has open)
+        "The panel is ajar, revealing an opening to the south.";
       if (frame has general)
         "The panel is currently closed flush against the wall.";
-      rtrue;  ! hmm, always seems to print blank line.
+      "Against the southern wall hangs a faded wooden panel depicting the Three
+      Living and the Three Dead, its Latin inscription barely legible in the
+      gloom.";
     ],
-    description
-      "A large wooden painted panel set in a brass frame, it
+    description [;
+      if (self has open)
+        "The panel is ajar from the wall, revealing an opening to the south.";
+      "A large wooden painted panel set in a distinctive brass frame, it
       depicts the Three Living and the Three Dead---three noble youths
-      recoiling from three
-      crowned corpses who gesture toward them. Woven beneath in Gothic script:
-      ~QUOD FUIMUS, ESTIS; QUOD SUMUS, ERITIS~ (What we were, you are; what we
-      are, you will be). Dampness has taken its toll on the ancient
-      pigments.",
+      recoiling from three crowned corpses who gesture toward them. Woven
+      beneath in Gothic script: ~QUOD FUIMUS, ESTIS; QUOD SUMUS, ERITIS~
+      (What we were, you are; what we are, you will be). Dampness has taken
+      its toll on the ancient pigments.";
+    ],
     before [;
       Take:
         "Before you even try, you realize this would be much too large to
@@ -4241,71 +4306,77 @@ Object -> Panel "art panel"                                             ! >Panel
       Search:
         "Besides your search for meaning on a memento mori, you find nothing
         unexpected in the artwork.";
-      Turn, Push:
-        "The art panel seems affixed to the brass frame.";
+      Turn: "Nothing happens when you try to rotate the panel.";
+      Push:
+        if (Frame hasnt general)
+          "The art panel seems fixed to the distinctive brass frame.";
+        if (self has open) <<Close self>>;
+        "The art panel seems fixed to the distinctive brass frame";
+      Pull:
+        if (self has open) "The panel is already ajar.";
+        "The art panel seems fixed to the distinctive brass frame.";
       Open:
-        if (Frame has general) <<Open Latch>>;
-      Close:
-        if (Frame has general) <<Close Latch>>;
-    ],
-    has
-      static;
-
-
-Object -> Frame "brass frame"                                           ! >Frame
-  with
-    name 'brass' 'frame',
-    before [;
-      Search, Examine:
-        if (Latch has open)
-          "The panel and frame are ajar from the wall, revealing an opening.";
-        print "The brass frame encloses the art panel";
-        if (self hasnt general) {
-          Latch.&name-->0 = 'latch';
-          print
-            ". Examining it closely, you find
-            a small latch on the right-hand side of the panel";
-        }
-        give self general;
-        ".";
-      Push, Turn:
-        if (self has general) "Perhaps if you tried to do that to the latch?";
-        "Nothing unexpected happens.";
-      Open:
-        if (Frame has general) <<Open Latch>>;
-      Close:
-        if (Frame has general) <<Close Latch>>;
-    ],
-  has
-    scenery;
-
-
-Object -> Latch "latch"                                                 ! >Latch
-  with
-    name ',,', ! can refer to until found
-    when_open
-      "The art panel and frame are ajar.",
-    description [;
-      print
-        "It's a small latch that seems to control something inside of the
-        brass frame. It is currently ";
-      if (self has open) "open."; "closed.";
-    ],
-    before [;
-      Open:
-        if (self hasnt open) {
-          give self open;
-          "You open the latch and feel the frame pop out a bit from the wall,
-          revealing an opening in the wall.";
-        }
-        "The latch is already opened.";
+        if (Frame has general) <<Push Button>>;
       Close:
         if (self has open) {
           give self ~open;
-          "You push the frame against the wall and the latch clicks shut.";
+          "You push the panel against the wall and hear a click from inside the
+          frame.";
         }
-      Turn, Push:
-        if (self has open) <<Close self>>; <<Open self>>;
+        if (Frame has general)
+          "The panel is already closed.";
+    ],
+    has
+      static transparent;
+
+
+! general = player has examined frame
+Object -> -> Frame "brass frame"                                        ! >Frame
+  class AdjObject,
+  with
+    adj_name 'distinctive' 'brass',
+    noun_name 'frame',
+    before [;
+      Search, Examine:
+        give self transparent;
+        if (FitzAlanPanel has open)
+          "The panel and frame are ajar from the wall, revealing an opening.";
+        give self general;
+        "The brass frame encloses the art panel. Examining it closely, you find
+        a small button on the right-hand side of the panel";
+      Push:
+        if (self has general) "Perhaps if you tried to do that to the button?";
+        "Nothing unexpected happens.";
+      Open:
+        if (self has general) <<Push Button>>;
+      Close:
+        <<Close FitzAlanPanel>>;
+      Pull:
+        <<Pull FitzAlanPanel>>;
+    ],
+  has
+    static ~transparent;
+
+
+Object -> -> -> Button "button"                                        ! >Button
+  with
+    name 'button',
+     description "It's a small brass button on the side of the frame.",
+    before [;
+      Push:
+        if (FitzAlanPanel hasnt open) {
+          give FitzAlanPanel open;
+          if (self hasnt moved) {
+            give self moved;
+            "You push the button and hear click from inside the frame.
+            The panel pops ajar from the wall, revealing an opening to the
+            south.";
+          }
+          "Pushing the button, the panel once again swings open,
+          revealing the opening to the south.";
+        }
+        "You push the button but hear no click. Perhaps this is because the
+        panel is already opened?";
     ],
   has
     scenery;
@@ -4316,15 +4387,22 @@ Object -> Latch "latch"                                                 ! >Latch
 Room Crypt "Crypt"                                                      ! >Crypt
   with
     name 'crypt',
-    description
-      "The crypt stretches dimly before you, thick stone pillars
-      supporting low vaulted arches. Rows of tombs line the walls;
-      the air is thick and damp.
-
-      ^^A large bell is in a stand by the stairs heading upward, and a small
-      doorway leads south.",
+    description [;
+      print
+        "The crypt stretches dimly before you, thick stone pillars
+        supporting low vaulted arches. Rows of tombs line the walls;
+        the air is thick and damp. ";
+      if (FitzAlanPanel has open)
+        print
+          "Part of the apparent wall to the north is open, revealing a
+          passage.";
+      else
+        print "A section of the north wall has been covered with wood planks.";
+      "^^A large bell is in a stand by the stairs heading upward, and a small
+      doorway leads south.";
+    ],
     u_to CryptStairs,
-    e_to [;
+    n_to [;
       if (Frame hasnt general) "You can't go that way.";
       print "You slip through the opening behind the panel, revealing...^^";
       return FitzAlanCrypt;
@@ -4335,6 +4413,49 @@ Room Crypt "Crypt"                                                      ! >Crypt
     ],
   has
     ~light;
+
+
+Object -> BlankPanel "wood panel"                                     ! >BlankPanel
+  class AdjObject,
+  with
+    adj_name 'blank' 'wood',
+    noun_name 'panel' 'planks',
+    describe 0,
+    description [;
+      print
+        "This side may have once had art on it; it's impossible to
+        tell because this side has been boarded over with thick planks of oak
+        (perhaps to provide insulatation from the now-disused family crypt?)";
+      if (FitzAlanPanel has open)
+        print ".^^The panel is ajar, revealing an opening to the north";
+      ".";
+    ],
+    before [;
+      Pull, Close:
+        if (FitzAlanPanel hasnt open)
+          "It already is pulled shut, and you can't pry the planks off.";
+        if (CryptBell hasnt general) {
+          print
+            "It doesn't appear that this can be opened from this side.
+            Are you sure you want to do this? ";
+            if (~~YesOrNo()) "You decide against this and leave it ajar.";
+        }
+        give FitzAlanPanel ~open;
+        "You pull the panel closed and hear a click in the frame.";
+      Push, Turn:
+        if (FitzAlanPanel has open)
+          "The panel is already ajar.";
+        "Push as you may, you can't seem to open it from this side.";
+      Search:
+        if (FitzAlanPanel hasnt open)
+          "You find nothing interesting about the panel other than your
+          frustration that it doesn't open from this side.";
+        "You find nothing unusual in the planks.";
+      Take:
+        if (FitzAlanPanel hasnt open)
+          "You cannot pry the planks off the panel.";
+    ],
+  has static;
 
 
 Object -> Tombs "tombs"                                                 ! >Tombs
@@ -4367,16 +4488,29 @@ Tomb -> TombGordian "Brother Gordian's tomb"                      ! >TombGordian
       mysteries surpass man's cleverness. He served as Prior from its
       founding until his death.";
 
-
 Tomb -> TombEzra "Brother Ezra's tomb"                               ! >TombEzra
   with
     noun_name 'ezra' 'ezra^s' 'tomb',
+    description
+      "Brother Ezra's tomb is a stone block with a lid on which his name is
+      carved. It sits in the dankest corner of the crypt, positioned between
+      two thick pillars that cast deep shadows behind it.",
+    react_before [;
+      if (self hasnt general) rfalse;
+      Listen, Smell, Examine, Wait, Pray, Insert, Eat, SwitchOff,
+      Blow, Consult, Drink, Transfer, Look, Drop:
+        ;
+      default:
+        print "(To do so, you get up from crouching)^";
+        give self ~general;
+    ],
     history_text
       "Ezra (1155-1212). Elected as the second prior in 1192 and served in this
       role for 18 years. He built out the infirmary and the infirmary chapel
       and opened the priory to religious pilgrims traveling to Scotland.
       Contemporary brothers of him remembered him
-      for his flaming orange hair and for his kindness.";
+      for his flaming orange hair and for his kindness---he always said he
+      would protect his brethren from danger as well as he could.";
 
 
 Tomb -> TombCrispin "Brother Crispin's tomb"                      ! >TombCrispin
@@ -4425,20 +4559,181 @@ Tomb -> TombAmbrose "Brother Ambrose's tomb"                      ! >TombAmbrose
       praying in memory of his lost brothers.";
 
 
+! general = rung and in the sequence for rescue
+
 Object -> CryptBell "crypt bell"                                    ! >CryptBell
   class AdjObject,
   with
     adj_name 'crypt',
     noun_name 'handbell' 'bell',
+    describe 0,
     description
       "A large bell in a stand, both made of pewter. You've heard it once
       rung during a Mass in the crypt, and it was loud enough that you
       heard it on the cloister.",
+    timer_left 0,
+    check [ how ;
+        ! print "tomb hide=", TombEzra has general, "^";
+        if (self hasnt general) rfalse;
+        else if (location == parent(BrCuthbert) && TombEzra hasnt general)
+          how = 1;
+        else if (parent(BrCuthbert) == Crypt && FitzAlanPanel has open)
+          how = 3;
+        else if (real_location == FitzAlanCrypt) how = 0;
+        else if (parent(BrCuthbert) == Crypt or CryptVestry && IsCarryingLit())
+          how = 2;
+        switch (how) {
+          0: rfalse;
+          1:
+            print
+              "Brother Cuthbert stops short. ~Brother Aldwin? What brings you to
+              the crypt at this hour?~"          2
+          2:
+            print
+              "~Who's there?~ Brother Cuthbert calls out, spotting your light.
+              ~Brother Aldwin? You shouldn't be down here alone.~"          3:
+            print
+              "Brother Cuthbert spots the open panel.
+              ~Someone must have been robbing that old family crypt?~
+              ^^You are suspected of troublesome behavior.";
+        }
+        print "^^You are sentenced to confined prayer for a week.";
+        KillOff();
+        rtrue;
+    ],
+    noises [ ;
+      ! TODO: in FACrypt, but panel open
+      if (real_location ~= FitzAlanCrypt or Crypt or CryptVestry
+          or CryptStairs or HighAltarArea) rfalse;  ! far away, can't hear
+      print "^";
+      if (real_location == FitzAlanCrypt) print "Behind the panel,";
+      else if (real_location == parent(BrCuthbert)) print "Very close,";
+      else if (real_location == CryptStairs or HighAltarArea)
+        print "Faintly below,";
+      else if (BrCuthbert in CryptStairs or Nave or HighAltarArea)
+        print "Above,";
+      else if (BrCuthbert in Crypt) print "To the north,";
+      else if (BrCuthbert in CryptVestry) print "To the south,";
+      else print "XXX BUG XXX";
+      print " you hear ";
+      rtrue;
+    ],
+    daemon [ ;
+      self.timer_left++;
+
+
+      ! check for discovery (may also do again after moving cuthbert below)
+      if (self.check()) return;
+
+      switch (self.timer_left) {
+        1:
+        2:
+          move BrCuthbert to Nave;
+          give CryptGate open;
+          if (self.check()) return;
+          "^You can hear a key turning in the gate above.
+          If you get caught here, you'll be in serious trouble.";
+        3:
+          move BrCuthbert to CryptStairs;
+          if (self.check()) return;
+          "^You can hear footsteps coming down the crypt stairs.";
+        4:
+          give Crypt light;
+          give CryptVestry light;
+          if (self.check()) return;
+          if (real_location == Crypt or CryptVestry)
+            "^The footsteps are closer, and you can see some light coming
+            from the stairs.";
+          "^The footsteps sound closer.";
+        5:
+          move BrCuthbert to Crypt;
+          if (self.check()) return;
+          if (real_location == Crypt or CryptVestry)
+            "^Someone has entered the crypt bearing a light.";
+          "^You can hear someone in the crypt.";
+        6:
+          if (self.noises())
+            "~Is someone down here?~. You recognize the voice as
+            Brother Cuthbert's.";
+        7:
+          if (self.noises())
+            "~Helloooo?~";
+        8:
+          move BrCuthbert to CryptVestry;
+          if (self.check()) return;
+          if (real_location == Crypt) {
+            print
+              "^The light moves to the south and you sense Brother Cuthbert
+              is now searching ";
+            if (CryptVestry has visited) print "the crypt vestry";
+            else print "the room south of the crypt";
+            ".";
+          }
+          if (self.noises())
+            "footsteps going south, away from the crypt stairs.";
+        9:
+          if (self.noises()) "~Is someone in the vestry?~";
+        10:
+          if (self.noises()) "~Helloooo?~";
+        11:
+          if (self.noises()) "rustling noises.";
+        12:
+          if (self.noises())
+            "~Must have been a draft from the church above.~ (You hear him
+            muttering a brief prayer.)"
+        13:
+          move BrCuthbert to Crypt;
+          if (self.check()) return;
+          if (real_location == Crypt)
+            "^The light becomes stronger here and your hear footsteps walking
+            back to the stairs.";
+          if (self.noises()) "the footsteps now walking back to the stairs.";
+        14:
+          give CryptVestry ~light;
+          give Crypt ~light;
+          move BrCuthbert to CryptStairs;
+          if (self.check()) return;
+          if (real_location == Crypt)
+            "^The light dims as you hear footsteps on the stairs.";
+        15:
+          give self ~general;
+          give CryptGate locked;
+          move BrCuthbert to HighAltarArea;
+          if (self.check()) return;
+          if (self.noises()) "the gate being shut.";
+        16:
+          StopDaemon(self);
+          move BrCuthbert to CloisterNE;
+          if (real_location == Crypt or FitzAlanCrypt or CryptVestry)
+            "^You managed to avoid detection, but you're still stuck here.
+            Now how will you get out?";
+          Achieved(TASK_ESCAPE_CRYPT);
+          "^It appears the danger has passed, and you escaped the crypt
+          without being discovered.";
+      }
+    ],
+    react_before [;
+      Go:
+        if (location == CryptStairs && selected_direction == u_to) {
+          StopDaemon(self);
+          give self ~general;
+          give Crypt ~light;
+          give CryptVestry ~light;
+          "You slip through the open gate and complete your escape.";
+        }
+    ],
     before [;
-      Turn, Pull, Attack, Push: "XXX";
+      Turn, Pull, Attack, Push:
+        if (self has general)
+          "You just rung it, and dare not do it again.";
+        StartDaemon(self);
+        give self general;
+        "You sound it with vigor which produces an almost deafening peal
+        as it echoes around the room. You feel certain someone above will
+        have heard that.";
       Take: "Leave it here. It will be needed for future masses here.";
     ]
-  has scenery;
+  has static;
 
 
 ! -------------------------------------------------------- Crypt Vestry
@@ -4455,7 +4750,8 @@ Room CryptVestry "Crypt Vestry"                                   ! >CryptVestry
     before [;
       Smell: <<Smell Crypt>>;
     ],
-    inside_description "FOO",
+    cheap_scenery
+      1 'items' "If you want to search the ledge, just say so.",
   has
     ~light;
 
@@ -4467,12 +4763,29 @@ Object -> VestryLedge "ledge"                                     ! >VestryLedge
     inside_description
       "From your vantage on the ledge, you see nothing further here, and
       nothing unexpected about the stone above.",
+    description [;
+      print
+        "It's a simple wooden ledge fastened to the stone wall. It contains
+        several items, likely needed for services held down here";
+      PrintContents(". Standing out among the other items ", self, ISARE_BIT);
+      ".";
+    ],
     react_before [;
       Go:
         if (parent(player) == self && selected_direction == d_to) <<Exit self>>;
     ],
     before [;
       Climb: <<Enter self>>;
+      Search:
+        if (coins has concealed) {
+          give coins ~concealed;
+          "Searching around, you find some pewter platters, a cup, and old
+          cloths. You realize these won't be useful, but then you discover a
+          sack buried under the cloths.";
+        }
+        print "There's nothing interesting on the ledge";
+        PrintContents(" except ", self);
+        ".";
     ],
     after [;
       Enter: "With some difficultly you climb onto the shelf.";
@@ -4550,7 +4863,7 @@ Object -> -> Coins "sack of coins"                                      ! >Coins
           Your vow of poverty weighs heavier than the silver.";
         "You take it, noting metallic clinking as you do.";
     ]
-  has ;
+  has concealed;
 
 
 ! ============================================== Second Floor
