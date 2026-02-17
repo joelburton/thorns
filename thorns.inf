@@ -3,6 +3,9 @@
 
 !
 
+! TODO: pre-death, confine player to Nave,Quire,HighAltarArea,LadyChapel,Cloisters
+!   (which will trigger the remigio->death->meeting scene)
+
 !% -~S
 !% $MAX_DYNAMIC_STRINGS=0
 !% $OMIT_UNUSED_ROUTINES=1
@@ -13,8 +16,33 @@
 
 ! Include "./abbrevs.inf";
 
+! Overall plot explanation:
+!
+! Brother Hugh's sister, Rose, is under extreme financial pressure---her
+! son needed surgery and she needs money desperately. To try to provide for
+! her, Hugh began stealing illuminated manuscripts made by Brother Wilfred.
+! Being so elderly, Wilfred and Oswald just assume Wilfred has misplaced
+! them. Hugh has been communicating with an outsider, arranging to sell
+! these works for money.
+!
+! Aelred (somehow) found out about this (perhaps related to the rosehips,
+! since those would have come from the garden). He told Hugh he needed to
+! confess, but instead Hugh poisoned him with the Henbane Tincture kept in
+! the Infirmary. Aelred dies, but not before pointing to the rosebushes that
+! line the Slype and also saying the cryptic phrase "One life for two".
 
-! inside_description - useful for sitting on things, like stalls
+! The player can recognize that Aelred was poisoned and recognize the poison
+! was henbane, based on the symptoms Aelred has while he was dying. The
+! player can find a letter from the buyer,
+! as well as find letters from Rose about her plight.
+! Ultimately, the player can get into the Undercroft and search it and
+! find the most reason stolen psalter.
+!
+! There are four major pieces of evidence:
+! - the letter from the buyer (explaining where the manuscripts went)
+! - the letters from Rose (proving his need)
+! - the coins hidden in the CryptVestry (proving the sale)
+! - the stolen psalter
 
 ! =============================================================================
 ! 1.0 Constants
@@ -26,8 +54,6 @@
 ! 2.5 Below Ground
 ! 2.6 Second Floor
 ! 3.0 Grammar
-
-! TODO: add food hanging off bell tower from dorter window
 
 Constant Story "Our Lady of Thorns";
 Constant Headline
@@ -51,38 +77,53 @@ Constant STATUSLINE_SCORE; Statusline score;
 Constant OPTIONAL_FULL_SCORE;
 Constant TASKS_PROVIDED;
 
-Constant NUMBER_TASKS = 13;
-Constant MAX_SCORE = 65;
-Array task_scores -> 5 5 5 5 5 5 5 5 5 5 5 5 5 5 5;
-Constant TASK_PERFORM_OFFICE = 0;
-Constant TASK_IDENTIFY_ROSEHIPS = 1;
-Constant TASK_MOVE_ALTAR = 2;
-Constant TASK_PERFORM_SERVICE = 3;
-Constant TASK_IDENTIFY_POISON = 4;
-Constant TASK_FIND_LETTERS = 5;
-Constant TASK_OPEN_CABINET = 6;
-Constant TASK_OPEN_SOLAR = 7;
-Constant TASK_FIND_COINS = 8;
-Constant TASK_ENTER_CRYPT = 9;
-Constant TASK_ESCAPE_CRYPT = 10;
-Constant TASK_FINDING_GUIDE = 11;
-Constant TASK_DISCOVER_FA_CRYPT = 12;
+Constant NUMBER_TASKS = 20;
+Constant MAX_SCORE = 225;
+Array task_scores -> 25 25 25 25 2 2 12 10 6 15 8 3 10 4 12 2 2 7 2 3;
+
+Constant TASK_EVIDENCE_COINS = 0;         ! 25
+Constant TASK_EVIDENCE_PSALTER = 1;       ! 25
+Constant TASK_EVIDENCE_HENBANE = 2;       ! 25
+Constant TASK_EVIDENCE_LETTER = 3;        ! 25
+Constant TASK_LEARNED_FOUNDING_DATE = 4;  ! 2
+Constant TASK_CAN_HIDE_CONTRABAND = 5;    ! 2
+Constant TASK_SOLAR_DOOR = 6;             ! 12
+Constant TASK_FA_CRYPT = 7;               ! 10
+Constant TASK_FA_PANEL = 8;               ! 6
+Constant TASK_ESCAPE_CRYPT = 9;           ! 15
+Constant TASK_BRIBE_WITH_BASIL = 10;      ! 8
+Constant TASK_GARDEN_KEY = 11;            ! 3
+Constant TASK_PRIORS_NOTES = 12;          ! 10
+Constant TASK_MATCH_SYMPTOMS = 13;        ! 4
+Constant TASK_LIBRARY = 14;               ! 12
+Constant TASK_REGISTRUM = 15;             ! 2
+Constant TASK_HERBAL = 16;                ! 2
+Constant TASK_INFIRMARY_CABINET = 17;     ! 7
+Constant TASK_SOURCE_LIGHT = 18;          ! 2
+Constant TASK_ROSE_LETTERS = 19;          ! 3
 
 [ PrintTaskName task_number;
   switch (task_number) {
-    TASK_PERFORM_OFFICE: "performing at an office";
-    TASK_IDENTIFY_ROSEHIPS: "identifying the rosehips";
-    TASK_MOVE_ALTAR: "discovering the secret of the FitzAlan altar";
-    TASK_PERFORM_SERVICE: "joining other brothers at office";
-    TASK_IDENTIFY_POISON: "identified the poison";
-    TASK_FIND_LETTERS: "finding the letters from Rose";
-    TASK_OPEN_CABINET: "opening the medicine cabinet";
-    TASK_OPEN_SOLAR: "getting into the Prior's Solar";
-    TASK_FIND_COINS: "finding the coins";
-    TASK_ENTER_CRYPT: "entering the main crypt";
-    TASK_ESCAPE_CRYPT: "escaping the crypt";
-    TASK_FINDING_GUIDE: "finding the ~Registrum Fratrum~";
-    TASK_DISCOVER_FA_CRYPT: "discovering the existing of another crypt";
+    TASK_EVIDENCE_COINS: "found the sack of coins";
+    TASK_EVIDENCE_PSALTER: "found the stolen psalter";
+    TASK_EVIDENCE_HENBANE: "found henbane";
+    TASK_EVIDENCE_LETTER: "found the scribbled letter";
+    TASK_LEARNED_FOUNDING_DATE: "learned about the priory's history";
+    TASK_CAN_HIDE_CONTRABAND: "found a way to hide things and carry them";
+    TASK_SOLAR_DOOR: "got into the Prior's Solar";
+    TASK_FA_CRYPT: "discovered the secret of the FitzAlan Chantry";
+    TASK_FA_PANEL: "learned how to get behind the art panel";
+    TASK_ESCAPE_CRYPT: "escaped the Crypt without being caught";
+    TASK_BRIBE_WITH_BASIL: "bribed Remigio with the basil";
+    TASK_GARDEN_KEY: "found the key to the Restricted Garden";
+    TASK_PRIORS_NOTES: "read the Prior's notes";
+    TASK_MATCH_SYMPTOMS: "matched the symptoms of the poison";
+    TASK_LIBRARY: "got into the Library";
+    TASK_REGISTRUM: "looked something up in the Registrum Fratrum";
+    TASK_HERBAL: "looked something up in Aelred's Herbal";
+    TASK_INFIRMARY_CABINET: "opened the Infirmary cabinet";
+    TASK_SOURCE_LIGHT: "discovered a source of light";
+    TASK_ROSE_LETTERS: "found the letters to Rose";
   }
 ];
 
@@ -270,6 +311,7 @@ Global f_identified_poison = 0;
   if (real_location == Crypt) {
     PlaceInScope(CryptBell);
     PlaceInScope(TombEzra);
+    PlaceInScope(BlankPanel);
   }
   rfalse;
 ];
@@ -518,6 +560,8 @@ Verb 'xyzzy' 'plug'
   Verb '_office'        *               -> SolveOffice;
   Verb '_aelred'        *               -> SolveAelredDead;
   Verb '_crypt'         *               -> SolveCrypt;
+  Verb '_cuthbert'      *               -> SolveCuthbert;
+  Verb meta 'showmonks' *               -> ShowMonks;
 
   [ SuspicionChangeSub;
     suspicion_level = noun;
@@ -567,6 +611,7 @@ Verb 'xyzzy' 'plug'
   ];
   [ SolveOfficeSub;
     Service.stop_service();
+    PlayerTo(Quire);
     "DEBUG: Service solved.^";
   ];
   [ SolveCryptSub;
@@ -577,7 +622,15 @@ Verb 'xyzzy' 'plug'
     <Push Button>;
     <Go FAKE_S_OBJ>;
   ];
-
+  [ SolveCuthbertSub;
+    move BrCuthbert to CloisterW;
+    StartDaemon(BrCuthbert);
+  ];
+  [ ShowMonksSub m ;
+    objectloop (m ofclass Monk) {
+      print (The) m, ": ", (name) parent(m), "^";
+    }
+  ];
   Object MagicLightGem "gem"
     with name 'gem', description "Glows with debugging power.",
     has light;
@@ -688,13 +741,6 @@ Class Altar                                                             ! >Altar
 ! It's not hard to find the candle, but you can't take it until you've
 ! proved you need it by opening the passage to the FitzAlan Chantry or
 ! by visiting the kitchen to see the stairs to the Undercroft.
-
-! TODO: should extinguishing the candle be a puzzle? can throw away
-!  in latrines, well, or leave in a hidden area, like a crypt,
-!  or douse in water in lav and nec (if we add a basin there)
-!
-! pro: decent puzzle
-! con: can't one extinguish a candle with their fingers?
 
 Class Candle                                                           ! >Candle
   class AdjObject,
@@ -833,8 +879,6 @@ Class Cot                                                                 ! >Cot
     ],
   has
     proper scenery supporter enterable;
-
-! TODO: hugh: hide letters *under* chest
 
 
 ! This is a sprig of any kind of plant (not technically always an herb)
@@ -1038,16 +1082,19 @@ Class Tomb                                                               ! >Tomb
 ! Aelred     herbalist    63   slype                1
 ! Anselm     cantor       30   locutory             all
 ! Benedict   infirmarer   48   infirmary,charter    1
-! Cuthbert   sacrist      46   -                    all
+! Cuthbert   sacrist      46   cloisters            all
 ! Hugh       cellarer     32   undercroft           all
 ! Martin     kitchener    42   kitchen,charter      all
 ! Oswald     prior        52   solar                all
-! Remigio    servant/lay  38                        1
+! Remigio    servant/lay  38   kitchen              1
 ! Wilfred    librarian    73   scriptorium          all
 ! Aldwin     novice       20                        1
 !
 ! the PC, Aldwin, is not an instance of monk class.
 
+
+! TODO: perhaps soap in the lav could be tool? opens hughs theft box?
+! TODO: can get martin to leave by telling him about benedict waiting
 
 ! Aelred, either normal or dying (but not dead, that's separate object)
 ! general = dying
@@ -1055,6 +1102,10 @@ Class Tomb                                                               ! >Tomb
 Monk BrAelred "Brother Aelred"                                       ! >BrAelred
   with
     name 'aelred' 'herbalist',
+    initial [;
+      if (BrAelred has general)
+        "Brother Remigio is hear, urging you toward the slype.";
+    ],
     description [;
       if (self has general)
         "Your beloved mentor. In normal moments, Brother Aelred's eyes
@@ -1071,7 +1122,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
     ],
     possess 'aelred^s' 'aelreds',
     go_home [;
-      if (self has animate) move self to slype;
+      if (self hasnt general && parent(self) ~= nothing) move self to slype;
     ],
     history_text
       "Aelred (1284-). Entered the priory 1295 as a youth. Served as
@@ -1085,7 +1136,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
           acrid and stale, reminding you of old chamber pots.";
     ],
   has
-      animate;  ! turn off when dead & remove him from slype
+    animate;
 
 
 Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
@@ -1140,13 +1191,30 @@ Monk BrCuthbert "Brother Cuthbert"                                 ! >BrCuthbert
       canonical hours precise. He rarely smiles.",
     possess 'cuthbert^s' 'cuthberts',
     go_home [;
-      move self to CloisterNE;
+      move self to CloisterE;
+      StartDaemon(self);
     ],
     history_text
       "Cuthbert (1300-). Entered 1315, son of a nobleman from the south.
       Appointed Sacrist 1325. Maintains
       the sacred vessels and vestments with meticulous care. Keeps the
       canonical hours by ringing the great bell.",
+    wander_path
+      CloisterNW CloisterW CloisterSW CloisterS
+      CloisterSE CloisterE CloisterNE CloisterN,
+    time_left 7,
+    daemon [ next_room ;
+      if (~~parent(self) ofclass Cloister) rfalse;
+      if (random(3) == 1) rfalse;
+      self.time_left++;
+      if (self.time_left == 8) self.time_left = 0;
+      next_room = self.&wander_path-->self.time_left;
+      if (location == parent(BrCuthbert))
+        print "^Brother Cuthbert leaves here.^";
+      move BrCuthbert to next_room;
+      if (location == next_room)
+        "^Brother Cuthbert enters here.";
+    ],
   has
   ;
 
@@ -1229,19 +1297,39 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
     go_home [;
       move self to Kitchen;
     ],
+    initial [;
+      if (BrAelred has general)
+        "Brother Remigio is hear, urging you toward the slype.";
+    ],
     life [;
       Give:
         if (noun == Basil) {
+          Achieved(TASK_BRIBE_WITH_BASIL);
           move Basil to self;
           give self general;
-          "Remigio's weathered face transforms. ~Basilico!~ he exclaims,
-          taking the herb and breathing deeply. ~I have not smelled this
-          since I left Toscana.~ His eyes glisten. ~Brother Aelred grew
-          this? He was... he was a good man.~ He gestures toward the
-          stairs. ~Go below if you must, Brother. I will not question you.~";
+          print
+            "Remigio's weathered face transforms. ~Basilico!~ he exclaims,
+            taking the herb and breathing deeply. ~I not smell
+            since Toscana.~ His eyes glisten. ~Brother Aelred grew?
+            He was brav'uomo, a good man.~";
+          if (Kitchen has general) { ! tried going down stairs
+            ! TODO: offer candle if they don't have
+            print
+              "^^He gestures toward the stairs,
+              his voice thick. ~Grazie mille, uh, thanks you.
+              Go. I not see you";
+            if (parent(MyCandle) ~= player) {
+              move TallowCandle to player;
+              print ". He produces a tallow candle from his robe and gives
+              it to you. ~La luce";
+            }
+            ".~";
+          }
+          print
+            "^^He clasps your hand warmly. ~Grazie mille, uh, thanks to you.
+            You need to do something, Remigio let you. Yes?~";
         }
     ],
-    history_text
     history_text
       "Remigio (c.1308-). A lay brother from Tuscany, came to the priory
       1340 seeking refuge from troubles in his homeland. Works in the
@@ -1284,10 +1372,11 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
       You note that this entry was written by Wilfred, but in his
       way, he tried to maintain a distant and truthful tone.",
     initial [;
-      if (BrWilfred in Scriptorium)
+      if (BrWilfred in Scriptorium) {
         print "Brother Wilfred is seated at the table, close to the south wall";
         if (BrWilfred has general) print ", snoring heavily";
         ".";
+      }
     ]
     possess 'wilfred^s' 'wilfreds',
     go_home [;
@@ -1373,12 +1462,14 @@ Object WestDoor "west door"                                          ! >WestDoor
       if (location == WestPorch) "nave to the east."; "porch to the west.";
     ],
     description [;
-      if (location == WestPorch && self hasnt open)
+      if (location == WestPorch && self hasnt open) {
+        Achieved(TASK_LEARNED_FOUNDING_DATE);
         "Carved deeply into the door's face:^
-        ^  NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)^
+        ^  NOSTRA DOMINA SPINARUM (~Our Lady of Thorns~)
         ^  FUNDATUM ANNO DOMINI MCLII^^
         Over two hundred years of wind and rain have worn the letters
         smooth.";
+      }
       "A large and solid oaken door.";
     ],
     after [;
@@ -1555,11 +1646,66 @@ Object -> BellRope "bell rope"                                       ! >BellRope
   has
     static;
 
+Object -> BellTowerChest "wooden chest"                        ! >BellTowerChest
+  class AdjObject,
+  with
+    adj_name 'wooden' 'old' 'weathered',
+    noun_name 'chest' 'box',
+    description [;
+      print
+        "An old wooden chest, weathered by years of wind and rain blowing
+        through the open tower. The lid bears a carved Latin inscription:
+        ~VOCA POPULUM AD PRECES~";
+      if (self has open)
+        PrintContents(". The chest stands open, revealing ", self);
+      ".";
+    ],
+    before [;
+      Push, Pull, LookUnder, Search:
+        if (ScribbledLetter hasnt moved) {
+          give ScribbledLetter moved;
+          give ScribbledLetter ~concealed;
+          "Moving the chest reveals a letter that was hidden under it.";
+        }
+        "Nothing else is found under it.";
+    ],
+  has
+    container openable ~open static;
+
+Object -> -> BellTools "bell-repairing tools"
+  with
+    article "some",
+    name 'tools' 'oil' 'wedges' 'items',
+    description
+        "Some maintenance items:
+        a small vial of oil and some wooden wedges. All the practical
+        things needed to keep the great bell ringing true.",
+    before [;
+      Take:
+        "Leave them be---you have no need of bell-making tools, and Brother
+        Cuthbert will need these left here.";
+    ],
+  has pluralname;
+
+Object -> ScribbledLetter "scribbled letter"                  ! >ScribbledLetter
+  class AdjObject,
+  with
+    adj_name 'scribbled',
+    noun_name 'letter' 'letters//p',
+    description
+      "It's just a folded scrap of paper, written in an educated hand. It reads:
+      ~The manuscript was exquisite---the illumination work exceptional. Should
+      another such work become available, I remain most interested. Leave word
+      at our usual place.~ It is unsigned.",
+    after [;
+      Take: Achieved(TASK_EVIDENCE_LETTER);
+    ]
+  has
+    concealed ok_carry;
+
 
 !---------------------------------------------------- 2.0.4 Quire
 ! Quire, lectern, and stalls
-
-! TODO: add door from quire to cloister
 
 [ QuireDescripDuringService;
   print
@@ -1583,7 +1729,7 @@ Object Service "service"                                              ! >Service
     start_service [;
       move self to Quire;
       StartTimer(self, 7);
-      if (BrAelred has animate) move BrAelred to Stalls;
+      if (BrAelred hasnt general) move BrAelred to Stalls;
       move BrAnselm to Stalls;
       move BrBenedict to Stalls;
       move BrCuthbert to Stalls;
@@ -1601,7 +1747,7 @@ Object Service "service"                                              ! >Service
       remove self;
       give self ~general;
       StopTimer(self);
-      if (BrAelred has animate) {
+      if (BrAelred hasnt general) {
         move BrAelred to Slype;
         give BrAelred general; ! dying
       }
@@ -1614,7 +1760,6 @@ Object Service "service"                                              ! >Service
       move BrWilfred to Scriptorium;
       print "You join the others in song.^^ - * - * -";
       QuoteBoxSimple(quote_song);
-      Achieved(TASK_PERFORM_OFFICE);
       Quire.description = Quire.old_description;
       give Stalls ~concealed;
       print
@@ -1729,12 +1874,10 @@ Room HighAltarArea "High Altar Area"                            ! >HighAltarArea
         "A domed ceiling rises above this, the place where the Prior leads
         office.
         A chapel stands in shadow to the east.
-        The sacristy lies south. Behind a";
-        if (CryptGate has open) print "n open";
-        else print "closed";
-        if (CryptGate has locked) print ", locked";
-        " gate to the north, narrow stairs descend into
-          the crypt.";
+        The sacristy lies south. ";
+        if (CryptGate hasnt open)
+          "A closed gate blocks a descent on the narrow stairs to the crypt.";
+        "The crypt gate is open.";
     ],
     w_to Quire,
     e_to LadyChapel,
@@ -1813,8 +1956,7 @@ Object CryptGate "crypt gate"                                       ! >CryptGate
     name 'crypt' 'gate' 'stairs',
     description [;
       #ifDef HAS_HINTS; HintReady(Hint_gate); #EndIf;
-      print
-        "The gate is made of sturdy iron and has a heavy lock built into it.";
+      "The gate is made of sturdy iron and has a heavy lock built into it.";
     ],
     found_in HighAltarArea CryptStairs,
     door_dir (u_to) (d_to),
@@ -1835,13 +1977,14 @@ Room CryptStairs "Crypt Stairs"                                   ! >CryptStairs
     ],
     s_to CryptGate,
     u_to [;
-      if (PrayerMat has general && CryptGate has locked) {
+      if (PrayerMat has general && CryptGate hasnt open) {
         print
           "As you approach the crypt door, you hear the soft
           click of an unseen bolt sliding back. Your prayer
           has been answered.^^";
         give CryptGate open;
         give PrayerMat hasnt general;
+        Achieved(TASK_ESCAPE_CRYPT);
       }
       return CryptGate;
     ],
@@ -1988,6 +2131,7 @@ Room FitzAlanChantry "FitzAlan Chantry"                       ! >FitzAlanChantry
         if (~~(FitzAlanCrypt.is_lit() || IsCarryingLit())) {
           print "Do you want to descend into darkness? ";
           if (YesOrNo() == 0) "You decide better of it.";
+          #IfDef HAS_HINTS; HintReady(Hint_FALight); #EndIf;
         }
         print
           "^You climb down the ladder. As you step off the bottom rung,
@@ -2042,7 +2186,7 @@ Altar -> FitzAlanAltar                                          ! >FitzAlanAltar
       give self moved;
       move Ladder to FitzAlanChantry;
       QuoteBoxSimple(quote_stone);
-      Achieved(TASK_MOVE_ALTAR);
+      Achieved(TASK_FA_CRYPT);
       print
         "You push against the altar and it swings away from the wall,
         revealing an opening in the floor with a ladder visible.^";
@@ -2250,7 +2394,6 @@ Object -> -> RoseHips "small red berries"                            ! >RoseHips
     recall [;
       if (self hasnt general) {
         give self general;
-        Achieved(TASK_IDENTIFY_ROSEHIPS);
         QuoteBoxSimple(quote_rose);
         "This action brings back a memory from summer: Aelred in the physic
         garden, showing you a red rose in full bloom. ~Beautiful now, Brother,
@@ -2305,7 +2448,7 @@ class Cloister
           the covered stone arcade at the
           center of the priory. It's a continuous square path surrounding
           the garth, a large open yard. Various rooms and
-          passageways come off of the cloister walk.^";
+          passageways come off of the cloister walk.^^";
       }
       print "Arched openings admit ";
       switch (RoughTime()) {
@@ -2359,6 +2502,21 @@ Cloister CloisterNE "Cloister Northeast"                           ! >CloisterNE
     w_to CloisterN,
     u_to DayStairs,
     s_to CloisterE,
+    before [;
+      Go:
+        if (BrAelred has general && selected_direction ~= s_to)
+          "Brother Remigio seems most intent that you should follow him.";
+    ],
+    after [;
+      Look: if (self hasnt visited) {
+        give BrAelred general;
+        move BrRemigio to self;
+        "^The lay monk, Brother Remigio, runs up to you, his face ashen.
+        ~You!~ he cries, grabbing your sleeve. ~Come---Brother
+        Aelred, l'erborista, he is---~ He cannot find the words. His
+        eyes say everything. He pulls you urgently south toward the slype.";
+      }
+    ]
   ;
 
 
@@ -2376,11 +2534,26 @@ Cloister CloisterW "Cloister West"                                  ! >CloisterW
 Cloister CloisterE "Cloister East"                                  ! >CloisterE
   with
     cloister_detail
-      "To the east is the entrance to the warmining room.",
+      "To the east is the entrance to the scriptorium.",
     n_to CloisterNE,
     e_to Scriptorium,
     w_to Garth,
     s_to CloisterSE,
+    before [;
+      Go:
+        if (BrAelred has general && selected_direction ~= s_to)
+          "Brother Remigio seems most intent that you should follow him.";
+    ],
+    after [;
+      Go:
+        if (BrAelred has general) {
+          print
+            "You follow Brother Remigio south to the eastern section of the
+            cloister.^^";
+          move BrRemigio to self;
+          <<Look>>;
+        }
+    ]
   ;
 
 
@@ -2426,6 +2599,21 @@ Cloister CloisterSE "Cloister Southeast"                           ! >CloisterSE
     cheap_scenery
       2 'long' 'slype'
         "The slype is a covered passageway to the east.",
+    before [;
+      Go:
+        if (BrAelred has general && selected_direction ~= e_to)
+          "Brother Remigio seems most intent that you should follow him.";
+    ],
+    after [;
+      Go:
+        if (BrAelred has general) {
+          print
+            "You follow Brother Remigio south to the southeastern section of the
+            cloister.^^";
+          move BrRemigio to self;
+          <<Look>>;
+        }
+    ]
   ;
 
 
@@ -2567,6 +2755,12 @@ Object PriorKey "magic key"                                          ! >PriorKey
   ;
 
 
+! "Brother Wilfred has misplaced his latest work---a small psalter with
+! illuminations of remarkable quality. He recalls completing the opening
+! of Beatus vir with azure and gold, but cannot remember where he shelved
+! it. At his age, such lapses grow more frequent. We cannot offer it for
+! sale until it is found."
+
 Room PriorsSolar "Prior's Solar"                                  ! >PriorsSolar
   with
     name 'solar' 'room',
@@ -2578,7 +2772,7 @@ Room PriorsSolar "Prior's Solar"                                  ! >PriorsSolar
       community that otherwise shares everything.",
     e_to PriorDoor,
     every_turn [;
-      Achieved(TASK_OPEN_SOLAR);
+      Achieved(TASK_SOLAR_DOOR);
     ],
   has
     ;
@@ -2593,6 +2787,15 @@ Object -> PriorsDesk "desk"                                        ! >PriorsDesk
   has
     scenery static supporter;
 
+Object -> -> PriorsNotes "notes"
+  with
+    article "some",
+    name 'notes',
+    description "XXX",
+    after [;
+      Take: Achieved(TASK_PRIORS_NOTES);
+    ],
+  ;
 
 Object -> PriorsChest "wooden chest"                              ! >PriorsChest
   with
@@ -2754,35 +2957,111 @@ Room ChapterHouse "Chapter House"                                ! >ChapterHouse
   with
     description
       "The chapter house is a modest, rectangular room where the brothers
-      gather each morning to discuss monastery business. A plain wooden table
-      and benches occupy the center, and painted panels on the walls depict
+      gather each morning to discuss monastery business.
+      A painted panel on the wall depict
       the hours of the divine office. In one corner stands a life-sized
-      wooden statue.",
+      wooden statue. The only exit is to the west.",
     w_to CloisterNE,
     cheap_scenery
       1 'scroll' "It's just a painted part of the statue.",
+    time_left 0,
+    daemon [ m ;
+      self.time_left++;
+      give self general;
+      switch (self.time_left) {
+        1:
+          objectloop (m ofclass Monk)
+            if (m ~= BrAelred) move m to ChapterBenches;
+          PlayerTo(self);
+          "^~Brothers,~ starts Brother Prior Oswald, ~this is a terrible day
+          for our community: the loss of our herbalist, Brother Aelred.~";
+        2:
+          "^Brother Oswald pauses. ~Brother Aelred's passing was... sudden.
+          He did have a weak heart. Let us thank God that his passing
+          was quick.~";
+        3:
+          "^Brother Oswald continues: ~Brother Benedict has placed him in
+          the infirmary chapel. You may pay visits to our dear brother there.~";
+        4:
+          "^Brother Oswald continues: ~Our novice~---he gestures toward
+          you---~is doing adequately in his
+          role, and will spend today cataloging the state of the gardens
+          so that he and I can meet tomorrow to decide how to proceed without
+          our herbalist.~";
+        5:
+          "^Brother Oswald continues: ~Of course, we will continue to hold
+          our Divine Offices today but, given the circumstances,
+          I expect many of you may need to skip offices
+          today---and to this, I give my blessing.~";
+        6:
+          objectloop (m ofclass Monk)
+            if (m ~= BrAelred) move m to self;
+          "^The meeting wraps up and the brethren stand and prepare to
+          leave.";
+        7:
+          objectloop (m ofclass Monk)
+            m.go_home();
+          StopDaemon(self);
+          give self ~general;
+          "^The brothers all depart.";
+      }
+    ],
+    before [;
+      Go:
+        if (self has general)
+          "You shouldn't leave during the meeting.";
+    ]
   has
     ;
 
 
-Object -> ChapterFurniture "table and benches"               ! >ChapterFurniture
+Object -> ChapterBenches "benches"                             ! >ChapterBenches
   with
-    name 'table' 'tables' 'chair' 'chairs',
-    describe 0,
-    description "Both the table and the chairs are plainly made and wooden.",
+    article "two",
+    name 'bench' 'benches',
+    description [;
+      print "The benches are plainly made of wood";
+      PrintContents(". On them ", self, ISARE_BIT);
+      ".";
+    ],
+    initial [;
+      print "Two benches are in the center of the room";
+      PrintContents(". On them ", self, ISARE_BIT);
+      ".";
+    ],
     before [;
       Examine: ;
       Push, Pull, Turn:
         "You could move them, but for what purpose?
         They're just plain furniture.";
-      Receive:
-        "There would be no point cluttering this space with stuff.";
+    ], after [;
+      Enter:
+        "You sit on a bench.";
+      Exit:
+        "You get up from your bench.";
+    ]
+  has static supporter enterable pluralname;
+
+
+Object -> ChapterTable "table"                                   ! >ChapterTable
+  with
+    name 'table',
+    description "A large rectangular wooden table between the benches.",
+    initial [;
+      print "A broad table lies between the benches";
+      PrintContents(". On it ", self, ISARE_BIT);
+      ".";
+    ],
+    before [;
+      Examine: ;
+      Push, Pull, Turn:
+        "It's much too heavy to move.";
       Enter:
         "You have no reason to sit right now.";
       Take:
         "Leave the furniture be, Brother.";
     ]
-  has supporter enterable pluralname;
+  has static supporter;
 
 
 Statue -> GordianStatue "statue"                                ! >GordianStatue
@@ -2834,6 +3113,9 @@ Room Scriptorium "Scriptorium"                                    ! >Scriptorium
       A large table is at the center where the work is done.",
     e_to LibraryDoor,
     w_to CloisterE,
+    each_turn [;
+      #IfDef HAS_HINTS; HintReady(Hint_Scriptorium); #EndIf;
+    ],
     before [;
       Open, Unlock:
         if (noun == self && BrWilfred has general) {
@@ -2974,6 +3256,7 @@ Object -> LibraryDoor "library door"                              ! >LibraryDoor
     door_to Library,
     with_key LibraryKey,
     each_turn [;
+      #IfDef HAS_HINTS; HintReady(Hint_LibraryKey); #EndIf;
       if (BrWilfred hasnt general && self has open) {
         print
           "^Brother Wilfred notices the open door to the library---you're
@@ -2998,6 +3281,10 @@ Room Library "Library"                                                ! >Library
     before [;
       Smell: "Ah, the smell of dusty books.";
     ],
+    each_turn [;
+      Achieved(TASK_LIBRARY);
+      #IfDef HAS_HINTS; HintReady(Hint_Library); #EndIf;
+    ]
     cheap_scenery
       'manuscript' 'manuscripts'
         "There are many, but none seem significant."
@@ -3027,10 +3314,6 @@ Object TwoCryptsOnMap "two crypts"                             ! >TwoCryptsOnMap
       ~FitzAlan Crypt~.^^
       Now that you think of it, while you've been in the crypt before, you've
       never seen or heard of the other one.",
-    after [;
-      Examine:
-        Achieved(TASK_DISCOVER_FA_CRYPT);
-    ],
     has
       ;
 
@@ -3094,7 +3377,7 @@ Object MonkGuide "Registrum Fratrum",                               ! >MonkGuide
     ],
     after [;
       Take:
-        Achieved(TASK_FINDING_GUIDE);
+        Achieved(TASK_REGISTRUM);
         "You carefully remove the Registrum Fratrum from the shelf.
         Brother Wilfred would be furious if he knew.";
     ],
@@ -3107,13 +3390,117 @@ Object MonkGuide "Registrum Fratrum",                               ! >MonkGuide
 Room Slype "Slype"                                                      ! >Slype
   with
     description
-      "A long east-west stone corridor. West is the cloister,
-      east is the infirmary. A small passage heads south to the herbarium.",
+      "A long east-west stone corridor lined with decorative bushes.
+      West is the cloister, east is the infirmary. A small passage heads
+      south to the herbarium.",
     s_to Herbarium,
     e_to Infirmary,
     w_to CloisterSE,
+    turns_left 0,
+    daemon [;     ! death scene
+      self.turns_left++;
+      switch (self.turns_left) {
+        1:
+          "^Brother Aelred is here, but clearly unwell. His body is convulsing
+          and his eyes are wild.";
+        2:
+          "^Brother Aelred's eyes jerk wildly as you approach. ~My son...~
+          he whispers. ~Gathering... he was always gathering... I wanted
+          to know why...~";
+        3:
+          "^Aelred's hand rises weakly, trembling, gesturing toward the
+          bushes lining the slype and the scriptorium behind.
+          His lips move. ~The letter... the letter told me everything...~";
+        4:
+          "^A strange peace crosses Aelred's face. He finds your hand and
+          holds it with surprising strength. ~Two lives for one, my son.~
+          He smiles---and is gone.";
+        5:
+          StopDaemon(self);
+          give BrAelred ~general;
+          remove BrAelred;
+          print
+            "^Prior Oswald arrives and, upon seeing the wide and still
+            eyes of Brother Aelred, makes the sign of the cross and whispers
+            a prayer. The other brothers, having heard Remigio's cries,
+            come to the slype. Brother Benedict, the infirmarer, is called upon
+            to determine if Aelred is dead, and he does so.
+            ^^Brothers Benedict and Anselm carry Aelred's body to the
+            Infirmary to be cleaned and placed in holy repose in the
+            adjoining chapel.
+            ^^You find yourself in the garden without quite knowing how you got
+            there, standing among Aelred's carefully tended beds.
+            Your friend. Your mentor. The pangs of loneliness
+            that have eaten at you on some nights reappear.
+            ^^Brother Wilfred, the venerable librarian, finds you in the Garden
+            and tries to offer
+            tender words of consolation: ~My child~, he says, ~you will always
+            have a friend in me. Brother Aelred lived a joyful and reverent
+            life, and we can carry on in his spirit with your help.~ He
+            gestures to the gardens that you have grown to love so much.
+            ^^You are told by others that there is a meeting in the Chapter
+            House. You dry your eyes and make your way there.^^";
+            StartDaemon(ChapterHouse);
+      }
+    ],
+    before [;
+      Smell:
+        "A faint sweetness lingers from the bushes, though the flowers are
+        mostly gone now.";
+      Go:
+        if (BrAelred has general)
+          "You wouldn't dare leave your mentor given his current state.";
+    ],
+    after [;
+      Go:
+        if (BrAelred has general) {
+          give self general;   ! death scene
+          StartDaemon(self);
+          print
+            "You arrive at the Slype, where it seems Brother Remigio was
+            imploring you to come to.^^";
+          <<Look>>;
+        }
+    ],
   has
      ;
+
+
+Object -> RoseBushes "bushes"                                      ! >RoseBushes
+  class AdjObject,
+  with
+    adj_name 'rose',
+    noun_name 'bush' 'bushes',
+    description
+      "These bushes were a point of pride for Aelred, given how hard they can be
+      to grow roses in this climate. Given the season, the flowers are largely
+      gone, replaced by only rosehips and their scent.",
+    before [;
+      Smell: "Faint but still sweet and floral.";
+      Search, LookUnder: "There is nothing in the bushes.";
+      Take: "You wouldn't dare dig up one of these.";
+    ],
+  has
+    scenery;
+
+
+Object -> RoseOrHips "roses"                                       ! >RoseOrHips
+  class AdjObject
+  with
+    describe 0,
+    noun_name 'rose' 'roses' 'rosehip' 'rosehips' 'flower' 'flowers',
+    description
+      "The flowers are largely shriveled and dead, and rosehips
+      replace them.",
+    before [;
+      Smell: "Still lovely.";
+      Search, LookUnder: <<Search RoseBushes>>;
+      Take:
+      "You dare not take any of the flowers or berries. It would feel
+      wrong to take anything of Aelred's pride.";
+    ]
+  has static;
+
 
 ! --------------------------------------------------------------
 
@@ -3122,7 +3509,8 @@ Room Slype "Slype"                                                      ! >Slype
 
 Room Infirmary "Infirmary"                                          ! >Infirmary
   with
-    description
+    description [;
+      #IfDef HAS_HINTS; HintReady(Hint_Infirmary); #EndIf;
       "The infirmary serves both the brothers and visiting villagers who seek
       healing. Several narrow beds line the western wall, their straw mattresses
       covered with coarse linen. A workbench holds mortars, bowls, and various
@@ -3130,7 +3518,8 @@ Room Infirmary "Infirmary"                                          ! >Infirmary
       illness. A polished metal mirror hangs on the wall---unusual luxury, but
       necessary for examining patients' throats and eyes. The medicine cabinet
       stands against the north wall. A small chapel lies to the south, and
-      the slype is to the west.",
+      the slype is to the west.";
+    ],
     s_to InfirmaryChapel,
     w_to Slype,
     before [;
@@ -3178,6 +3567,7 @@ Object -> InfirmaryCabinet "medicine cabinet"                ! >InfirmaryCabinet
   with
     name 'medicine' 'cabinet',
     description [;
+      #IfDef HAS_HINTS; HintReady(Hint_Cabinet); #EndIf;
       print
         "A wooden cabinet secured with a brass lock mechanism. Four wheels,
         each engraved with digits ~0~ through ~9~, can be rotated
@@ -3203,7 +3593,7 @@ Object -> InfirmaryCabinet "medicine cabinet"                ! >InfirmaryCabinet
           && Wheel3.setting == 5 && Wheel4.setting == 2) {
         if (self hasnt open) {
           give self open;
-          Achieved(TASK_OPEN_CABINET);
+          Achieved(TASK_INFIRMARY_CABINET);
           "^You hear a satisfying click as the lock disengages and
           the cabinet opens.";
         }
@@ -3247,7 +3637,7 @@ Tincture -> -> HenbaneTincture "tincture of henbane"          ! >HenbaneTincture
     scent "overtones of alcohol and urine.",
     flavor "gluey, unpleasant, and bitter.",
     identified [;
-      Achieved(TASK_IDENTIFY_POISON);
+      Achieved(TASK_MATCH_SYMPTOMS);
       f_identified_poison = true;
       if (suspicion_level == 0) suspicion_level = 1;
       "^That's it---you now know that your dear mentor was poisoned with ",
@@ -3262,6 +3652,8 @@ Tincture -> -> HenbaneTincture "tincture of henbane"          ! >HenbaneTincture
         self.lick();
         give self general;
         if (f_smelled_aelred) self.identified();
+      Take:
+        if (f_identified_poison) Achieved(TASK_EVIDENCE_HENBANE);
     ],
   ;
 
@@ -3459,6 +3851,10 @@ Room Herbarium "Herbarium"                                          ! >Herbarium
     n_to Slype,
     s_to Garden,
     out_to Garden,
+    each_turn [;
+      #IfDef HAS_HINTS; HintReady(Hint_HangingHerbs); #EndIf;
+      #IfDef HAS_HINTS; HintReady(Hint_Herbarium); #EndIf;
+    ],
     cheap_scenery
       3 'thyme' 'rosemary' 'feverfew' [;
         Examine:
@@ -3590,6 +3986,9 @@ Object -> -> Herbal "Aelred's Herbal"                                  ! >Herbal
         }
         print_ret (string) second.herb_text;
     ],
+    after [;
+      Take: Achieved(TASK_HERBAL);
+    ],
   has proper;
 
 
@@ -3610,6 +4009,10 @@ Object -> Basket "basket"                                              ! >Basket
         if (noun has light)
           "Placing a lit item in the basket would surely catch it on fire.";
     ],
+    after [;
+      Receive:
+        if (noun hasnt ok_carry) Achieved(TASK_CAN_HIDE_CONTRABAND);
+    ]
   has
     concealed container open openable ok_carry;
 
@@ -3648,6 +4051,7 @@ Room Garden "Garden"                                                   ! >Garden
     in_to Herbarium,
     time_here 0,
     each_turn [;
+      #IfDef HAS_HINTS; HintReady(Hint_Garden); #EndIf;
       self.time_here++;
       if (self.time_here == 3) {
         print
@@ -3809,7 +4213,7 @@ Plant -> -> BasilPlant "basil plant"                               ! >BasilPlant
   ;
 
 
-Herb -> -> -> Basil "basil"                                             ! >Basil
+Herb -> -> -> Basil "basil sprig"                                       ! >Basil
   with
     name 'basil',
     description "A cluster of large green leaves with pointed tips.",
@@ -3851,7 +4255,10 @@ Object -> GardenGate "restricted garden gate"                      ! >GardenGate
           rtrue;
         }
     ],
-    description "A wooden fence protecting access to the dangerous plants.",
+    description [;
+      #IfDef HAS_HINTS; HintReady(Hint_GardenGate); #EndIf;
+      "A wooden fence protecting access to the dangerous plants.";
+    ],
     found_in RestrictedGarden Garden,
     door_dir (w_to) (e_to),
     with_key GardenGateKey
@@ -3865,11 +4272,15 @@ Object GardenGateKey "iron key"                                 ! >GardenGateKey
     article "an",
     adj_name 'iron' 'garden' 'pitted' 'rusty',
     noun_name 'key',
-    description
+    description [;
       "A heavy iron key, its surface pitted and darkened with rust from
       years hanging in the damp herbarium. It opens the gate to the
-      restricted garden where the dangerous herbs grow.",
-    has ok_carry;
+      restricted garden where the dangerous herbs grow.";
+    ],
+    after [;
+      Achieved(TASK_GARDEN_KEY);
+    ],
+  has ok_carry;
 
 
 Room RestrictedGarden "Restricted Garden"                    ! >RestrictedGarden
@@ -3886,6 +4297,9 @@ Room RestrictedGarden "Restricted Garden"                    ! >RestrictedGarden
           right dose, they heal. In the wrong, they kill.~^";
       give self general;
       rtrue;
+    ],
+    each_turn [;
+      #IfDef HAS_HINTS; HintReady(Hint_RestGarden); #EndIf;
     ],
     e_to GardenGate,
     out_to GardenGate,
@@ -3979,6 +4393,10 @@ Herb -> -> -> Henbane "henbane sprig"                                 ! >Henbane
     before [;
       Smell: "Reminiscent of stale urine. Very unpleasant.";
       Taste: "You wouldn't dare. You've been taught that it's very toxic.";
+    ],
+    after [;
+      Take:
+        Achieved(TASK_EVIDENCE_HENBANE);
     ],
   has toxic ;
 
@@ -4156,24 +4574,53 @@ Object -> -> Cauldron "cauldron"                                     ! >Cauldron
 
 ! ================================================ Basement
 
-Room CellarerChamber "Cellarer Chamber"                       ! >CellarerChamber
-  with
-    description
-      "XXX",
-    s_to Undercroft,
-  has
-     ~light;
-
 
 Room Undercroft "Undercroft"                                       ! >Undercroft
   with
-    name 'undercroft',
     description
-      "XXX",
-    n_to CellarerChamber,
+      "The undercroft is Brother Hugh's domain. Barrels, sacks, and storage
+      chests crowd the vaulted space beneath the refectory. Everything the
+      priory needs to survive is here: grain, dried fish, oil, wine, candles,
+      salt. The cellarer's careful hand is evident in the organization---each
+      item labeled, stacked, accounted for.
+      ^^As cellarer, Brother Hugh alone manages this space---organizing the
+      stores, counting what remains, arranging what must be purchased. No
+      other brother would have reason to come here uninvited.
+      ^^Stairs lead up to the north.",
     u_to Kitchen,
+    n_to Kitchen,
   has
-     ~light;
+    ~light;
+
+
+Object -> -> StolenPsalter "illuminated psalter"                ! >StolenPsalter
+  class AdjObject,
+  with
+    article "an",
+    adj_name 'illuminated' 'stolen',
+    noun_name 'psalter' 'manuscript',
+    initial
+      "Wrapped in linen and hidden behind some sacks, you find a small book.",
+    description
+      "A small psalter, exquisitely crafted. The leather cover is tooled
+      with a design of intertwined vines and lilies. Opening it, you see
+      Brother Wilfred's unmistakable hand---each page a work of devotion.
+      The opening initial 'B' of Psalm 1 (~Beatus vir~) is illuminated in
+      brilliant azure and gold leaf, depicting a tree bearing fruit by
+      streams of water. Marginal decorations show doves, wheat, and grapes.
+      ^^This is clearly one of Wilfred's finest works. It should be in the
+      library before it is sold, not hidden here.",
+    before [;
+      Take:
+        Achieved(TASK_EVIDENCE_PSALTER);
+      Examine:
+        if (verb_word == 'read')
+          "The psalms are beautiful, but what strikes you most is the
+          artistry---the hours Wilfred must have spent on each illumination.";
+    ],
+  has
+    ~concealed;  ! Remove concealed when player searches the hiding spot
+
 
 ! ---------------------------------------------------- FitzAlan Crypt
 
@@ -4223,7 +4670,7 @@ Room FitzAlanCrypt "FitzAlan Crypt"                             ! >FitzAlanCrypt
       return _LookForLightInObj(self, self);
     ],
   each_turn [;
-    Achieved(TASK_DISCOVER_FA_CRYPT);
+    #IfDef HAS_HINTS; HintReady(Hint_FACrypt); #EndIf;
   ],
   cheap_scenery
     1 'recesses'
@@ -4368,6 +4815,7 @@ Object -> -> -> Button "button"                                        ! >Button
           give FitzAlanPanel open;
           if (self hasnt moved) {
             give self moved;
+            Achieved(TASK_FA_PANEL);
             "You push the button and hear click from inside the frame.
             The panel pops ajar from the wall, revealing an opening to the
             south.";
@@ -4408,6 +4856,12 @@ Room Crypt "Crypt"                                                      ! >Crypt
       return FitzAlanCrypt;
     ],
     s_to CryptVestry,
+    each_turn [;
+      #IfDef HAS_HINTS;
+        HintReady(Hint_Crypt);
+        HintReady(Hint_CryptEscape);
+      #EndIf;
+    ],
     before [;
       Smell: "Heavy, damp, and earthy.";
     ],
@@ -4479,7 +4933,8 @@ Object -> Tombs "tombs"                                                 ! >Tombs
 Tomb -> TombGordian "Brother Gordian's tomb"                      ! >TombGordian
   with
     noun_name 'gordian' 'gordian^s' 'tomb',
-    history_text
+    history_text [;
+      Achieved(TASK_LEARNED_FOUNDING_DATE);
       "Gordian (1112-1192). Founder of the priory in 1152, formerly Master
       Builder to the Earl of Pembroke. A man of great skill and piety, he
       designed the church and cloisters himself, incorporating his love of
@@ -4487,6 +4942,8 @@ Tomb -> TombGordian "Brother Gordian's tomb"                      ! >TombGordian
       priory as penance for worldly pride, each mechanism a reminder that God's
       mysteries surpass man's cleverness. He served as Prior from its
       founding until his death.";
+    ],
+    ;
 
 Tomb -> TombEzra "Brother Ezra's tomb"                               ! >TombEzra
   with
@@ -4587,17 +5044,20 @@ Object -> CryptBell "crypt bell"                                    ! >CryptBell
           1:
             print
               "Brother Cuthbert stops short. ~Brother Aldwin? What brings you to
-              the crypt at this hour?~"          2
+              the crypt at this hour?~";
           2:
             print
               "~Who's there?~ Brother Cuthbert calls out, spotting your light.
-              ~Brother Aldwin? You shouldn't be down here alone.~"          3:
+              ~Brother Aldwin? You shouldn't be down here alone.~";
+          3:
             print
-              "Brother Cuthbert spots the open panel.
-              ~Someone must have been robbing that old family crypt?~
-              ^^You are suspected of troublesome behavior.";
+              "~An open panel? Someone must have been robbing that old family
+              crypt?~";
         }
-        print "^^You are sentenced to confined prayer for a week.";
+        print
+          "^^When this is reported to Brother Oswald, you are summoned
+          before him. ~Why would you be wandering the crypt?~ he asks unkindly.
+          You are sentenced to confined prayer for a week.";
         KillOff();
         rtrue;
     ],
@@ -4614,7 +5074,7 @@ Object -> CryptBell "crypt bell"                                    ! >CryptBell
         print "Above,";
       else if (BrCuthbert in Crypt) print "To the north,";
       else if (BrCuthbert in CryptVestry) print "To the south,";
-      else print "XXX BUG XXX";
+      else print "BUG REPORT ME";
       print " you hear ";
       rtrue;
     ],
@@ -4680,7 +5140,7 @@ Object -> CryptBell "crypt bell"                                    ! >CryptBell
         12:
           if (self.noises())
             "~Must have been a draft from the church above.~ (You hear him
-            muttering a brief prayer.)"
+            muttering a brief prayer.)";
         13:
           move BrCuthbert to Crypt;
           if (self.check()) return;
@@ -4700,6 +5160,8 @@ Object -> CryptBell "crypt bell"                                    ! >CryptBell
           give CryptGate locked;
           move BrCuthbert to HighAltarArea;
           if (self.check()) return;
+          if (location == HighAltarArea)
+            "^You see Brother Cuthbert at the gate and see him shut the gate.";
           if (self.noises()) "the gate being shut.";
         16:
           StopDaemon(self);
@@ -4849,6 +5311,7 @@ Object -> -> Coins "sack of coins"                                      ! >Coins
         "The sack contains only silver coins.
         More money than you've ever held.";
       Take:
+        Achieved(TASK_EVIDENCE_COINS);
         if (IndirectlyContains(player, self)) {
           print "You already have the sack";
           wn = verb_wordnum + 1;
@@ -4892,42 +5355,9 @@ Room Dorter "Dorter"                                                   ! >Dorter
     s_to LayCells,
     d_to DayStairs,
     e_to DayStairs,
-    w_to DorterWindow
   has
     ;
 
-! XXX: from roof, could see stolen goods hanging off the clock tower
-
-! Object -> DorterWindows "windows"
-!   with
-!     name 'window' 'windows' 'opening' 'openings' 'unglazed',
-!     description
-!       "Simple unglazed openings in the outer wall. Wooden shutters
-!       hang beside them, currently open. Cold air flows through freely.",
-!     before [;
-!       Enter, Climb, JumpOver:
-!         if (shutters_open) {  ! Or some condition
-!           "The opening is wide enough. You could climb through
-!           onto the roof... though it would be dangerous.";
-!         }
-!         "The shutters are closed.";
-!     ],
-!   has
-!     scenery static;
-
-Object -> DorterWindow "window"                                  ! >DorterWindow
-  with
-    describe [; rtrue; ],
-    door_to Rooftop,
-    door_dir w_to,
-  has
-    static door openable;
-
-
-Room Rooftop "Rooftop"                                                ! >Rooftop
-  with
-    description "XXX",
-    e_to Dorter;
 
 ! --------------------------------------------------- Dorm
 
@@ -5062,7 +5492,7 @@ Object -> -> Letters "letters"                                        ! >Letters
           sister Rose. Even with Brother Aelred's death, reading another
           brother's letters feels wrong. Perhaps if you had some particular
           suspicion of Brother Hugh?^^You return them to the chest.";
-        Achieved(TASK_FIND_LETTERS);
+        Achieved(TASK_ROSE_LETTERS);
         "The first letter reads:
 
         ^^~~~
@@ -5296,14 +5726,21 @@ Object -> Latrines "latrines"                                        ! >Latrines
 
 ! ---------------------------------------------------- LayCells
 
-Room LayCells "Lay cells"                                            ! >LayCells
+Room LayCells "Lay Brothers' Cells"                                 ! >LayCells
   with
     description
-      "XXX",
-     n_to Dorter,
-   has
-     ;
-
+      "This chamber was built to house the priory's lay brothers---those who
+      serve without taking full vows. The walls are marked with darker patches
+      where other cots once stood, and you can see the worn floorboards where
+      chests were dragged back and forth over the years. Now the room holds
+      only Brother Remigio's single cot and chest, pushed against the far wall.
+      The priory's decline is nowhere more visible than in this emptiness,
+      this quiet room that once held the sounds of simple men at their evening
+      prayers.
+      ^^The exit is to the north.",
+    n_to Dorter,
+  has
+    light;
 
 
 ! ================================================================= Game
@@ -5341,6 +5778,7 @@ Object MyHood "hood"                                                   ! >MyHood
     ],
     after [;
       Receive:
+        if (noun hasnt ok_carry) Achieved(TASK_CAN_HIDE_CONTRABAND);
         print "You put ", (the) noun, " into the hood";
         if (self hasnt general)
           print
