@@ -84,13 +84,15 @@ Constant MAX_TIMERS 1;
 Constant NO_SCORE;
 Constant OPTIONAL_NO_DARKNESS;
 Constant RUNTIME_ERRORS = 0;
+Constant HAS_HINTS;
 
 Include "globals.h";
 
 Constant Story "Hints";
 
 Include "puny.h";
-Include "./thints.h";
+Include "extlib/hints.h";
+Include "./game_hints.inf";
 
 Object Room " " with description [;
     if (self has general) quit;
@@ -101,8 +103,8 @@ Object Room " " with description [;
 [ Initialise h ;
     ! pointless check for HAS_HINTS -- always true -- but silence warning
     #IfDef HAS_HINTS;
-    ! objectloop (h ofclass Hintobj) HintReady(h);
-    move hint_dragon to Hints;
-    move hint_intro to Hints;
+    objectloop (h ofclass Hintobj) HintReady(h);
+    ! move hint_dragon to Hints;
+    ! move hint_intro to Hints;
     #EndIf;
 ];

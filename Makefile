@@ -37,5 +37,5 @@ test:
 			code -g "$$first_issue"; \
 		fi; \
 	else \
-		./frotz thorns.z5; \
+		frotz_ctrlc thorns.z5; \
 	fi

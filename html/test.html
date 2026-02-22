@@ -1,0 +1,106 @@
+<html>
+<head>
+<title>Testing</title>
+</head>
+<body>
+<h1>Testing Our Lady of Thorns</h1>
+<p>If you've never played interactive fiction before, this might help:
+  <a href="https://pr-if.org/doc/play-if-card/play-if-card.pdf">IF Postcard</a>
+</p>
+
+<h2>Commands specific to this game or important to highlight:</h2>
+<ul>
+  <li><b>MAP</b>: see a map of the area you're in</li>
+  <li><b>UNDO</b>: undo last move</li>
+  <li><b>SAVE</b>: save game state</li>
+  <li><b>RESTORE</b>: load a saved game</li>
+</ul>
+
+<h2>Debugging commands:</h2>
+<p>These are cheating, but as you test, you might find it useful
+  to examine or manipulate things in special ways. The real game will
+  disable these commands.
+</p>
+<ul>
+  <li><b>GOTO room-name</b>: jump to a room by name</li>
+  <li><b>GONEAR obj</b>: jump to a room by an object in it</li>
+  <li><b>PURLOIN obj</b>: steal an object from anywhere, even if its something you couldn't normally take</li>
+  <li><b>SCOPE</b>: list all of the things in "scope" (nearby)</li>
+  <li><b>ROOMS</b>: list all of the rooms in game</li>
+  <li><b>SETTIME h m</b>: Set the time (eg SETTIME 14 15 sets to 2:15pm)</li>
+  <li><b>TIME</b>: show current time</li>
+</ul>
+
+<h2>Map</h2>
+<p>This map contains spoilers (it shows some rooms players wouldn't see.</p>
+<img src="thorns.png">
+
+<h2>Hints</h2>
+<p>The game has a HINTS command. It will show hints for things you've
+  encountered. However, I haven't finished writing all the hints yet,
+  so not many things have hints. Soon!
+</p>
+
+<h2>How to Test</h2>
+
+<h3>Get the Game</h3>
+  <p>Download: <a href="thorns.z5">Thorns.z5</a>.</p>
+
+<h3>Turn on transcript</h3>
+<p>Immediately, turn on transcripting with SCRIPT ON --- this will record
+  everything you type and that it shows. After you're done, email that to
+  me at joel@joelburton.com.
+</p>
+
+<h3>Try Everything</h3>
+<p>Try lots of things! Even if you think they're not helpful or
+  a bit silly, I want to make sure the world seems real. For example,
+  if you try this:
+</p>
+<pre>
+  > EXAMINE BODY
+  You feel nothing unexpected.
+</pre>
+<p>It'd be much better if there was a custom message about touching a
+  body, even if it isn't important.
+</p>
+
+<p>Also note: <b>THERE IS NO WAY TO SECRETLY LOSE THIS GAME.</b>
+  Some games have challenges where if you fail to do a certain thing early
+  in the game, or you eat candy that would be needed to bribe a dwarf later,
+  you'll be locked out of success without even knowing it.
+</p>
+
+<p>In this game, you can lose only in ways that are obvious when they
+  happen: getting very ill, being caught doing something against the
+  prior's rules, etc. So: if you feel like "OH NO, I SHOULDN'T HAVE DONE THAT",
+  if it doesn't kill you in a few turns, it won't.
+</p>
+
+<p>Once the game is tested well, I'll add a time limit that you have to
+  complete your investigations by sunset. I'm not doing that now so that
+  testers who try zillions of things won't be frustrated by a time limit.
+</p>
+
+<h3>Adding bugtesting comments</h3>
+<p>Anytime you catch any problem (confusing text, typos, grammar, feeling stuck, etc,
+  please enter a command like this:
+</p>
+
+<pre>
+  > X DOOR
+  The door is solid oak and closed.
+
+  > OPEN DOOR
+  The door is already open
+
+  > * Door reports being both open and closed
+</pre>
+
+<p>A line like that, starting with an asterisk, is ignored by the game,
+  but it'll appear in the transcript, and I'll search especially for those.
+</p>
+
+<h2>Thanks SO MUCH!</h2>
+</body>
+</html>
