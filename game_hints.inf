@@ -65,7 +65,7 @@ the_hints
 
 Option Hint_Jude "What should I do in the Chapel of St Jude?"
   class Hintobj
-  with in_menu HintExChurch
+  with in_menu HintExChurch,
 the_hints
   "Pray for desperate causes, of course."
   "It looks like someone has beat you to this."
@@ -101,7 +101,7 @@ the_hints
 ! TODO: enable
 Option Hint_silence "Why can't I talk to the monks?"
  class Hintobj
- with in_menu HintGeneral
+ with in_menu HintGeneral,
 the_hints
   "XXX mostly because the programming isn't done yet for that"
   "Many monasteries have strict vows of silence at many times and places."
@@ -124,7 +124,7 @@ the_hints
 
 Option Hint_Nec "What should I do in the Necessarium?"
   class Hintobj
-  with in_menu HintUpper
+  with in_menu HintUpper,
 the_hints
   "You're not feeling a call of nature."
   "So there's nothing you need here."

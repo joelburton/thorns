@@ -1,18 +1,15 @@
-%.z5: %.inf thints.h
-	inform -E1 +lib -S -D $<
+SMALL_FLAG = '$$\#SMALL'
+
+%.z5: %.inf Makefile
+	inform -E1 -D -S $<
+
+%.z3: %.inf Makefile
+	inform $(SMALL_FLAG) -x '(small.inf)' -v3 -E1 $<
 
 %.play: %.z5
 	# frotz $<
 	killall Gargoyle || echo "not running"
 	open -a Gargoyle $<
-
-%.html_BROKEN: %.z5
-	curl -o $@ -F "story_file=@$<" https://iplayif.com/api/sitegen
-
-%.up_BROKEN: %.html
-	cp $< html/index.html
-	cd html && surge . lady-of-thorns.surge.sh
-	open https://lady-of-thorns.surge.sh
 
 %.up: %.inf
 	inform -E1 +lib -S $<
@@ -37,5 +34,9 @@ test:
 			code -g "$$first_issue"; \
 		fi; \
 	else \
-		frotz_ctrlc thorns.z5; \
+		frotz_ctrlc -s 42 thorns.z5; \
 	fi
+
+playtest: thorns.z5
+	open -a Gargoyle thorns.z5
+

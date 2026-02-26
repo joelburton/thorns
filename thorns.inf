@@ -1277,7 +1277,7 @@ Class Altar                                                             ! >Altar
 
 
 
-Class Barrel
+Class Barrel                                                           ! >Barrel
   with
     name 'barrel' 'barrels//p',
     contents_name 0,
@@ -1676,7 +1676,7 @@ Class Statue                                                           ! >Statue
 
 ! Medicines in the infirmary
 
-Class Decoction                                                       ! >Decoction
+Class Decoction                                                     ! >Decoction
   with
     name 'decoction' 'decoctions//p',
     list_together [ ;
@@ -1852,7 +1852,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
     animate;
 
 
-Object BrAelredDying "Brother Aelred"
+Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
   with
     name 'brother' 'monk' 'aelred' 'body',
     description [;
@@ -1902,7 +1902,7 @@ Object -> BrAelredEyes "eyes"                                    ! >BrAelredEyes
   has ;
 
 
-Object -> BrAelredHabit "habit"
+Object -> BrAelredHabit "habit"                                 ! >BrAelredHabit
   class AdjObject
   with
     article "his",
@@ -2825,7 +2825,7 @@ Scene SceneMeeting "Chapter Meeting"                             ! >SceneMeeting
   ;
 
 
-Scene SceneLibraryMandrake "Library Mandrake"
+Scene SceneLibraryMandrake "Library Mandrake"            ! >SceneLibraryMandrake
   with
     name 'smoke',
     react_before [;
@@ -2888,7 +2888,7 @@ Scene SceneLibraryMandrake "Library Mandrake"
   ;
 
 
-Scene SceneLibraryCat "Library Pax"
+Scene SceneLibraryCat "Library Pax"                           ! >SceneLibraryCat
   with
     name 'catnap',
     react_before [ ;
@@ -2959,7 +2959,7 @@ Scene SceneLibraryCat "Library Pax"
   has ;
 
 
-Scene SceneUndercroft "scene undercroft"
+Scene SceneUndercroft "scene undercroft"                      ! >SceneUndercroft
   with
     name 'undercroft',
     react_after [;
@@ -3054,7 +3054,7 @@ Constant HOW_CAUGHT_VISIBLE = 1;
 Constant HOW_CAUGHT_HAS_LIGHT = 2;
 Constant HOW_CAUGHT_PANEL_OPEN = 3;
 
-Scene SceneCrypt
+Scene SceneCrypt                                                   ! >SceneCrypt
   with
     check [ how ;
       ! check and kill off player
@@ -3218,7 +3218,7 @@ Scene SceneCrypt
   has ;
 
 
-Scene SceneConfession;
+Scene SceneConfession;                                        ! >SceneConfession
 
 ! general = active (adds to scope, is equal to daemon-active)
 ! visited = has already happened
@@ -3448,14 +3448,14 @@ SceneService SceneMatins "Matins office"                          ! >SceneMatins
   ;
 
 
-SceneService SceneLauds "Lauds office"
+SceneService SceneLauds "Lauds office"                           ! >SceneLauds
   with
     name 'lauds',
     number 2,
     time_start 5 * 60,
   has ;
 
-SceneService ScenePrime "Prime office"
+SceneService ScenePrime "Prime office"                           ! >ScenePrime
   with
     name 'prime',
     number 3,
@@ -3537,7 +3537,7 @@ Room Passage "Passage (North End)"                                    ! >Passage
     ;
 
 
-Room PassageSouth "Passage (South End)"
+Room PassageSouth "Passage (South End)"                          ! >PassageSouth
   with
     description
       "The narrow walkway ends here. This part seems less traveled, with small
@@ -6042,7 +6042,7 @@ Decoction -> -> FeverFewDecoction "feverfew decoction"      ! >FeverfewDecoction
   ;
 
 
-Object -> Wheels "wheels"
+Object -> Wheels "wheels"                                             ! >Wheels
   with
     name 'wheels',
     description [;
@@ -7223,7 +7223,7 @@ Object -> -> Ledger "ledger"
   has ;
 
 
-Object -> Barrels "barrels"
+Object -> Barrels "barrels"                                           ! >Barrels
   with
     name 'barrels',
     before [ b i ;
@@ -7366,7 +7366,7 @@ Barrel -> MustardBarrel "mustard barrel"                        ! >MustardBarrel
   has edible;
 
 
-Object MustardPackage "mustard-yellow package"
+Object MustardPackage "mustard-yellow package"                 ! >MustardPackage
   with
     name 'mustard' 'package',
     description
@@ -8287,7 +8287,7 @@ Chest -> ChestAelred                                              ! >ChestAelred
 Chest -> ChestAnselm                                              ! >ChestAnselm
   with amonk BrAnselm;
 
-Object -> -> seashell "seashell"                                     ! >seashell
+Object -> -> Seashell "seashell"                                     ! >Seashell
   class AdjObject,
   with
     adj_name 'sea' 'scallop',
@@ -8611,7 +8611,7 @@ Array quote_psalter --> 6 34                              ! >quote_psalter
   ""
   "       --- The Gospel of Matthew";
 
-Array quote_stranger --> 5 27
+Array quote_stranger --> 5 27                                  ! >quote_stranger
   "The stranger that dwelleth"
   "with you shall be unto you"
   "as one born among you."
