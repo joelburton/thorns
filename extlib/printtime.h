@@ -18,7 +18,7 @@
         0:  ; ! just use the hour
         15: print "quarter past ";
         30: print "half past ";
-        45: print "quarter til ";
+        45: print "quarter to ";
     }
 
     #IfDef OPTIONAL_LANGUAGE_NUMBER;

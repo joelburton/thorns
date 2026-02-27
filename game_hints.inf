@@ -4,7 +4,7 @@ Option -> Hint_intro "Who are we, and what's our purpose?"
  class Hintobj
  with in_menu HintGeneral,
  the_hints
-  "You're a novice monk at the priory Our Lady of Thorns."
+  "You're a novice monk at the priory of Our Lady of Thorns."
   "A dramatic thing happens early in the game that will give you a sense
     of your purpose in the game."
   "If that hasn't happened yet, wander around the priory until that happens.";
@@ -54,7 +54,7 @@ the_hints
     said for them."
   "They would also often have the right to be buried in the crypt."
   "Or even have a private crypt."
-  "There is an entrance hidden to their private crypt."
+  "There is a hidden entrance to their private crypt."
   "Have you examined the altar carefully?"
   "The gouges might have come from moving the altar."
   "Have you tried doing anything with the family arms?"
@@ -233,7 +233,7 @@ Option Hint_Herbarium "What should I do in the Herbarium?"
 the_hints
   "There are three things to find."
   "One is probably obvious: the Herbal will be a useful reference."
-  "Two others aren't as easilly spotted, but search around."
+  "Two others aren't as easily spotted, but search around."
   "Look under table: that basket will be useful for carrying things."
   "And particularly: for carrying things without others seeing them."
   "The last thing to search closely is the terracotta pot."
@@ -315,7 +315,7 @@ Option Hint_Scriptorium "What should I do in the Scriptorium?"
   class Hintobj
   with in_menu HintExLibrary,
 the_hints
-  "It's a pretty room, isn't it. So cozy."
+  "It's a pretty room, isn't it? So cosy."
   "And warm, given that fireplace."
   "There's nothing that useful in the Scriptorium *itself*."
   "You really want to get into the Library!"
@@ -363,7 +363,7 @@ Option Hint_Kitchen "What should I do in the kitchen?"
   class Hintobj
   with in_menu HintExRefectory,
 the_hints
-  "You can't do almost anything while Martin is here"
+  "You can do hardly anything while Martin is here"
   "Is there anything you can tell him to get him to leave?"
   "Have you heard anyone saying they were hoping to talk with him?"
   "Benedict said he was hoping to talk to Martin"
@@ -381,7 +381,7 @@ the_hints
   "Perhaps you could give him something?"
   "Have you seen anything he might like?"
   "Brother Aelred was growing a gift for him in the Garden."
-  "Get the spring of basil and give it to Remigio."
+  "Get the sprig of basil and give it to Remigio."
   ;
 
 Menu HintExUndercroft "Exploring the Undercroft";
@@ -400,7 +400,7 @@ Option Hint_WhatIsSolar "What's a solar?"
   with in_menu HintExPriorSolar,
 the_hints
   "A historic name for his private living quarters."
-  "As the Prior, gets a bit of privacy."
+  "As the Prior, he gets a bit of privacy."
   ;
 
 Option Hint_SolarDoor "How can I get past the lock?"
@@ -416,7 +416,7 @@ the_hints
   "Does the entry on him suggest places to look?"
   "Have you seen a statue of him around?"
   "You can find his creed in the stained glass in the Nave, on his
-    statue in the Chapter House, and on the Bell in the tower."
+    statue in the Chapter House, and on the bell in the tower."
   "PUSH CROSS.^PUSH HAMMER.^PUSH BOOK.";
 
 Option Hint_PriorGone "How can I get past Oswald to enter the solar?"
@@ -431,7 +431,7 @@ the_hints
   "Or you can listen for the bell."
   ;
 
-Option Hint_InSolar "What should do I do in the Solar?"
+Option Hint_InSolar "What should I do in the Solar?"
   class Hintobj
   with in_menu HintExPriorSolar,
 the_hints

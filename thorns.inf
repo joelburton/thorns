@@ -66,7 +66,7 @@ Constant OPTIONAL_LANGUAGE_NUMBER;
 Constant OPTIONAL_ALLOW_WRITTEN_NUMBERS;
 Constant OPTIONAL_LIST_TOGETHER;
 Constant OPTIONAL_GUESS_MISSING_NOUN;
-Constant OPTIONAL_GUESS_KEY;
+! Constant OPTIONAL_GUESS_KEY;
 Constant CUSTOM_PLAYER_OBJECT = BrAldwin;
 
 Constant STATUSLINE_SCORE; Statusline score;
@@ -83,6 +83,9 @@ Global f_can_get_confession = false;
 Global f_offered_shout = false;
 Global f_ever_offered_confession = true;  ! TODO: is this right? <--
 Global f_show_time_command = false;
+Global f_singing_mentioned = false;
+Global f_warned_about_barrel_open_time = false;
+Global f_warned_about_barrel_search_time = false;
 
 Global current_service;
 Global suspicion_level = 0;
@@ -176,9 +179,11 @@ Constant TASK_LISTED_OFFICES = 23;          ! 1
 ! -------------------------------------------
 
 Constant INITIAL_LOCATION_VALUE = AllMonkCots;
-Constant MAX_CARRIED = 6;
+Constant MAX_CARRIED = 3;
 Constant SACK_OBJECT = Basket;
 
+Replace LockSub;
+Replace UnlockSub;
 
 Include "globals.h";
 
@@ -191,7 +196,6 @@ Attribute topicky;
 
 #Ifv5;
 Property cheap_scenery;
-Property herb_text;
 Property time_start;
 #EndIf;
 
@@ -258,6 +262,7 @@ Constant MSG_KISS_DEFAULT
   "Such displays of affection are... inappropriate.
   And forbidden. Very forbidden.";
 Constant MSG_MILD_DEFAULT "Mind your tongue, Brother.";
+Constant MSG_THINK_DEFAULT "Silent reflection is always good.";
 Constant MSG_INVENTORY_EMPTY "You are without possessions.";
 Constant MSG_PROMPT = 1001;  ! anything > 1000
 Constant MSG_LOOK_BEFORE_ROOMNAME = 1002;
@@ -315,6 +320,9 @@ Replace _GuessMissingNoun Original_GuessMissingNoun;
   if (location == Garden && obj == GardenGateKey && code == 2) {
     return 9;
   }
+
+  ! important to keep this; otherwise, tries to get EVERYTHING
+  rfalse;
 ];
 
 [ DarkToDark ;
@@ -398,8 +406,8 @@ Constant DEAD_INACTION 9;
       " you openly carrying ", (the) caught_with,
       ", you'd have faced severe punishment.";
     3:
-      "^Again: be careful! Carrying contraband around openly will
-      get you in trouble.";
+      "^Again: be careful! Openly carrying contraband, like ",
+      (the) caught_with, ", will get you in trouble.";
     4 to 100:
       print "^", (The) mir, " ", ;
       mloc = parent(mir);
@@ -486,8 +494,7 @@ Global waittime_waiting = false;
 
 
 [ InScope s;
-  ! if (scope_reason ~= PARSING_REASON) rfalse;
-  ! can't enable this w/o serious study for updates to scope and moving
+  if (scope_reason ~= PARSING_REASON) rfalse;
   ! print "*** InScope^";
 
   ! Player should have access to certain objects when in the dark
@@ -546,6 +553,82 @@ Global waittime_waiting = false;
 
 Include "puny.h";
 
+
+! Thanks to Garry Francis (Warrigal) for this code.
+
+[ LockSub k;
+  if (ObjectIsUntouchable(noun))
+    rtrue;
+  if (noun hasnt lockable)
+  {
+    PrintMsg(MSG_LOCK_NOT_A_LOCK, 'lock');
+    rtrue;
+  }
+  if (noun has locked)
+  {
+    PrintMsg(MSG_LOCK_ALREADY_LOCKED);
+    rtrue;
+  }
+  if (noun has open)
+  {
+    PrintMsg(MSG_LOCK_CLOSE_FIRST);
+    rtrue;
+  }
+  k = RunRoutines(noun, with_key);
+  if (k == nothing)
+    "You can't see how to lock ", (ItOrThem)noun, ".";
+  if (second == nothing && k ~= nothing && k in player)
+  {
+    second = k;
+    print "(with ", (the)second, ")^";
+  }
+  if (second == nothing)
+    "You don't have the key.";
+  if (second ~= k)
+  {
+    PrintMsg(MSG_LOCK_KEY_DOESNT_FIT);
+    rtrue;
+  }
+  give noun locked;
+  run_after_routines_msg = MSG_LOCK_DEFAULT;
+  run_after_routines_arg_1 = 'lock';
+];
+
+[ UnlockSub k;
+  if (ObjectIsUntouchable(noun))
+    rtrue;
+  if (noun hasnt lockable)
+  {
+    PrintMsg(MSG_UNLOCK_NOT_A_LOCK, 'unlock');
+    rtrue;
+  }
+  if (noun hasnt locked)
+  {
+    PrintMsg(MSG_UNLOCK_ALREADY_UNLOCKED, 'unlock');
+    rtrue;
+  }
+  k = RunRoutines(noun, with_key);
+  if (k == nothing)
+    "You can't see how to unlock ", (ItOrThem)noun, ".";
+  if (second == nothing && k ~= nothing && IndirectlyContains(player, k))
+  {
+    second = k;
+    print "(with ", (the)second, ")^";
+  }
+  if (second == nothing)
+    "You don't have the key.";
+  if (second ~= k)
+  {
+    PrintMsg(MSG_UNLOCK_KEY_DOESNT_FIT);
+    rtrue;
+  }
+  give noun ~locked;
+  run_after_routines_msg = MSG_UNLOCK_DEFAULT;
+  run_after_routines_arg_1 = 'unlock';
+];
+
+
+
 ! need to declare this library *after* puny, unlike others
 Include "extlib/my_waittime.h";
 
@@ -560,10 +643,11 @@ Include "extlib/my_waittime.h";
       if (sprig == nothing)
         "You've already picked a sprig from ", (the) arg1,
         ". You should do this with that.";
-      print "(first taking a sprig from ", (the) arg1, ")^";
+      print "(first taking just a sprig from ", (the) arg1, ")^";
       move sprig to player;
-      PerformAction(action, sprig);
-      rtrue;
+      noun = sprig;
+      update_moved = true;
+      rfalse;
     }
     return OriginalImplicitGrab(arg1, arg2);
 ];
@@ -612,7 +696,7 @@ Include "extlib/my_waittime.h";
   switch (scope_stage) {
     1: rfalse;
     2:
-      objectloop (o provides history_text or herb_text) PlaceInScope(o);
+      objectloop (o provides history_text) PlaceInScope(o);
     3:
       "I don't know what book-like object you're referring to.";
   }
@@ -624,6 +708,7 @@ Include "extlib/my_waittime.h";
     1: rfalse;
     2:
       if (location == Infirmary) {
+        ScopeWithin(InfirmaryCabinet);
         PlaceInScope(InfirmaryCabinet);
         PlaceInScope(Mirror);
       } else if (location == Scriptorium) {
@@ -634,7 +719,7 @@ Include "extlib/my_waittime.h";
 
       objectloop (o provides history_text) PlaceInScope(o);
       rtrue;
-    3: "REPORT BUG IF YOU GET THIS";
+    3: "*** PLEASE REPORT BUG: AskScope";
   }
 ];
 
@@ -648,7 +733,8 @@ Extend 'climb' first
   * 'on' noun                             -> Climb
   * 'up' 'on' noun                        -> Climb
   * 'down'                                -> Exit
-  * 'down' noun                           -> Exit;
+  * 'down' noun                           -> Exit
+  * 'in' container                        -> Enter ;
 
 Extend 'consult' first
 	* held 'about'/'on' scope=ConsultScope  -> Consult;
@@ -723,6 +809,15 @@ Verb meta 'offices'
 Verb meta 'time'
   *                                       -> Time;
 
+Extend 'lock' first
+  * noun                                  -> Lock;
+
+Extend 'unlock' first
+  * noun                                  -> Unlock;
+
+! So crypt gate can say you don't have right key
+Object DummyKey ;
+
 ! ========================================================= Verb Subs
 
 [ HelpSub;
@@ -760,6 +855,8 @@ Verb meta 'time'
     ^- HIDE BEHIND thing
     ^- LOOK UNDER thing
     ^- KNEEL ON thing
+    ^- WAIT UNTIL hh:mm: wait until given time
+    ^- WAIT n HOURS|MINUTES: wait that length of time
 
     ^^This is a game with subtle descriptions. Read carefully and
     try other senses, like taste, smell, and hearing.
@@ -774,9 +871,10 @@ Verb meta 'time'
   #Ifv5; @set_text_style 2; #EndIf;  ! bold
   print "Special thanks to:";
   #Ifv5; @set_text_style 0; #EndIf;
-  " Fredrik Ramsberg, andrewj, curiousdannii, Garry Francis,
-  Andrew Plotkin (zarf), Daniel Stelzer, ~Pontus I~, and Tara McGraw (vaporware)
-  for answering my questions on forums.";
+  " Fredrik Ramsberg (fredrik), andrewj, Dannii, Garry Francis (Warrigal),
+  Allyson Gray (Ally),
+  Giger_Kitty, Andrew Plotkin (zarf), Daniel Stelzer (Draconis), ~Pontus I~,
+  and Tara McGraw (vaporware) for answering my questions on forums.";
 ];
 
 
@@ -923,7 +1021,7 @@ Verb meta 'time'
         " You wonder if this is related to that note you found.";
     } else if (ev_chronicle) {
       print
-        " This sounds like the one that Brother Wilfred 'misplaced'.";
+        " This sounds like the one that Brother Wilfred couldn't find.";
     }
     new_line;
   }
@@ -1055,7 +1153,7 @@ Verb meta 'time'
 
 ! Wrapper for Achived; allows for debugging
 [ TaskDone t ;
-  #IfDef DEBUG;
+  #IfDef FULL_DEBUG;
   if (task_done->t == 0)
     print "^*** DEBUG: task completed: ", (PrintTaskName) t;
   #EndIf;
@@ -1230,6 +1328,14 @@ Verb meta 'time'
     Ending(noun);
   ];
 
+  Object SmellySock "smelly sock"
+    with
+      name 'smelly' 'sock',
+      description "Yeck.",
+      before [;
+        Smell: "It smells like feet.";
+      ],
+    has ok_carry;
 
   Object MagicLightGem "gem"
     with
@@ -1258,32 +1364,32 @@ Verb meta 'time'
         dies alone that winter, with no brother to tend her.
 
         ^^You kept your vows. You served truth. But standing in the herb garden
-        where Aelred died, you wonder if justice and mercy are truly the same
-        thing---or if, in choosing one, you betrayed the other.
+        where Brother Aelred died, you wonder if justice and mercy are truly
+        the same thing---or if, in choosing one, you betrayed the other.
 
-        ^^Aelred's words echo: ~One life for two, my son.~ You will never know
+        ^^Brother Aelred's words echo: ~One life for two, my son.~ You will never know
         if you honoured his sacrifice, or squandered it.";
 
     DEAD_MERCY:
       print
-        "^You tell Hugh to leave. Tonight. Before questions are asked. He takes
-        flight, and you never learn what becomes of him---or Rose.
+        "^You tell Brother Hugh to leave. Tonight. Before questions are asked.
+        He takes flight, and you never learn what becomes of him---or Rose.
 
         ^^You lied to the Prior. You broke your vows. But when you pray before
-        the Lady of Thorns, you remember Aelred's last words: ~One life for
-        two, my son.~ Perhaps mercy, not justice, was what he meant.
+        the Lady of Thorns, you remember Brother Aelred's last words: ~One life
+        for two, my son.~ Perhaps mercy, not justice, was what he meant.
 
         ^^Still, you wonder. A murderer walks free. Does forgiveness make you
         holy, or complicit? You will carry this question all your days.";
 
     DEAD_INACTION:
       print
-        "^Hugh fled in the night, never to be seen again.
+        "^Brother Hugh fled in the night, never to be seen again.
 
         ^^In the weeks that followed, Brother Wilfred grew silent and withdrawn.
         He stopped eating, stopped illuminating. One morning, he simply didn't
-        wake. Whether from grief for Aelred or despair at the priory's decline,
-        he had lost his will to live.
+        wake. Whether from grief for Brother Aelred or despair at the priory's
+        decline, he had lost his will to live.
 
         ^^Three brothers lost. The Rule continues, but the light grows dimmer.";
 
@@ -1525,13 +1631,19 @@ Class Barrel                                                           ! >Barrel
         if (noun == Stick) <<Search self>>;
         "You shouldn't add anything to the barrels.";
       Search:
+        if (self hasnt open) "You cannot, since the barrel is closed.";
         if (parent(Stick) ~= player)
-          "The barrels are much too deep to search easily.";
-        print "Searching ", (the) self,
-            " will take several minutes. Are you sure? ";
-        if (YesOrNo() == false) "You think better of it.";
+          "The barrels are much too deep to poke around in easily.";
+        if (~~f_warned_about_barrel_search_time) {
+          f_warned_about_barrel_search_time = true;
+          print "Searching ", (the) self,
+              " will take several minutes. Are you sure? ";
+          if (YesOrNo() == false) "You think better of it.";
+        }
       Take: "The barrels are too heavy, and you've no need of the contents.";
-      Empty, Pull, Push, Turn: "These are so heavy they're impossible to move.";
+      Empty, Pull, Push, Turn:
+        "These are so heavy they're impossible for you to move.
+        Brother Hugh is much stronger than you.";
       Smell:
         if (self hasnt open) "With it closed, you can't detect any scent.";
       Taste:
@@ -1539,18 +1651,22 @@ Class Barrel                                                           ! >Barrel
       Eat:
         if (self hasnt open) "You cannot, since the barrel is closed.";
         "You might taste it if you'd like, but not eat the whole thing.";
+      Open:
+        if (~~f_warned_about_barrel_open_time) {
+          f_warned_about_barrel_open_time = true;
+          print "Openining the sealed ", (name) self,
+              " will take several minutes. Are you sure? ";
+          if (YesOrNo() == false) "You think better of it.";
+        }
     ],
     after [;
       Open:
         the_time = the_time + 2;
-        "It takes several minutes to open the tightly-sealed barrel, but
-        you succeed.";
+        "With some effort, you succeed.";
       Close: "You pound on the lid to shut it.";
       Search:
-        if (self hasnt open) "You cannot, since the barrel is closed.";
         the_time = the_time + 2;
-        "Digging around with the stick for a few minutes, you find
-        nothing unexpected.";
+        "Digging around with the stick, you find nothing unexpected.";
     ]
   has static container openable ~open;
 
@@ -1575,8 +1691,15 @@ Class Candle                                                           ! >Candle
         self.stop_light();
         "You drop the candle and, in doing so, extinguish it.";
     ],
-    start_light [; give self light; TaskDone(TASK_SOURCE_LIGHT); ],
-    stop_light [; give self ~light; ],
+    start_light [;
+      give self light;
+      TaskDone(TASK_SOURCE_LIGHT);
+      scope_modified = true;
+    ],
+    stop_light [;
+      give self ~light;
+      scope_modified = true;
+    ],
     each_turn [ c;
       if (location == WestPorch or Passage or PassageSouth) {
         objectloop (c ofclass Candle) {
@@ -1589,6 +1712,8 @@ Class Candle                                                           ! >Candle
     ],
     before [ helper ;
       Burn:
+        if (NarcInRoom())
+          print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
         if (self notin player)
           "You need to be holding ", (the) self, " to do that.";
         ! > BURN CANDLE (in kitchen or nightstairs)
@@ -1606,7 +1731,7 @@ Class Candle                                                           ! >Candle
         "You need something appropriate to light the candle.";
       Take:
         if (self.dont_need()) rtrue;
-      Extinguish:
+      Extinguish, SwitchOff:
         if (self hasnt light) "It isn't lit.";
         self.stop_light();
         "You extinguish the candle.";
@@ -1772,7 +1897,7 @@ Class Monk                                                               ! >Monk
     walk_start 0,
     service_location 0,   ! where did they get to in last service?
     life [;
-      Tell, Answer, Yes, Ask:
+      Tell, Answer, Yes, Ask, Show:
         print_ret
           (The) self, " presses a finger to his lips, reminding
           you of the rule of silence toward needless conversation.";
@@ -1821,7 +1946,7 @@ Verb meta 'who' * -> Who ;
 Class Plant                                                             ! >Plant
   with
     name 'plant',
-    before [ p ;
+    before [  p ; ! p ks ;
       Eat:
         if (DieIfToxic(self)) rtrue;
       Touch:
@@ -1833,13 +1958,21 @@ Class Plant                                                             ! >Plant
         p = child(self);
         if (p == nothing)
           "You've already taken a sprig from ", (the) self, ".";
-        move p to player;
+        move p to location;
         ! give p ~concealed;
-        PronounNotice(p);
-        "Rather than trying to take the entire plant, you take a sprig of it.";
+        noun = p;
+        if (TryToTakeNoun(true) ~= 1) {
+          PronounNotice(p);
+          print
+            "Rather than trying to take the entire plant, you take a sprig
+            of it.^";
+          } else {
+            move p to self;
+          }
+        rtrue;
     ],
   has
-    ~edible;
+    ~edible static ;
 
 
 ! Very light, just here so it's easy to distinguish room vs object
@@ -2028,7 +2161,6 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
       been matched only by his knowledge of God's healing herbs.",
     possess 'aelred^s' 'aelreds',
     home nothing,
-    capacity 3,
     history_text
       "Aelred (1284-). Entered the priory 1295 as a youth. Served as
       Herbalist. Fluent in several languages beyond English and Latin.^^
@@ -2080,6 +2212,8 @@ Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
       You pray he is at peace.";
     ],
     before [;
+      Kiss:
+        "You kiss his forehead.";
       Smell:
         ev_symptoms = true;
         "There's something oddly distinctive about his breath:
@@ -2098,7 +2232,7 @@ Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
   has animate ;
 
 
-Object -> BrAelredEyes "eyes"                                    ! >BrAelredEyes
+Object -> BrAelredEyes "Brother Aelred's eyes"                   ! >BrAelredEyes
   class AdjObject
   with
     article "his",
@@ -2111,18 +2245,18 @@ Object -> BrAelredEyes "eyes"                                    ! >BrAelredEyes
     before [;
       Close: "Leave such matters to Brother Benedict.";
     ],
-  has ;
+  has proper;
 
 
-Object -> BrAelredHabit "habit"                                 ! >BrAelredHabit
+Object -> BrAelredHabit "Brother Aelred's habit"                ! >BrAelredHabit
   class AdjObject
   with
     article "his",
     adj_name 'alered' 'aelred^s' 'brother' 'his',
-    noun_name 'habit',
+    noun_name 'habit' 'robe',
     description
-      "You see nothing on it or unusual about it, and don't see the things
-      he was picking at.",
+      "You see nothing unusual about his habit
+      and don't see the things he was picking at.",
     has ;
 
 
@@ -2133,7 +2267,9 @@ Object -> BrAelredHabit "habit"                                 ! >BrAelredHabit
   else if (dir == w_to) print "west";
   else if (dir == u_to) print "up";
   else if (dir == d_to) print "down";
-  else print "BUG REPORT ME";
+  #IfDef DEBUG;
+  else print "*** DirName REPORT BUG";
+  #EndIf;
 ];
 
 [ OppDirName dir ;
@@ -2143,7 +2279,9 @@ Object -> BrAelredHabit "habit"                                 ! >BrAelredHabit
   else if (dir == e_to) print "the west";
   else if (dir == d_to) print "upstairs";
   else if (dir == u_to) print "downstairs";
-  else print "BUG REPORT ME";
+  #IfDef DEBUG;
+  else print "*** OppDirName REPORT BUG";
+  #EndIf;
 ];
 
 
@@ -2207,10 +2345,16 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
             Pax.meet();
             "Oh, her? Her name is Pax. She's very friendly. Brother Wilfred
             seems especially fond of her.";
-          default:
-            "Anselm seems much more interested in talking about people
-            than things or ideas.";
         }
+
+        wn = consult_from;
+        switch (NextWord()) {
+          'himself': <<Ask self self>>;
+          'poison', 'murder': "~Do you really think so?~";
+        }
+
+        "Anselm seems much more interested in talking about people
+        than things or ideas.";
     ],
     history_text
       "Anselm (1316-). Entered 1332. Studied under Brother Wilfred as a
@@ -2261,11 +2405,25 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
             "He only gestures south to the chapel.";
           InfirmaryCabinet:
             "~The medicines are kept secure here.~";
+          FeverFewDecoction, FoxgloveDecoction, HenbaneDecoction:
+            print "~I keep that here for medicine.~";
+            if (second == HenbaneDecoction)
+              print
+                " He pauses. ~I thought we had more, though. I rarely use it.~";
+            "";
           Mirror:
             "~Ah, the mirror serves medicine, not pride. I can check if pupils
             respond to light, examine the tongue and throat, see if jaundice
             yellows the eyes. Observation is half of healing.~";
         }
+
+        wn = consult_from;
+        switch (NextWord()) {
+          'himself': <<Ask self self>>;
+          'poison', 'murder':
+            "~Now, none of that, Brother Aldwin.~";
+        }
+
       Tell:
         consult_words = second;
         wn = consult_from;
@@ -2273,8 +2431,9 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
           "~I examined Brother Aelred carefully before preparing his body.
             His heart stopped---he was an old man, and such is God's will.
             We will lay him to rest tomorrow with proper honour.~";
-          "Brother Benedict nods kindly but gestures toward his work.
-          ~Forgive me, Brother Novice, but I have much to attend to.~";
+          if (location == Infirmary)
+            "Brother Benedict nods kindly but gestures toward his work.
+            ~Forgive me, Brother Novice, but I have much to attend to.~";
       default:
         "Brother Benedict looks at you kindly, but raises his finger to his
         lips. ~This is neither the time nor place for speech.~";
@@ -2313,6 +2472,7 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
     name 'hugh' 'cellarer',
     simple_name "Hugh",
     job_title "Cellarer",
+    home Undercroft,
     walk_home Quire (s_to) (w_to) (s_to) (s_to) (e_to) (s_to) (s_to) Undercroft,
     description
       "Brother Hugh, the Cellarer, is lean and blond, barely thirty but
@@ -2325,7 +2485,6 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
       by the brothers. Appointed Cellarer 1342. Manages stores and trade
       with exceptional diligence. Has a widowed sister in the village of Holt
       who visited once.",
-    home Undercroft,
   has
   ;
 
@@ -2335,13 +2494,13 @@ Monk BrMartin "Brother Martin"                                       ! >BrMartin
     name 'martin' 'kitchener',
     simple_name "Martin",
     job_title "Kitchener",
+    home Kitchen,
     walk_home Quire (s_to) (w_to) (s_to) (s_to) (e_to) (s_to) (s_to),
     description
       "Brother Martin, the Kitchener, is short, round, and quick to
       laugh---unusual in this sombre place. He and Brother Remigio, the lay
       monk, produce the simple meals that sustain the community.",
     possess 'martin^s' 'martins',
-    home Kitchen,
     history_text
       "Martin (1304-). Entered 1322. Born and raised in Wales by a prominent
       family. Appointed Kitchener 1334. Oversees the preparation of meals for
@@ -2439,9 +2598,27 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
           Pax:
             "~Ah, la gatta! Frate Wilfred, he love her much. She good mouser.
             Always hungry.~";
-          default: "Brother Remigio listens with a puzzled expression.";
         }
+
+        wn = consult_from;
+        switch (NextWord()) {
+          'himself': <<Ask self self>>;
+          'poison', 'murder': "~Assassinio?~ He looks terrified.";
+          'priory': "~It is safe here.~";
+          'tuscany', 'tuscana', 'italy':
+            "~Toscana.~ He is quiet for a moment, his eyes distant.
+            ~Is... how to say... the hills, they are gold in summer.
+            The sun, she is warm. Not like here.~ He glances at the grey
+            stone walls around him. ~I not speak of it. Is better not to.~";
+          'basil', 'basilico': "~Ah, it makes me happy.~";
+        }
+        "Brother Remigio listens with a puzzled expression.";
+
       Give:
+        if (BrMartin in Kitchen)
+          "You shouldn't try to give Brother Remigio anything with
+          Brother Martin here.";
+
         if (noun == Basil) {
           QuoteBoxSimple(quote_stranger);
           TaskDone(TASK_BRIBE_WITH_BASIL);
@@ -2458,6 +2635,7 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
               uh, thanks you. Go. I not see you";
             if (MyCandle notin player) {
               move TallowCandle to player;
+              update_moved = true;
               print "~. He produces a tallow candle from his robe and gives
               it to you. ~La luce";
             }
@@ -2599,7 +2777,7 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
 
         wn = consult_from;
         switch (NextWord()) {
-          'himself': <<Ask BrWilfred BrWilfred>>;
+          'himself': <<Ask self self>>;
           'poison', 'murder':
             "~Now, none of that kind of talk, dear child.~";
           'fluff', 'fur':
@@ -2646,9 +2824,14 @@ Object -> LibraryKey "silver key"                               ! >LibraryKey
           ~Ah-ah,~ he says kindly but firmly, stifling a yawn. ~Not without
           the prior's leave, young Brother Aldwin.~";
         if (self in BrWilfred) {
-          move self to player;
-          update_moved = true;
-          "Being as quiet as you can, you take the key from the table.";
+          ! TODO: needs to check result of TryToTakeNoun
+          move self to location;
+          if (TryToTakeNoun(noun) ~= 1) {
+            "Being as quiet as you can, you take the key from the table.";
+          } else {
+            move self to BrWilfred;
+            rtrue;
+          };
         }
     ],
 
@@ -2681,7 +2864,10 @@ Object BrAldwin "you"                                                ! >BrAldwin
 		capacity MAX_CARRIED,
     react_after [;
       Go:
-        if (location == thedark) NowInDark();
+        if (location == thedark) {
+          NowInDark();
+          #IfDef DEBUG; f_found_darkness = true; #EndIf;
+        }
     ],
     history_text
       "Aldwin (1326-). Joined us in 1346, coming from a servant family
@@ -2692,7 +2878,7 @@ Object BrAldwin "you"                                                ! >BrAldwin
 
 ! general: happy with you (you can pick up)
 
-Object Pax "Pax"                                                          ! >Pax
+Object Pax                                                                ! >Pax
   class AdjObject
   with
     article "an",
@@ -2746,7 +2932,6 @@ Object Pax "Pax"                                                          ! >Pax
         "She allows you to pick her up.";
       Drop:
         remove self;
-        update_moved = true;
         "She scampers away.";
     ],
     each_turn [;
@@ -2785,8 +2970,9 @@ Class Scene                                                             ! >Scene
     scene_start [;
       self.time_left = 0;
       give self general;
+      scope_modified = true;
       StartDaemon(self);
-      #IfDef DEBUG;
+      #IfDef FULL_DEBUG;
       print "*** SCENE START ", (the) self, "^";
       #EndIf;
     ],
@@ -2795,15 +2981,16 @@ Class Scene                                                             ! >Scene
       give self ~on;  ! some scenes use this to show someone leading it
       give self visited;
       StopDaemon(self);
-      #IfDef DEBUG;
+      scope_modified = true;
+      #IfDef FULL_DEBUG;
       print "*** SCENE STOP ", (the) self, "^";
       #EndIf;
     ]
-  has proper ;
+  has proper scenery ;
 
 ! This is the period after lauds but before the players run into Remigio
 
-Scene SceneWandering "Wandering Pre Remigio"                   ! >SceneWandering
+Scene SceneWandering "SceneWandering"                          ! >SceneWandering
   with
     name 'wandering',
     time_left 0,
@@ -2826,11 +3013,11 @@ Scene SceneWandering "Wandering Pre Remigio"                   ! >SceneWandering
       Go:
         if (location ~= Nave or Quire or HighAltarArea or LadyChapel
                 or CloisterNE or CloisterN or TowerStairs or BellTower
-                or NightStairs)
+                or NightStairs or Garth or CloisterS or CloisterE)
           print
             "While you enjoy exploring the church, you should go to the
             Garden and begin your daily labours with Brother Aelred.^";
-        if (location == CloisterNE) {
+        if (location == CloisterNE or CloisterE or CloisterSE) {
           self.scene_stop();
           SceneFollowRemigio.scene_start();
         }
@@ -2838,7 +3025,7 @@ Scene SceneWandering "Wandering Pre Remigio"                   ! >SceneWandering
   has ;
 
 
-Scene SceneFollowRemigio "Follow Remigio"                  ! >SceneFollowRemigio
+Scene SceneFollowRemigio "SceneFollowRemigio"              ! >SceneFollowRemigio
   with
     name 'follow',
     time_left 0,
@@ -2866,10 +3053,14 @@ Scene SceneFollowRemigio "Follow Remigio"                  ! >SceneFollowRemigio
     daemon [;
       self.time_left++;
       if (self.time_left == 1) {
-        "^The lay monk, Brother Remigio, runs up to you, his face ashen. ~You!~
-        he cries, grabbing your sleeve. ~Come---Frate Aelred, l'erborista, he
-        is---~ He cannot find the words. His eyes say everything. He pulls you
-        urgently south toward the Slype.";
+        print
+          "^The lay monk, Brother Remigio, runs up to you, his face ashen. ~You!~
+          he cries, grabbing your sleeve. ~Come---Frate Aelred, l'erborista, he
+          is---~ He cannot find the words. His eyes say everything. He pulls you
+          urgently ";
+        if (location == CloisterSE) print "east";
+        else print "south";
+        " toward the Slype.";
       }
       if (self.time_left == 8) {
         ! IDEA: maybe don't end game, but see less of the death scene?
@@ -2892,7 +3083,7 @@ Scene SceneFollowRemigio "Follow Remigio"                  ! >SceneFollowRemigio
     ];
 
 
-Scene SceneDeathInSlype "Death in Slype"                    ! >SceneDeathInSlype
+Scene SceneDeathInSlype "SceneDeath"                        ! >SceneDeathInSlype
   with
     name 'death',
     time_left 0,
@@ -2960,7 +3151,7 @@ Scene SceneDeathInSlype "Death in Slype"                    ! >SceneDeathInSlype
   ;
 
 
-Scene SceneMeeting "Chapter Meeting"                             ! >SceneMeeting
+Scene SceneMeeting "SceneMeeting"                                ! >SceneMeeting
   with
     name 'meeting',
     time_left 0,
@@ -2981,9 +3172,8 @@ Scene SceneMeeting "Chapter Meeting"                             ! >SceneMeeting
             if (m ~= BrAelred) move m to ChapterBenches;
           if (player notin ChapterBenches) {
             print "^You sit on a bench.^";
-            ! PlayerTo(ChapterBenches);
             move player to ChapterBenches;
-            update_moved = true;
+            ! update_moved = true;
           }
           "^~Brothers,~ starts Brother Prior Oswald, ~this is a terrible day
           for our community: the loss of our herbalist, Brother Aelred.~";
@@ -3057,7 +3247,7 @@ Scene SceneMeeting "Chapter Meeting"                             ! >SceneMeeting
   ;
 
 
-Scene SceneLibraryMandrake "Library Mandrake"            ! >SceneLibraryMandrake
+Scene SceneLibraryMandrake "SceneMandrake"               ! >SceneLibraryMandrake
   with
     name 'smoke',
     react_before [;
@@ -3070,11 +3260,14 @@ Scene SceneLibraryMandrake "Library Mandrake"            ! >SceneLibraryMandrake
           self.scene_stop();
         }
     ],
+    #IfDef DEBUG;
     scene_start [;
       self.Scene::scene_start();
       if (location ~= Scriptorium) PlayerTo(Scriptorium);
       move MandrakeRoot to Fireplace;
+      update_moved = true;
     ],
+    #EndIf;
     scene_stop [;
       self.Scene::scene_stop();
       give BrWilfred awake;
@@ -3131,7 +3324,7 @@ Scene SceneLibraryMandrake "Library Mandrake"            ! >SceneLibraryMandrake
   ;
 
 
-Scene SceneLibraryCat "Library Pax"                           ! >SceneLibraryCat
+Scene SceneLibraryCat "SceneCatnap"                           ! >SceneLibraryCat
   with
     name 'catnap',
     react_before [ ;
@@ -3155,11 +3348,13 @@ Scene SceneLibraryCat "Library Pax"                           ! >SceneLibraryCat
           self.scene_stop();
         }
     ],
+    #IfDef DEBUG;
     scene_start [;
       self.Scene::scene_start();
       if (location ~= Scriptorium) PlayerTo(Scriptorium);
       move Pax to player;
     ],
+    #EndIf;
     scene_stop [;
       self.Scene::scene_stop();
       give BrWilfred awake;
@@ -3181,15 +3376,16 @@ Scene SceneLibraryCat "Library Pax"                           ! >SceneLibraryCat
         1:
           move Pax to BrWilfred;
           if (player notin Scriptorium) return;
-          "^Brother Wilfred perks up immediately as he sees ", (the) Pax, ".
-          ~Pax~, he cries, ~are you making a new friend of our novice?~ ",
-          (The) Pax, " jumps into his lap. He snuggles her with such comfort
-          that he seems to get even more drowsy.";
+          "^A smile crosses Brother Wilfred's lined face as he sees",
+          (the) Pax, ".
+          ~Ah, Pax~, he murmurs, ~come to check on an old man?~ ",
+          (The) Pax, " leaps into his lap and settles there. His hand moves
+          to stroke her, and his eyes grow heavy almost at once.";
         2:
           give BrWilfred ~awake;
           if (player notin Scriptorium) return;
           print
-            "^As ", (the) Pax, " continues to snuggle in his lap,
+            "^As ", (the) Pax, " continues to rest in his lap,
             Brother Wilfred begins to snore.^";
           QuoteBoxSimple(quote_sleep);
         3:
@@ -3213,12 +3409,12 @@ Scene SceneLibraryCat "Library Pax"                           ! >SceneLibraryCat
   has ;
 
 
-Scene SceneUndercroft "scene undercroft"                      ! >SceneUndercroft
+Scene SceneUndercroft "SceneUndercroft"                       ! >SceneUndercroft
   with
     name 'undercroft',
     react_after [;
       Go:
-        if (selected_direction == u_to) self.scene_stop();
+        if (selected_direction == u_to or e_to) self.scene_stop();
     ],
     caught [ o ;
       print
@@ -3309,12 +3505,11 @@ Constant HOW_CAUGHT_VISIBLE = 1;
 Constant HOW_CAUGHT_HAS_LIGHT = 2;
 Constant HOW_CAUGHT_PANEL_OPEN = 3;
 
-Scene SceneCrypt "Scene Crypt"                                     ! >SceneCrypt
+Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
   with
     name 'crypt',
     check [ how ;
       ! check and kill off player
-        ! print "tomb hide=", TombEzra has general, "^";
       if (BrCuthbert in location && TombEzra hasnt general)
         how = HOW_CAUGHT_VISIBLE;
       else if (BrCuthbert in Crypt && FitzAlanPanel has open)
@@ -3359,7 +3554,9 @@ Scene SceneCrypt "Scene Crypt"                                     ! >SceneCrypt
       print "Above,";
     else if (BrCuthbert in Crypt) print "To the north,";
     else if (BrCuthbert in CryptVestry) print "To the south,";
-    else print "BUG REPORT ME";
+    #Ifv5;
+    else print "*** noises: REPORT BUG";
+    #EndIf;
     print " you hear ";
     rtrue;
   ],
@@ -3392,6 +3589,7 @@ Scene SceneCrypt "Scene Crypt"                                     ! >SceneCrypt
       4:
         give Crypt light;
         give CryptVestry light;
+        scope_modified = true;
         if (self.check()) return;
         if (real_location == Crypt or CryptVestry)
           "^The footsteps are closer, and you can see some light coming
@@ -3443,6 +3641,7 @@ Scene SceneCrypt "Scene Crypt"                                     ! >SceneCrypt
       14:
         give CryptVestry ~light;
         give Crypt ~light;
+        scope_modified = true;
         move BrCuthbert to CryptStairs;
         if (self.check()) return;
         if (real_location == Crypt)
@@ -3475,22 +3674,21 @@ Scene SceneCrypt "Scene Crypt"                                     ! >SceneCrypt
 
 
 [ JusticeOrMercy ;
-  print "Do you choose justice or mercy? ";
+  print "Do you choose justice or mercy? > ";
   for (::) {
-    print "^> ";
     read buffer parse;
     wn = 1;
     switch (NextWord()) {
       'justice': rtrue;
       'mercy':   rfalse;
       default:
-        print "Please type ~justice~ or ~mercy~.^";
+        print "Please type ~justice~ or ~mercy~. > ";
     }
   }
 ];
 
 
-Scene SceneConfession "Scene Confession"                      ! >SceneConfession
+Scene SceneConfession "SceneConfession"                       ! >SceneConfession
   with
     name 'confession',
     scene_start [;
@@ -3524,16 +3722,12 @@ Scene SceneConfession "Scene Confession"                      ! >SceneConfession
 ! visited = has already happened
 ! on = service is underway (ie, PC should be sat and singing)
 
-Scene SceneGoHome "Scene Go Home"                                 ! >SceneGoHome
+Scene SceneGoHome "SceneGoHome"                                   ! >SceneGoHome
   with
     scene_start [ o ;
       self.Scene::scene_start();
-      ! print "*** starting^";
       objectloop (o ofclass Monk) {
-        ! print o, "^";
         o.walk_start = 0;
-        ! print (The) o, "first ^";
-        ! if (o.home ~= nothing) move o to o.service_location;
       }
       BrAnselm.walk_start = -3;
       BrWilfred.walk_start = -3;
@@ -3543,20 +3737,15 @@ Scene SceneGoHome "Scene Go Home"                                 ! >SceneGoHome
       objectloop (m ofclass Monk) {
         if (m.walk_start < 0) {
           m.walk_start++;
-          ! print (The) m, " is waiting.^";
           continue;
         }
-        ! print (The) m, " ";
         now_at = parent(m);
         if (now_at == nothing) continue;  ! aelred is dead
-        ! if (parent(now_at) ~= nothing) now_at = parent(now_at);
 
         if (m.home == now_at) {
-          ! print "is home.^";
           continue;
         }
 
-        ! print "from ", (name) loc, " ";
         dir = m.&walk_home-->m.walk_start;
         m.walk_start++;
         fake_dir = (dir ~= n_to or s_to or w_to or e_to or u_to or d_to);
@@ -3577,7 +3766,6 @@ Scene SceneGoHome "Scene Go Home"                                 ! >SceneGoHome
         }
 
         move m to going_to;
-        ! print "^", (the) m, " going to=", (the) going_to, "^";
 
         ! arriving/sitting ms
         if (going_to == location) {
@@ -3594,6 +3782,7 @@ Scene SceneGoHome "Scene Go Home"                                 ! >SceneGoHome
 
         any_moved = true;
       }
+      if (newline) new_line;
       if (~~any_moved) self.scene_stop();
       self.time_left++;
     ],
@@ -3610,7 +3799,7 @@ Class SceneService                                               ! >SceneService
     number 0,          ! hour of this service (0 for non-aut-start first)
     has_sung false,    ! has player sung during the actual service?
     service_rounds 0,  ! what "round" of the active-singing is this?
-    service_length 30, ! how many turns do they get?
+    service_length 35, ! how many turns do they get?
     aldwin_joining false,   ! is aldwin joining in?
     actually_attending 0,
       ! if so, he has to do the right things
@@ -3754,14 +3943,18 @@ Class SceneService                                               ! >SceneService
         }
         "You dare not interrupt the Divine Office.";
       Go:
-        if (parent(player) == Stalls) {
+        if (parent(player) == Stalls && self has on) {
           "Surely, you wouldn't leave your stall now.";
         }
-        ! going = location.(selected_direction);
-        ! if (going == 0) rfalse;
+        if (location == Quire && self has on) {
+          "Surely, you wouldn't leave the office.";
+        }
+        if (~~self.aldwin_joining) rfalse;
+        if (location == Quire)
+          "Stay here for the service.";
+
         dir = MoveMonkToService(player, location);
         if (dir > 1 && dir ~= selected_direction) {
-          ! print "*** dir=", dest, "^";
           "Going ", (DirName) selected_direction,
           " isn't the right direction for the Divine Office.
           You want to head ", (DirName) dir, ".";
@@ -3774,6 +3967,7 @@ Class SceneService                                               ! >SceneService
       Wait:
         if (self.has_sung) {
           self.service_rounds = 100;  ! they're bored, end service
+          "(skippng to end of service)";
         }
     ],
     move_to_service [ i monk now_at going_to dir newline num_ready fake_dir ;
@@ -3794,7 +3988,7 @@ Class SceneService                                               ! >SceneService
           ! show departing monks
           if (now_at ~= Quire && now_at == location) {
             print "^", (the) monk, " heads ";
-            if (fake_dir) print " to ", (the) going_to, ".";
+            if (fake_dir) print "to ", (the) going_to, ".";
             else print (DirName) dir, ".";
             newline = true;
           }
@@ -3824,13 +4018,14 @@ Class SceneService                                               ! >SceneService
         rfalse;
     ],
 
-    daemon [  ;
+    daemon [  distant ;
       self.time_left++;
 
       ! don't do anything until everyone has moved
       if (~~self.move_to_service()) rfalse;
 
-      if (self has on && enough_evidence && ~~f_offered_shout) {
+      if (location == Quire && self has on && enough_evidence
+            && ~~f_offered_shout) {
         f_offered_shout = true;
         print
           "^You know this may be your best chance to make the accusation and
@@ -3838,14 +4033,19 @@ Class SceneService                                               ! >SceneService
           the Divine Office.";
       }
 
+      distant = (location ==
+            Crypt or CryptStairs or LadyChapel or StJudeChapel or CloisterN
+            or FitzAlanChantry or NightStairs or Nave or HighAltarArea);
+
+      f_singing_mentioned = false;
+
       if (self.service_rounds == 0) {
         if (location == Quire)
           print "^Brother Anselm begins to lead the brethren in song.^";
-        else if (location ==
-            Crypt or CryptStairs or LadyChapel or StJudeChapel
-            or FitzAlanChantry or NightStairs or Nave or HighAltarArea
-            or CloisterNE or DayStairs)
+        else if (distant) {
+          f_singing_mentioned = true;
           print "^In the distance, you can hear singing as the office starts.^";
+        }
       }
 
       ! service is underway
@@ -3860,24 +4060,24 @@ Class SceneService                                               ! >SceneService
       }
 
       if (player in Quire) {
-        if (self.service_rounds == 1)
+        if (self.service_rounds == 1 || ~~self.aldwin_joining)
           print
             "^The other monks look at you, puzzled. Why aren't you
             seated with them?^";
-        if (self.service_rounds > 1) {
+        else if (self.service_rounds > 2) {
           self.failed();
           return;
         }
       }
 
-      if (self.aldwin_joining) {
+      if (location == Quire) {
         if (self.has_sung == false) {
-          if (self.service_rounds > 1) {
+          if (self.service_rounds > 1 || ~~self.aldwin_joining) {
             print
               "^Brother Anselm looks at you pointedly.
               Why aren't you singing?^";
           }
-          else if (self.service_rounds > 2) {
+          else if (self.service_rounds > 3) {
             self.failed();
             return;
           }
@@ -3887,8 +4087,16 @@ Class SceneService                                               ! >SceneService
       }
 
       if (self.service_rounds >= self.service_length) {
+        if (distant) {
+          f_singing_mentioned = true;
+          print "^The singing from the Quire stops.^";
+        }
         self.scene_stop();
       }
+
+      if (distant && ~~f_singing_mentioned)
+          print "^From a distance, you can hear the singing continue.^";
+
     ],
     failed [;
       StoryPause();
@@ -4297,7 +4505,7 @@ Object -> BellTowerChest "wooden chest"                        ! >BellTowerChest
     description [;
       print
         "An old wooden chest, weathered by years of wind and rain blowing
-        through the open tower. The lid bears a carved Latin inscription:
+        through the open tower. The lid bears an engraved inscription:
         ~VOCA POPULUM AD PRECES~";
       if (self has open)
         PrintContents(". The chest stands open, revealing ", self);
@@ -4311,11 +4519,9 @@ Object -> BellTowerChest "wooden chest"                        ! >BellTowerChest
         if (BrCuthbert in location)
           print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
         if (ScribbledNote hasnt moved) {
-          move ScribbledNote to player;
-          update_moved = true;
-          PronounNotice(ScribbledNote);
-          "Moving the chest reveals a note that was hidden under it.
-          You take it.";
+          move ScribbledNote to location;
+          ! update_moved = true;
+          "Moving the chest reveals a note that was hidden under it.";
         }
         "Nothing else is found under it.";
       Take:
@@ -4361,7 +4567,7 @@ Object ScribbledNote "scribbled note"                           ! >ScribbledNote
         ev_note = true;
     ],
   has
-    evidence ok_carry;
+    evidence ;
 
 
 !---------------------------------------------------- 2.0.4 Quire
@@ -4465,7 +4671,7 @@ Altar -> HighAltar                                                  ! >HighAltar
   with
     short_name "high altar",
     article "the",
-    adj_name 'high' 'stone',
+    adj_name 'high',
     add_to_scope AltarCross,   ! don't want them to be listed on
     description [;
       print
@@ -4515,9 +4721,10 @@ Object AltarCross "altar cross"                              ! >AltarCross
 !    upstairs when he goes to crypt vestry
 
 Object CryptGate "crypt gate"                                       ! >CryptGate
+  class AdjObject,
   with
-    name 'crypt' 'gate' 'stairs',
-    describe 0,
+    adj_name 'crypt',
+    noun_name 'gate' 'stairs',
     description [;
       #ifDef HAS_HINTS; HintReady(Hint_gate); #EndIf;
       print
@@ -4525,22 +4732,22 @@ Object CryptGate "crypt gate"                                       ! >CryptGate
       if (self has open) print ". It is open"; else print ". It is closed";
       ".";
     ],
+    with_key DummyKey,
     found_in HighAltarArea CryptStairs,
     door_dir (u_to) (d_to),
   has
-    static door locked ~open openable;
+    scenery door locked lockable ~open openable;
 
 
 Room CryptStairs "Crypt Stairs"                                   ! >CryptStairs
   with
-    name 'crypt' 'stairs',
     description [;
       print
         "At the midpoint of these stairs, you can sense the damp
         below. A thin veil of ", (DescribeLight) self,
         " comes from the altar area above";
       if (_LookForLightInObj(Crypt, Crypt))
-        ", and weak candlelight from the Crypt below.^";
+        ", and weak candlelight from the Crypt below.";
       ", but the path down descends into darkness.";
     ],
     s_to CryptGate,
@@ -4557,8 +4764,11 @@ Room CryptStairs "Crypt Stairs"                                   ! >CryptStairs
     ],
     d_to Crypt,
     before [;
-      Smell: "Musty and damp.";
+      Smell: if (noun == nothing) "Musty and damp.";
     ],
+    cheap_scenery
+      1 'crypt' "You can't see it from here, but it's below."
+    ,
   has
     ;
 
@@ -4580,8 +4790,12 @@ Object SacristyDoor "sacristy door"                              ! >SacristyDoor
           "Have faith, Brother. You can't see it, but you know it's there.";
     ],
     after [;
-        Open: give Sacristy light;
-        Close: give Sacristy ~light;
+        Open:
+          give Sacristy light;
+          ! scope_modified = true;
+        Close:
+          give Sacristy ~light;
+          ! scope_modified = true;
     ],
   has
     static scenery door openable ~open;
@@ -4652,6 +4866,7 @@ Room Sacristy "Sacristy"                                             ! >Sacristy
     ,
     before [;
       Smell:
+        if (noun) rfalse;
         if (location == thedark)
           "You smell wax and old incense in the darkness.";
         "Dusty and fragrant with wax and wood.";
@@ -4702,12 +4917,14 @@ Candle MyCandle "beeswax candle"                                     ! >MyCandle
         if (IndirectlyContains(location, self)) rfalse;
         ! if it's been removed from the game (destroyed), they get another
         if (parent(MyCandle) == nothing) {
-          move self to player;
-          update_moved = true;
-          if (self has moved)
-            "Feeling even more guilt, you take another candle.";
-          "You take a single candle, feeling the weight of this
-          small theft.";
+          if (TryToTakeNoun(true) ~= 1) {
+            if (self has moved)
+              "Feeling even more guilt, you take another candle.";
+            "You take a single candle, feeling the weight of this
+            small theft.";
+          } else {
+            rtrue;
+          }
         }
         "Surely, one stolen candle must be enough.";
     ],
@@ -4731,7 +4948,7 @@ Room FitzAlanChantry "FitzAlan Chantry"                       ! >FitzAlanChantry
         FitzAlans are gone now---their line ended in the pestilence---and no
         masses are said here anymore";
       if (FitzAlanAltar has open) {
-        print ". An opening in the floor reveals a ladder leading down";
+        print ".^^An opening in the floor reveals a ladder leading down";
         if (~~IsLit(FitzAlanCrypt))
           print " into darkness";
       }
@@ -4754,7 +4971,6 @@ Room FitzAlanChantry "FitzAlan Chantry"                       ! >FitzAlanChantry
           a counterweight somewhere in the mechanism snaps the ladder
           back to the ceiling, far out of reach.^^";
         move Ladder to FitzAlanCrypt;
-        update_moved = true;
         return FitzAlanCrypt;
       }
     ],
@@ -4818,7 +5034,6 @@ Altar -> FitzAlanAltar                                          ! >FitzAlanAltar
           give self ~open;
           give FitzAlanLion ~moved;
           remove Ladder;
-          update_moved = true;
           "You push the altar back against the wall and hear a solid click as
           it settles against the wall.";
         }
@@ -4833,7 +5048,6 @@ Altar -> FitzAlanAltar                                          ! >FitzAlanAltar
           give self open;  ! now open
           give self moved; ! ever opened
           move Ladder to FitzAlanChantry;
-          update_moved = true;
           print "The opening reveals a ladder descending";
           if (~~IsLit(FitzAlanCrypt)()) print " into darkness";
           ".";
@@ -4950,7 +5164,7 @@ Room StJudeChapel "St Jude Chapel"                               ! >StJudeChapel
       on_first_entry [;
         HintReady(hint_jude);
       ],
-      #EndIf;
+    #EndIf;
     cheap_scenery
       1 'staff' "The staff is just a painted part of the statue."
       1 'eyes' "While evocative, the eyes of the statue are merely paint."
@@ -5132,7 +5346,8 @@ class Cloister                                                       ! >Cloister
         "You eye the effort it would take to scale the cloister
         and think better of it.";
       Smell:
-        "You can faintly smell the gardens and the grass in the Garth.";
+        if (noun == nothing)
+          "You can faintly smell the gardens and the grass in the Garth.";
     ],
   has
     light;
@@ -5317,8 +5532,8 @@ Object WestGate "West Gate"                                          ! >WestGate
         print "closed";
         if (location == Passage)
           print
-            ". On its face is carved ~FRATRIBUS TANTUM~, reminding others
-            that this entrance is for the brothers, and that others should enter
+            ". On its face is carved ~FRATRIBUS TANTUM~, reminding others that
+            this entrance is for the brothers, and that others should enter
             via the West Porch to the church";
       }
       ".";
@@ -5628,12 +5843,9 @@ Object -> -> PriorCross "cross"                                    ! >PriorCross
       Pull: "Tugging on it does nothing.";
       Push: "Pushing down on it does nothing.";
       Turn:
-        print
-          "Turning the cross on its base, you hear a click within.
-          The drawer opens";
         give PriorDrawer open;
-        PrintContents(". In it ", PriorDrawer, ISARE_BIT);
-        ". The cross snaps back to its original place.";
+        "Turning the cross on its base, you hear a click within.
+        The drawer opens, and the cross snaps back to its original place.";
     ],
   has static;
 
@@ -5650,7 +5862,7 @@ Object -> PriorDrawer "desk drawer"                               ! >PriorDrawer
         print "open";
         PrintContents(", revealing ", self);
       }
-      print "closed";
+      else print "closed";
       ".";
     ],
     before [;
@@ -5659,6 +5871,8 @@ Object -> PriorDrawer "desk drawer"                               ! >PriorDrawer
           "Though you don't see a lock on the drawer, it won't open.";
       Unlock:
         "You don't see any lock on it.";
+      Take:
+        "You can't remove the drawer from the desk.";
     ],
     after [;
       Close:
@@ -5666,7 +5880,7 @@ Object -> PriorDrawer "desk drawer"                               ! >PriorDrawer
         "It closes and you hear a click inside when it locks.";
     ],
   has
-    openable locked container;
+    static openable locked container;
 
 
 ! general = read
@@ -5731,7 +5945,9 @@ Object -> -> Chronicle "Chronicle"                                  ! >Chronicle
           "";
         }
       Take:
-        if (~~ev_chronicle) "Why would you take this?";
+        if (~~ev_chronicle) "
+          Perhaps you should examine it to see if its
+          worth stealinhg from the Prior.";
     ],
     after [;
       Take:
@@ -5824,42 +6040,16 @@ Object -> Basin "basin"                                                 ! >Basin
     adj_name 'large' 'stone',
     noun_name 'basin',
     initial
-      "A large stone basin is built into the south wall, filled with
-      water for washing.",
+      "A large stone basin is built into the south wall.",
     description
-      "The basin is water-stained and contains a large quantity of water.",
+      "The basin normally contains water for washing-up but, perhaps given the
+      events today, someone has failed to fill it.",
     before [;
-      Drink:
-        "This is washing-up water, and not suitable for drinking.";
-      Taste:
-        "You try a tiny sip and notice nothing unexpected.";
       Take:
-        "The basin is built into the wall, and trying to get the water from it
-        would seem impractical without a vessel.";
-    ],
-    after [;
-      Receive:
-        print (The) noun, " drops into the water";
-        if (noun ofclass Candle && noun has light)
-          { noun.stop_light(); print " and extinguishes"; }
-        ".";
+        "The basin is built into the wall.";
     ],
   has
     static container open transparent;
-
-
-Object -> -> Water "water"                                              ! >Water
-  with
-    article "some",
-    name 'water',
-    before [;
-      Drink: <<Drink Basin>>;
-      Taste: <<Taste Basin>>;
-      Take: <<Take Basin>>;
-      Insert: <<Transfer noun Basin>>;
-    ],
-  has
-    ;
 
 
 Object -> Towel "towel"                                                 ! >Towel
@@ -5986,7 +6176,7 @@ Object -> OfficeHours "painted panel"                             ! >OfficeHours
       Take: "It's much too large to carry.";
       LookUnder, Search, Turn, Push, Pull:
         "It's painted onto a panel wall, and it doesn't move.";
-    ]
+    ],
   has
     scenery;
 
@@ -6079,7 +6269,6 @@ Object -> ScriptoriumTable "table"                           ! >ScriptoriumTable
       Receive:
         if (noun == LibraryKey && BrWilfred in Scriptorium) {
           move LibraryKey to BrWilfred;
-          update_moved = true;
           "You place the key on the table, aiming for the exact place it
           was before.";
         }
@@ -6129,7 +6318,7 @@ Object -> Fireplace "fireplace"                                     ! >Fireplace
       making the room warmer and helping keep the manuscripts dry from the
       sea air.",
     description [;
-      print "A plain chamber of stone built into the wall";
+      print "A plain chamber of stone built into the wall with a fire going";
       PrintContents(". In it ", self, ISARE_BIT);
       ".";
     ],
@@ -6142,9 +6331,8 @@ Object -> Fireplace "fireplace"                                     ! >Fireplace
       Smell:
         "It smells of wood and smoke.";
       Receive:
-        if (noun == MandrakeRoot) <<Burn MandrakeRoot>>;
         remove noun; ! other things burn instantly
-        "You toss ", (the) noun, " into the fire.";
+        print_ret (The) noun, " catches aflame and is destroyed.";
     ],
   has
     static container open;
@@ -6194,43 +6382,29 @@ Room Library "Library"                                                ! >Library
       The only exit is to the west.",
     w_to Scriptorium,
     before [;
-      Smell: "Ah, the smell of dusty books.";
+      Smell: if (noun == nothing) "Ah, the smell of dusty books.";
     ],
-    cheap_scenery
-      'manuscript' 'manuscripts'
-        "There are many, but none seem significant."
-    ,
     on_first_entry [;
       TaskDone(TASK_LIBRARY);
       #IfDef HAS_HINTS; HintReady(Hint_Library); #EndIf;
     ],
+    cheap_scenery
+      'manuscript' 'manuscripts'
+        "There are many, but none seem significant."
+      11 'two' 'crypts'
+        "Two crypts: a larger one, simply labelled ~Crypt~ and another,
+        ~FitzAlan Crypt~.^^
+        Now that you think of it, while you've been in the crypt before, you've
+        never seen or heard of the other one."
+      1 'dorms'
+        "One dorm for the choir monks and one for the lay brothers, naturally."
+      11 'brass' 'map'
+        "Finely etched into brass and signed by ~Prior Gordian~.
+        It shows both the indoor and outdoor areas, from the dorms on the
+        upper floor all the way down to the two crypts below ground."
+    ,
   has
     ;
-
-
-Object -> BrassMap "brass map"                                       ! >BrassMap
-  class AdjObject,
-  with
-    adj_name 'brass',
-    noun_name 'map',
-    description
-      "Finely etched into brass and signed by ~Prior Gordian~.
-      It shows both the indoor and outdoor areas, from the dorms on the
-      upper floor all the way down to the two crypts below ground.",
-  has
-    scenery transparent;
-
-
-Object -> -> TwoCryptsOnMap "two crypts"                       ! >TwoCryptsOnMap
-  with
-    name 'two' 'crypts',
-    description
-      "Two crypts: a larger one, simply labelled ~Crypt~ and another,
-      ~FitzAlan Crypt~.^^
-      Now that you think of it, while you've been in the crypt before, you've
-      never seen or heard of the other one.",
-    has
-      ;
 
 
 Object -> Bookshelf "bookshelf"                                     ! >Bookshelf
@@ -6276,7 +6450,7 @@ Object -> -> MonkGuide "Registrum Fratrum",                         ! >MonkGuide
           "It's too long to read through, but you can look up particular
           entries by name.";
       Consult:
-      print (the) second;
+        if (location == thedark) { PrintMsg(MSG_EXAMINE_DARK); rtrue; }
         if (ImplicitGrabIfNotHeld(noun)) return;
         if (second == nothing || ~~(second provides history_text)) {
           print "You find no entry for ";
@@ -6418,7 +6592,8 @@ Object -> Mirror "mirror"                                              ! >Mirror
         crown---you're still a novice, not yet bound by final vows. Brother
         Aelred used to say you had honest eyes. You hope he was right.";
       Attack:
-        "Next, you'll want to cross a black cat's path?";
+        "Next, you'd want to cross a black cat's path? You think
+        better of it.";
       Take:
         if (self hasnt moved && BrBenedict in location)
           "You dare not steal this in front of the brother.";
@@ -6656,7 +6831,6 @@ Room InfirmaryChapel "Infirmary Chapel"                       ! >InfirmaryChapel
   has ;
 
 
-
 Altar -> InfirmaryAltar "altar"                                ! >InfirmaryAltar
   with
   has ~enterable ;
@@ -6722,6 +6896,7 @@ Object -> -> BrAelredBody "Brother Aelred's body"                ! >BrAelredBody
       Search:
         if (GardenGateKey hasnt moved) {
           move GardenGateKey to player;
+          update_moved = true;
           "In an inner pocket of his robe, you find ", (a) GardenGateKey, ".
           You take it.";
         }
@@ -6809,6 +6984,7 @@ Object -> Pot "plant pot"                                                 ! >Pot
       Turn, Pull, Push, LookUnder:
         if (GardenGateKey hasnt moved) {
           move GardenGateKey to player;
+          update_moved = true;
           "Underneath the pot, you find ", (a) GardenGateKey, ".
           You take it.";
         }
@@ -6884,7 +7060,8 @@ Object -> -> Gloves "gloves"                                           ! >Gloves
     ],
     after [;
       Wear:
-        if (self hasnt moved) {
+        if (self hasnt general) {
+          give self general;
           print
             "You pause for a second. His gloves, and now they'll pass to
             you. You hope you can honour his work in the garden.^^";
@@ -6904,29 +7081,81 @@ Object -> -> Herbal "Aelred's Herbal"                                  ! >Herbal
     description
       "A thin volume, but very handy: it lists many herbs and other plants,
       along with descriptions of them and their uses.",
-    before [ end i last_word ;
+    before [  ;
       Examine:
         if (verb_word == 'read')
           "It's much too dense to read the entire thing. You can consult it
           by looking up a plant by name.";
       Consult:
-        print "^second=", nothing, "^";
-        if (ImplicitGrabIfNotHeld(noun)) return;
-        if (second == nothing || ~~(second provides herb_text)) {
-          print "You find no entry for ";
-          if (second == nothing) {
-            last_word = consult_from + consult_words - 1;
-            end = WordAddress(last_word) + WordLength(last_word);
-            for (i = WordAddress(consult_from) : i < end : i++)
-              print (char) i->0;
-          }
-          else {
-            print (name) second;
-          }
-          " in ", (the) self, ".";
+        if (location == thedark) { PrintMsg(MSG_EXAMINE_DARK); rtrue; }
+        wn = consult_from;
+        switch (NextWord()) {
+
+          'rosemary':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Rosemary: one of God's most beneficial gifts, useful for the
+              digestion and for nerves. Can be made into a decoction or served
+              as a tea.";
+
+          'thyme':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Thyme: powerful for cleaning the blood and warding off the
+              plague. Can be made into a decoction or served in a tea.";
+
+          'feverfew':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Feverfew: a sovereign remedy for headaches and the agues that
+              bring fever. Women take it for monthly afflictions. Chew the
+              fresh leaves or make a tea, though the bitterness is formidable.
+              Some claim it prevents the megrim when taken daily.";
+
+          'basil':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Basil: difficult to grow in these northern climes, but common
+              in warmer lands like southern France and especially Tuscany,
+              where it is prized as both culinary herb and remedy. Effective
+              for digestive troubles and inflammation of the eyes.";
+
+          'monkshood':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Monkshood: when used with caution, can reduce inflammation or
+              problems with breathing. When used without care, can result in
+              a death that looks like rabies: with frothy saliva, slurred
+              speech, and impaired vision. Used as a liniment or decoction.";
+
+          'foxglove':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Foxglove: some claim it strengthens a weak heart, though its
+              use is controversial and dangerous. Even small amounts can
+                cause the heart to beat irregularly. Handle with great
+                caution---the plant irritates the skin terribly.";
+
+          'mandrake', 'root':
+            #Ifv5; @set_text_style 4; #EndIf;
+            print
+              "Mandrake: called the sleeping root. In small doses brings
+              drowsiness and eases pain. A large root consumed or its smoke
+              deeply breathed brings profound sleep---useful before surgery
+              or for serious insomnia. Not dangerous to handle, but it should
+              not be eaten.";
+
+          'henbane':
+            #Ifv5; @set_text_style 4; #EndIf;
+            ev_hen_symptoms = true;
+            print
+              "Henbane: can treat toothache and rheumatism. While useful, it
+              can be deadly: symptoms preceding death include extremely
+              dilated eyes and strange visions.";
+
+          default: "You find no entry for that in ", (the) self, ".";
         }
-        #Ifv5; @set_text_style 4; #EndIf;
-        second.herb_text();
+
         #Ifv5; @set_text_style 0; #EndIf;
         TaskDone(TASK_USED_HERBAL);
         rtrue;
@@ -6986,7 +7215,7 @@ Room Garden "Garden"                                                   ! >Garden
     #EndIf;
     each_turn [;
       self.time_left++;
-      if (self.time_left == 4) {
+      if (self.time_left == 5) {
         print
           "^Spending all of this time here reminds you of a conversation from
           spring, when Aelred was tending a corner of the garden. ~This one's a
@@ -7049,10 +7278,6 @@ Herb -> -> -> Rosemary "rosemary sprig"                              ! >Rosemary
   with
     name 'rosemary',
     description "A stalk of needle-like leaves.",
-    herb_text
-      "Rosemary: one of God's most beneficial gifts, useful for the
-      digestion and for nerves. Can be made into a decoction or served
-      as a tea.",
     before [;
       Smell: "It smells of pine sap and wood.";
       Taste:
@@ -7085,9 +7310,6 @@ Herb -> -> -> Thyme "thyme sprig"                                       ! >Thyme
       Smell: "Strongly earthy with a note of mint.";
       Taste: "You try a few leaves. It's warm and earthy.";
     ],
-    herb_text
-      "Thyme: powerful for cleaning the blood and warding off the
-      plague. Can be made into a decoction or served in a tea.",
   ;
 
 
@@ -7118,11 +7340,6 @@ Herb -> -> -> Feverfew "feverfew sprig"                              ! >Feverfew
         "You try a single leaf: intensely bitter, leaving your mouth
         tingling unpleasantly.";
     ],
-    herb_text
-      "Feverfew: a sovereign remedy for headaches and the agues that
-      bring fever. Women take it for monthly afflictions. Chew the
-      fresh leaves or make a tea, though the bitterness is formidable.
-      Some claim it prevents the megrim when taken daily.",
   ;
 
 
@@ -7157,11 +7374,6 @@ Herb -> -> -> Basil "basil sprig"                                       ! >Basil
         "You try a single leaf: it's sharp at first,
         then peppery and a bit like liquorice.";
     ],
-    herb_text
-      "Basil: difficult to grow in these northern climes, but common in
-      warmer lands like southern France and especially Tuscany, where it
-      is prized as both culinary herb and remedy. Effective for digestive
-      troubles and inflammation of the eyes.",
   has
     ;
 
@@ -7179,15 +7391,21 @@ Object -> GardenGate "restricted garden gate"                      ! >GardenGate
       if (self has locked) print " and locked";
       ".";
     ],
-    before [;
+    ! before [;
+    !   Unlock:
+    !     if (second == GardenGateKey) {
+    !       give self ~locked;
+    !       give self open;
+    !       print "You unlock the gate, open it, and enter the smaller garden.^^";
+    !       PlayerTo(RestrictedGarden);
+    !       rtrue;
+    !     }
+    ! ],
+    after [;
       Unlock:
-        if (second == GardenGateKey) {
-          give self ~locked;
-          give self open;
-          print "You unlock the gate, open it, and enter the smaller garden.^^";
-          PlayerTo(RestrictedGarden);
-          rtrue;
-        }
+        give self ~open;
+        print "You unlock the gate, open it, and enter the smaller garden.^^";
+        PlayerTo(RestrictedGarden);
     ],
     description [;
       #IfDef HAS_HINTS; HintReady(Hint_GardenGate); #EndIf;
@@ -7281,11 +7499,6 @@ Herb -> -> -> Monkshood "monkshood sprig"                           ! >Monkshood
     description
       "The flowers are deep blue, and in a shape like a monk's cowl, hence the
       name.",
-    herb_text
-      "Monkshood: when used with caution, can reduce inflammation or problems
-      with breathing. When used without care, can result in a death that looks
-      like rabies: with frothy saliva, slurred speech, and impaired vision.
-      Used as a liniment or decoction.",
     before [;
       Smell:
         "You cautiously sniff---barely any scent at all. The plant saves
@@ -7313,11 +7526,6 @@ Herb -> -> -> Foxglove "foxglove sprig"                              ! >Foxglove
     description
       "The flowers are pink and bell-shaped, dangling in a long spike---each
       bloom like a tiny glove finger, hence the name.",
-    herb_text
-      "Foxglove: some claim it strengthens a weak heart, though its use is
-      controversial and dangerous. Even small amounts can cause the heart to
-      beat irregularly. Handle with great caution---the plant irritates the
-      skin terribly.",
     before [;
       Smell:
         "You cautiously sniff---barely any scent at all. The plant saves
@@ -7346,13 +7554,6 @@ Herb -> -> -> Henbane "henbane sprig"                                 ! >Henbane
   with
     name 'henbane',
     description "The flowers are dirty yellow and streaked with purple.",
-    herb_text [;
-      ev_hen_symptoms = true;
-      print
-        "Henbane: can treat toothache and rheumatism. While useful, it can be
-        deadly: symptoms preceding death include extremely dilated eyes and
-        strange visions.^";
-    ],
     before [;
       Smell:
         "Reminiscent of stale urine. Very unpleasant.";
@@ -7370,15 +7571,14 @@ Object -> -> MandrakeRoot "mandrake root"                        ! >MandrakeRoot
     name 'mandrake' 'root',
     description
       "A small pale, forked root twisted into a vaguely human shape.",
-    herb_text
-      "Mandrake: called the sleeping root. In small doses brings drowsiness
-      and eases pain. A large root consumed or its smoke deeply breathed
-      brings profound sleep---useful before surgery or for serious
-      insomnia. Not dangerous to handle, but it should not be eaten.",
     before [;
       Burn:
         if (player in Scriptorium)
            SceneLibraryMandrake.scene_start();
+        "You throw ", (the) self, " into the fireplace.";
+      PutOn, Insert, ThrowAt:
+        if (second == Fireplace)
+        SceneLibraryMandrake.scene_start();
         "You throw ", (the) self, " into the fireplace.";
       Smell:
         "An unpleasant, earthy smell.";
@@ -7410,7 +7610,7 @@ Room Refectory "Refectory"                                          ! >Refectory
     s_to Kitchen,
     before [;
       SitAny: <<Enter RefectoryBenches>>;
-      Smell: "The scent of pottage from previous meals.";
+      Smell: if (noun == nothing) "The scent of pottage from previous meals.";
       Listen: "You can hear activity in the Kitchen to the south.";
     ],
     cheap_scenery
@@ -7467,14 +7667,14 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
     each_turn [;
       if (BrMartin in self) {
         self.time_left++;
-        if (self.time_left < 2) rfalse;
+        if (self.time_left < 4) rfalse;
         if (Fish hasnt moved) {
           move Fish to player;
           update_moved = true;
           print
-            "^Brother Martin twinkles at you. ~Here to cadge a snack, eh, young
-            novice?~ He takes a piece of smoked fish from the table and hands
-            it to you. ~Now, go, go. Remigio and I have work to do.~";
+            "^Brother Martin smiles broadly.
+            ~Hungry, are we, Brother Novice?~ He takes a piece of smoked fish
+            and presses it into your hands. ~There. Now leave us to our work.~";
         } else {
           print
             "Brother Martin says ~Out, out, Brother Aldwin. Remigio and I are
@@ -7488,7 +7688,9 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
       Search:
         if (BrMartin in Kitchen || BrRemigio hasnt general)
           "You can't just search here with another brother here.";
-      Smell: "There is a strong smell of soup from the cauldron.";
+      Smell:
+        if (noun == nothing)
+          "There is a strong smell of soup from the cauldron.";
       Listen:
         print "You can hear the noise of ";
         if (BrMartin in self) print "Brother Martin and ";
@@ -7513,7 +7715,7 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
           }
           if (TallowCandle hasnt light && MyCandle hasnt light) {
             print
-              "You're heading down to the Undercroft without a light source.
+              "^You're heading down to the Undercroft without a light source.
               Are you sure you want to do this? ";
             if (~~YesOrNo()) "You think better of it.";
           }
@@ -7589,6 +7791,9 @@ Object -> Hearth "hearth"                                              ! >Hearth
       "A stone block built into the wall, with a fire burning in it.
       A cauldron hangs above the fire.",
     before [;
+      if (BrMartin in location && action ~= ##Search or ##Examine or ##Smell)
+        print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
+
       Search: "Anything within this would certainly be burned to cinders.";
       Receive:
         if (noun == MandrakeRoot)
@@ -7601,7 +7806,7 @@ Object -> Hearth "hearth"                                              ! >Hearth
       Smell: "Burning wood and smoke.";
       Enter:
         deadflag = 1;
-        "Visions of saints burning at the stake enter your head.";
+        print "Visions of saints burning at the stake enter your head.";
     ]
   has static container open;
 
@@ -7613,6 +7818,9 @@ Object -> -> Cauldron "cauldron"                                     ! >Cauldron
       "A large iron pot hanging over the fire, filled with pottage---a
       thick vegetable stew that will feed the brothers at their next meal.",
     before [;
+      if (BrMartin in location && action ~= ##Search or ##Examine or ##Smell)
+        print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
+
       Touch: "Ow, ow, ow.";
       Taste, Eat: "It's not mealtime yet.";
       Blow: "You can't manage to cool it.";
@@ -7657,8 +7865,9 @@ Room Undercroft "Undercroft"                                       ! >Undercroft
     ],
     before [;
       Smell:
-        "Musty and filled with fragrances from the barrels, especially with
-        the overpowering odour of tallow.";
+        if (noun == nothing)
+          "Musty and filled with fragrances from the barrels, especially with
+          the overpowering odour of tallow.";
     ],
     cheap_scenery
       1 'door' [;
@@ -7887,7 +8096,7 @@ Object MustardPackage "mustard-yellow package"                 ! >MustardPackage
     ],
     after [;
       Open:
-        "You untie the cord, revealing a small illuminated book.";
+        "You untie the cord, revealing a small illuminated psalter.";
     ]
   has
     container openable ~open evidence;
@@ -8103,7 +8312,7 @@ Object -> -> Frame "brass frame"                                        ! >Frame
 Object -> -> -> Button "button"                                        ! >Button
   with
     name 'button',
-     description "It's a small brass button on the side of the frame.",
+    description "It's a small brass button on the side of the frame.",
     before [;
       Push:
         if (FitzAlanPanel hasnt open) {
@@ -8152,16 +8361,16 @@ Room Crypt "Main Crypt"                                                 ! >Crypt
     ],
     s_to CryptVestry,
     time_left 0,
+    #IfDef HAS_HINTS;
     each_turn [;
-      #IfDef HAS_HINTS;
-        self.time_left++;
         HintReady(Hint_Crypt);
         if (self.time_left > 4)
           HintReady(Hint_CryptEscape);
-      #EndIf;
     ],
+    #EndIf;
     before [;
-      Smell: "Heavy, damp, and earthy.";
+      Smell:
+        if (noun == nothing or Crypt) "Heavy, damp, and earthy.";
     ],
     cheap_scenery
       'pillars' 'arches'
@@ -8331,7 +8540,7 @@ Object -> CryptBell "crypt bell"                                    ! >CryptBell
     description
       "A large bell in a stand, both made of pewter. You've heard it once
       rung during a Mass in the crypt, and it was loud enough that you
-      heard it on the cloister.",
+      heard it on the Cloister.",
     before [;
       Turn, Pull, Attack, Push:
         if (self has general)
@@ -8358,7 +8567,7 @@ Room CryptVestry "Crypt Vestry"                                   ! >CryptVestry
     n_to Crypt,
     out_to Crypt,
     before [;
-      Smell: <<Smell Crypt>>;
+      if (noun == nothing) "Heavy, damp, and earthy.";
     ],
     cheap_scenery
       1 'items' "If you want to search the ledge, just say so.",
@@ -8908,14 +9117,14 @@ Room Necessarium "Necessarium"                                    ! >Necessarium
       from the pit below.",
     w_to Dorter,
     before [;
-      Smell, Taste: "You dare not.";
+      Smell, Taste: "In this foul place, you dare not.";
       Climb:
         if (selected_direction == d_to)
           "You wouldn't fit in a latrine hole, praise be.";
     ],
     cheap_scenery
       'dung' 'pit' "Happily, you can only barely make it out from up here."
-      'bench' "It's just a bench."
+      'bench' "It's just a bench. Leave it be."
     ,
   has
     ;
@@ -9015,10 +9224,11 @@ Object -> CotRemigio "Brother Remigio's cot"
 
 ! ================================================================= Game
 
-Object MyRobe "robe"                                                   ! >MyRobe
+Object MyRobe "your robe"                                              ! >MyRobe
+  class AdjObject,
   with
-    article "your",
-    name 'robe' 'habit',
+    adj_name 'my',
+    noun_name 'robe' 'habit',
     invent [ ;
       print "your robe (worn)";
       if (PrintContents(" (hidden in the hood ", MyHood, ISARE_BIT)) print ")";
@@ -9042,9 +9252,10 @@ Object MyRobe "robe"                                                   ! >MyRobe
         "You're already wearing it. Outside a weekly washing, you're
         always wearing it.";
       LookUnder: "Just you.";
+      Smell: "It's been a few days since washing day.";
     ],
   ! has container clothing transparent worn ok_carry;
-  has clothing transparent worn ok_carry ;
+  has proper clothing transparent worn ok_carry ;
 
 
 ! slightly-kludgy, but added always to scope in InScope
@@ -9070,7 +9281,8 @@ Object -> MyHood "hood"                                                ! >MyHood
         if (noun == Pax) "She wouldn't find that very comfortable.";
         if (noun has light)
           "Placing a lit item in your hood would surely catch it on fire.";
-      Wear, Take: "It's part of your robe, which you're already wearing.";
+      Wear, Take:
+        "It's part of your robe, which you're already wearing.";
       Search:
         if (~~PrintContents("In the hood ", self, ISARE_BIT))
           print "There is nothing in the hood";
@@ -9087,7 +9299,7 @@ Object -> MyHood "hood"                                                ! >MyHood
         give self general;
         ".";
     ]
-  has container open worn;
+  has scenery container open worn;
 
 
 ! ==================================================================== Quotes
@@ -9210,6 +9422,14 @@ Array quote_stranger --> 5 27                                  ! >quote_stranger
   ClearScreen();
   #EndIf;
 
+  #IfDef DEBUG;
+  #IfDef FULL_DEBUG;
+  print "^*** FULL DEBUGGING MODE^";
+  #IfNot;
+  print "^*** PLAYTESTING MODE^";
+  #EndIf;
+  #EndIf;
+  
   ! example of using a dynamic string
   ! string DS_PRIORY_NAME "Our Lady of Thorns";
   ! print "^^Welcome to @(1)^";

@@ -1,10 +1,13 @@
 SMALL_FLAG = '$$\#SMALL'
+FULL_DEBUG = '$$\#FULL_DEBUG'
 
 %.z5: %.inf Makefile
 	inform -E1 -D -S $<
 
 %.z3: %.inf Makefile
-	inform $(SMALL_FLAG) -x '(small.inf)' -v3 -E1 $<
+	inform  -s $(SMALL_FLAG) '(small.inf)' -v3 -E1 $<
+	@echo
+	@echo left $$(( (128 * 1024) - $$(wc -c < thorns.z3) ))
 
 %.play: %.z5
 	# frotz $<
@@ -24,7 +27,7 @@ clean:
 
 test:
 	@clear; \
-	output=$$(inform -E1 -D -S thorns.inf 2>&1); \
+	output=$$(inform -E1 $(FULL_DEBUG) -D -S thorns.inf 2>&1); \
 	stat=$$?; \
 	if [ $$stat -ne 0 ] || echo "$$output" | grep -q "Warning"; then \
 		echo "$$output"; \
@@ -39,4 +42,3 @@ test:
 
 playtest: thorns.z5
 	open -a Gargoyle thorns.z5
-
