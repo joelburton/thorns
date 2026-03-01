@@ -65,6 +65,7 @@ Constant Headline
   ^Copyright 2026 by Joel Burton^";
 Release 1;
 
+Constant OPTIONAL_ORDERED_TIMERS;
 Constant OPTIONAL_EXTENDED_VERBSET;
 Constant OPTIONAL_SIMPLE_DOORS;
 Constant OPTIONAL_EXTENDED_METAVERBS;
@@ -304,6 +305,7 @@ Include "ext_cheap_scenery.h";
 Include "extlib/simple_quotes.h";
 Include "extlib/printtime.h";
 Include "extlib/adjectives.h";
+Include "extlib/monk_moves.h";
 #IfDef HAS_HINTS;
   include "extlib/hints.h";
 #EndIf;
@@ -327,15 +329,17 @@ Replace _GuessMissingNoun Original_GuessMissingNoun;
   ! When in these locations, bump up odds player is referring to right key
 
   ! help out with "burn (candle) with (candle)"
-  if (obj == MyCandle or TallowCandle && action == ##Burn
-      && location == NightStairs && noun == nothing) return 9;
-  if (obj == TimeCandle && action == ##Burn && noun) return 9;
-
-  if (location == Scriptorium && obj == LibraryKey && code == 2) {
-    return 9;
-  }
-  if (location == Garden && obj == GardenGateKey && code == 2) {
-    return 9;
+  if (code == 0) {
+    if (obj == MyCandle or TallowCandle && action == ##Burn
+        && location == NightStairs && noun == nothing) return 9;
+    if (obj == TimeCandle && action == ##Burn && noun) return 9;
+  } else {
+    if (location == Scriptorium && obj == LibraryKey) {
+      return 9;
+    }
+    if (location == Garden && obj == GardenGateKey) {
+      return 9;
+    }
   }
 
   ! important to keep this; otherwise, tries to get EVERYTHING
@@ -415,7 +419,7 @@ Constant DEAD_INACTION 9;
 
   ! Don't do this during the crypt rescue since there's so much darkness and
   ! hiding and such
-  if (SceneCrypt has general) rfalse;
+  if (SceneCrypt has general || SceneUndercroft has general) rfalse;
 
   ! check for contraband, first thing becomes 'caught_with':
   objectloop (o in player) {
@@ -431,7 +435,7 @@ Constant DEAD_INACTION 9;
   mir = NarcInRoom();
   if (mir == 0) rfalse;
 
-  if (MyCandle has light || TallowCandle has light) {
+  if (location ~= Kitchen && (MyCandle has light || TallowCandle has light)) {
     print "^", (The) mir,
       " catches you carrying the lit candle.
       ~Where did you get that? Candles aren't to be wasted by novices.~
@@ -1272,7 +1276,8 @@ Object DummyKey ;
   Verb '_undercroft'    *                      -> SolveUndercroft;
   Verb '_start'         * scope=SceneScope     -> StartScene
                         *                      -> StartScene;
-  Verb meta '_stop'     *                      -> StopScenes;
+  Verb meta '_stop'     * scope=SceneScope     -> StopScenes
+                        *                      -> StopScenes;
   Verb meta 'showmonks' *                      -> ShowMonks;
   Verb meta 'quotes'    *                      -> TestQuotes;
   Verb meta '!//'       * topic                -> Comment;
@@ -1396,6 +1401,10 @@ Object DummyKey ;
   ];
 
   [ StopScenesSub o ;
+    if (noun) {
+      noun.scene_stop();
+      "^DEBUG: ", (The) noun, " stopped.";
+    }
     objectloop (o ofclass Scene) {
       if (o has general) {
         o.scene_stop();
@@ -1745,7 +1754,7 @@ Class Barrel                                                           ! >Barrel
       Open:
         if (~~f_warned_about_barrel_open_time) {
           f_warned_about_barrel_open_time = true;
-          print "Openining the sealed ", (name) self,
+          print "Opening the sealed ", (name) self,
               " will take several minutes. Are you sure? ";
           if (YesOrNo() == false) "You think better of it.";
           new_line;
@@ -1988,7 +1997,7 @@ Class Monk                                                               ! >Monk
       if (location == Quire) rtrue;
     ],
     list_together "monks",
-    walk_start 0,
+    walk_index 0,
     service_location 0,   ! where did they get to in last service?
     life [;
       Tell, Answer, Yes, Ask, Show:
@@ -2187,51 +2196,6 @@ Class Tomb                                                               ! >Tomb
 ! the PC, Aldwin, is not an instance of monk class.
 
 
-! Move monk to service -- returns either direction or a location
-
-[ MoveMonkToService monk loc ;
-  if (monk == BrWilfred) {
-    if (BrWilfred hasnt awake) rfalse;
-    ! He'll take the key with him
-    ! if (LibraryKey in Scriptorium) remove LibraryKey;
-  }
-  switch(loc) {
-      CloisterNW: return e_to;
-      CloisterW: return n_to;
-      Locutory: return e_to;
-      PriorsSolar: return CloisterNW;
-      Scriptorium: return w_to;
-      Infirmary: return w_to;
-      Slype: return w_to;
-      Undercroft: return u_to;
-      Kitchen: return n_to;
-      Refectory: return n_to;
-      CloisterS: return n_to;
-      Garth: return n_to;
-      CloisterSE: return n_to;
-      CloisterE: return n_to;
-      CloisterNE: return w_to;
-      CloisterN: return n_to;
-      Quire: return Stalls;
-      Dorm:
-        ! don't have all monks run from the dorm
-        if ((monk ~= player) && random(3) == 1) rfalse;  ! pause
-        return d_to;
-      NightStairs: return d_to;
-      Necessarium: return w_to;
-      ! They're only in the upper floor for Matins, so they'll take the
-      ! night stairs, not the day stairs. No one will notice me, but it makes
-      ! me happy to do this.
-      Dorter: return n_to;
-      LayCells: return n_to;
-      BellTower: return d_to;
-      TowerStairs: return d_to;
-      Nave: return e_to;
-      Quire: return Stalls;
-      Stalls: return -1;
-      default: rfalse;  ! should only happen when using debugging-goto
-  }
-];
 
 ! TODO: fix offices so player can skip them OR if the meet a monk,
 !   they have to join them?
@@ -2264,6 +2228,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
       "~Hush now, child. This is no time for talking. I'll see you
       after office in the gardens.~";
     ],
+    walk_matins 0 0 (d_to) (d_to) (Stalls),
     before [;
       Smell: print_ret (The) self, " always smells a bit like herbs and dirt.";
     ],
@@ -2332,31 +2297,6 @@ Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
   has animate proper ;
 
 
-[ DirName dir ;
-  if (dir == n_to) print "north";
-  else if (dir == s_to) print "south";
-  else if (dir == e_to) print "east";
-  else if (dir == w_to) print "west";
-  else if (dir == u_to) print "up";
-  else if (dir == d_to) print "down";
-  #IfDef DEBUG;
-  else print "*** DirName REPORT BUG";
-  #EndIf;
-];
-
-[ OppDirName dir ;
-  if (dir == s_to) print "the north";
-  else if (dir == n_to) print "the south";
-  else if (dir == w_to) print "the east";
-  else if (dir == e_to) print "the west";
-  else if (dir == d_to) print "upstairs";
-  else if (dir == u_to) print "downstairs";
-  #IfDef DEBUG;
-  else print "*** OppDirName REPORT BUG";
-  #EndIf;
-];
-
-
 Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
   with
     name 'anselm' 'cantor',
@@ -2371,6 +2311,8 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
     possess 'anselm^s' 'anselms',
     home Locutory,
     walk_home Quire (s_to) (w_to) (s_to) (w_to),
+    walk_office (e_to) (n_to) (e_to) (n_to) Stalls,
+    walk_matins 0 (d_to) (d_to) Stalls,
     orders [;
       "~Brother Aldwin, you forget yourself. You're just a novice.~";
     ],
@@ -2453,6 +2395,8 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
     simple_name "Benedict",
     job_title "Infirmarer",
     walk_home Quire (s_to) (e_to) (s_to) (s_to) (e_to) (e_to),
+    walk_office (w_to) (w_to) (n_to) (n_to) (w_to) (n_to) Stalls,
+    walk_matins (d_to) (d_to) Stalls,
     description
       "Brother Benedict, the Infirmarer, is a heavyset man in his forties
       with gentle hands and a warmer smile than his bulk might suggest.
@@ -2546,6 +2490,8 @@ Monk BrCuthbert "Brother Cuthbert"                                 ! >BrCuthbert
     simple_name "Cuthbert",
     job_title "Sacrist",
     walk_home Quire (w_to) (u_to) (u_to),
+    walk_matins (d_to) (d_to) (e_to) Stalls,
+    walk_office (d_to) (d_to) (e_to) Stalls,
     description
       "Brother Cuthbert, the Sacrist, is in his late forties. Dark-haired
       and sharp-featured, he keeps the sacred vessels spotless and the
@@ -2567,7 +2513,9 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
     simple_name "Hugh",
     job_title "Cellarer",
     home Undercroft,
-    walk_home Quire (s_to) (w_to) (s_to) (s_to) (e_to) (s_to) (s_to) Undercroft,
+    walk_home Quire (s_to) (s_to) (s_to) (s_to) (s_to) (d_to),
+    walk_office (u_to) (n_to) (n_to) (n_to) (n_to) (n_to) Stalls,
+    walk_matins (d_to) (d_to) Stalls,
     description
       "Brother Hugh, the Cellarer, is lean and blond, barely thirty but
       already worry-worn. He manages the priory's worldly goods---trade, stores,
@@ -2589,7 +2537,9 @@ Monk BrMartin "Brother Martin"                                       ! >BrMartin
     simple_name "Martin",
     job_title "Kitchener",
     home Kitchen,
-    walk_home Quire (s_to) (w_to) (s_to) (s_to) (e_to) (s_to) (s_to),
+    walk_home Quire (s_to) (s_to) (s_to) (s_to) (s_to),
+    walk_office (n_to) (n_to) (n_to) (n_to) (n_to) Stalls,
+    walk_matins (w_to) (n_to) (d_to) (d_to) Stalls,
     description
       "Brother Martin, the Kitchener, is short, round, and quick to
       laugh---unusual in this sombre place. He and Brother Remigio, the lay
@@ -2618,6 +2568,8 @@ Monk BrOswald "Brother Oswald"                                       ! >BrOswald
       your words and deeds carefully in his presence.",
     home PriorsSolar,
     walk_home Quire (s_to) (w_to) 0 PriorsSolar,
+    walk_office (CloisterNW) (e_to) (n_to) (Stalls),
+    walk_matins (CloisterNW) (e_to) (n_to) (Stalls),
     history_text
       "Oswald (1294-). Entered 1312 from a minor noble family. Elected
       Prior 1338 upon the retirement of Brother Wilfred. Governs
@@ -2648,6 +2600,7 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
        expressive hands. His English is poor, and he often lapses into his
        native Tuscan tongue.";
     ],
+    walk_matins (n_to) (n_to) (d_to) (d_to) (Stalls),
     possess 'remigio^s' 'remigios',
     home Kitchen,
     life [;
@@ -2807,7 +2760,9 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
     possess 'wilfred^s' 'wilfreds',
     tired_count 0,  ! don't repeat messages
     home Scriptorium,
-    walk_home Quire (s_to) (e_to) (s_to) (e_to),
+    walk_home Quire (s_to) (e_to) (s_to) 0 (e_to),
+    walk_office 0 (w_to) (n_to) (w_to) (n_to) Stalls,
+    walk_matins 0 (w_to) (n_to) (d_to) (d_to) Stalls,
     yawn [ ;
       if (BrWilfred hasnt awake || deadflag || f_ever_offered_confession)
         rfalse;
@@ -3597,13 +3552,14 @@ Scene SceneLibraryCat "SceneCatnap"                           ! >SceneLibraryCat
 Scene SceneUndercroft "SceneUndercroft"                       ! >SceneUndercroft
   with
     name 'undercroft',
+    timer_order 150,  ! after go home
     react_after [;
       Go:
         if (selected_direction == u_to or e_to) self.scene_stop();
     ],
     caught [ o ;
       print
-        "Brother Hugh catches you here. ~You!~ he snarls, ~What are you doing
+        "^Brother Hugh catches you here. ~You!~ he snarls, ~What are you doing
         here?~ ";
 
       if (BrHugh has general) {
@@ -3678,9 +3634,22 @@ Scene SceneUndercroft "SceneUndercroft"                       ! >SceneUndercroft
       if (BrHugh in Undercroft) if (self.caught()) return;
     ],
     time_left 0,
+    react_before [;
+      Go:
+        if (selected_direction == u_to && BrHugh in Kitchen) {
+          print
+            "^Brother Hugh catches you coming up from the Undercroft.
+            ~What were you doing down there? It's not allowed.~
+            ^^For violating the rules of the priory, you are confined to
+            silent prayer for a week.";
+            KillOff();
+        }
+    ],
     daemon [;
-      self.time_left++;
+      ! self.time_left++;
       if (BrHugh in Undercroft) if (self.caught()) return;
+      if (BrMartin in Kitchen)
+        "^Above, you can hear Martin and Remigio talking.";
     ],
   ;
 
@@ -3694,7 +3663,9 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
         print
           "^Brother Cuthbert looks at you with suspicion. ~Brother Aldwin?
           Were you just in the crypt?~";
-      else if (BrCuthbert in location && TombEzra hasnt general)
+      else if (BrCuthbert in location
+          && location == CryptVestry or Crypt or CryptStairs
+          && TombEzra hasnt general)
         print
           "^Brother Cuthbert stops short. ~Brother Aldwin? What brings you to
           the crypt?~";
@@ -3830,12 +3801,19 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
         give CryptBell ~general;
         give CryptGate locked;
         move BrCuthbert to HighAltarArea;
-        if (self.check()) return;
         if (location == HighAltarArea)
-          "^You see Brother Cuthbert at the gate and see him shut the gate.";
+          print
+            "^You see Brother Cuthbert at the gate and see him shut the gate.^";
+        if (self.check()) return;
         if (self.noises()) "the gate being shut.";
       16:
-        move BrCuthbert to BrCuthbert.home;
+        MovePerson(BrCuthbert, w_to);
+      17:
+        MovePerson(BrCuthbert, w_to);
+      18:
+        MovePerson(BrCuthbert, u_to);
+      19:
+        MovePerson(BrCuthbert, u_to);
         self.scene_stop();
         if (real_location == Crypt or FitzAlanCrypt or CryptVestry)
           "^You managed to avoid detection, but you're still stuck here.
@@ -3901,76 +3879,31 @@ Scene SceneConfession "SceneConfession"                       ! >SceneConfession
 ! visited = has already happened
 ! on = service is underway (ie, PC should be sat and singing)
 
+
 Scene SceneGoHome "SceneGoHome"                                   ! >SceneGoHome
   with
     scene_start [ o ;
       self.Scene::scene_start();
-      objectloop (o ofclass Monk) {
-        o.walk_start = 0;
-      }
-      BrAnselm.walk_start = -3;
-      BrWilfred.walk_start = -3;
+      objectloop (o ofclass Monk) o.walk_index = 0;
     ],
-    daemon [ m dir now_at going_to fake_dir any_moved newline ;
-      ! print "HERE";
-      objectloop (m ofclass Monk) {
-        if (m.walk_start < 0) {
-          m.walk_start++;
-          continue;
-        }
-        now_at = parent(m);
-        if (now_at == nothing) continue;  ! aelred is dead
-
-        if (m.home == now_at) {
-          continue;
-        }
-
-        dir = m.&walk_home-->m.walk_start;
-        m.walk_start++;
-        fake_dir = (dir ~= n_to or s_to or w_to or e_to or u_to or d_to);
-
-        if (dir == 0) continue; ! pausing
-
-        if (fake_dir) going_to = dir;
-        else going_to = now_at.(dir);
-
-        ! show departing ms
-        if (now_at == location) {
-        if (now_at ~= Stalls) {
-          print "^", (the) m, " heads ";
-          if (fake_dir) print "to ", (the) going_to, ".";
-          else print (DirName) dir, ".";
-          newline = true;
-        }
-        }
-
-        move m to going_to;
-
-        ! arriving/sitting ms
-        if (going_to == location) {
-          if (location == Quire or Stalls) {
-            print "^", (The) m, " stands.";
-          }
-          else {
-            print "^", (the) m, " arrives from ";
-            if (fake_dir) print (the) now_at, ".";
-            else print (OppDirName) dir, ".";
-          }
-          newline = true;
-        }
-
-        any_moved = true;
-      }
-      if (newline) new_line;
-
-      if (BrOswald in PriorsSolar) {
-        objectloop (m ofclass DoorButton)
-        give m ~on;
-        PriorDoor.pressed_count = 0;
-      }
-
-      if (~~any_moved) self.scene_stop();
+    daemon [ _m num_moved  ;
       self.time_left++;
+
+      mm_needs_new_line = false;
+
+      objectloop(_m ofclass Monk) {
+        num_moved = num_moved + MoveAMonk(walk_home, _m, waittime_waiting);
+      }
+
+      if (mm_needs_new_line) new_line;
+
+      ! if (BrOswald in PriorsSolar) {
+      !   objectloop (m ofclass DoorButton)
+      !   give m ~on;
+      !   PriorDoor.pressed_count = 0;
+      ! }
+
+      if (num_moved == 0) self.scene_stop();
     ],
   has ;
 
@@ -4071,7 +4004,7 @@ Class SceneService                                               ! >SceneService
       ! but don't change the "moves", this wasn't a player choice
       the_time = self.time_start + self.service_length + 5; ! add travel time
     ],
-    react_before [ dir ;
+    react_before [ ; ! dir ;
       ! if aldwin isn't joining this service, he skips the consequences
       if (self.aldwin_joining == false && location ~= Quire) rfalse;
       Sing:
@@ -4138,13 +4071,6 @@ Class SceneService                                               ! >SceneService
         if (~~self.aldwin_joining) rfalse;
         if (location == Quire)
           "Stay here for the service.";
-
-        dir = MoveMonkToService(player, location);
-        if (dir > 1 && dir ~= selected_direction) {
-          "Going ", (DirName) selected_direction,
-          " isn't the right direction for the Divine Office.
-          You want to head ", (DirName) dir, ".";
-        }
       Exit:
         if (noun == Stalls) "Not during office, surely!";
       Ask, Tell, Give, AskFor, AskTo, ShoutAt:
@@ -4156,57 +4082,23 @@ Class SceneService                                               ! >SceneService
           "(skipping to end of service)";
         }
     ],
-    move_to_service [ i monk now_at going_to dir newline num_ready fake_dir ;
-        ! Service hasn't started yet; move monks to sitting in quire
-        for (i = 0: i < self.#req_monks / 2: i++) {
-          monk = self.&req_monks-->i;
-          if (monk == 0) continue;
-          now_at = parent(monk);
-          dir = MoveMonkToService(monk, now_at);
-          fake_dir = (dir ~= n_to or s_to or w_to or e_to or u_to or d_to);
-
-          if (dir == -1) { num_ready++; continue; }
-          if (dir == 0) continue;
-
-          if (fake_dir) going_to = dir;
-          else going_to = now_at.(dir);
-
-          ! show departing monks
-          if (now_at ~= Quire && now_at == location) {
-            print "^", (the) monk;
-            if (now_at == Scriptorium && monk == BrWilfred)
-              print " gets ", (the) LibraryKey, " from the table and";
-            print " heads ";
-            if (fake_dir) print "to ", (the) going_to, ".";
-            else print (DirName) dir, ".";
-            newline = true;
-          }
-
-          move monk to going_to;
-
-          ! arriving/sitting monks
-          if (going_to == location) {
-            print "^", (the) monk, " arrives from ";
-            if (fake_dir) print (the) now_at, ".";
-            else print (OppDirName) dir, ".";
-            newline = true;
-          }
-          else if (going_to == Stalls && location == Quire) {
-            print "^", (the) monk, " sits.";
-            newline = true;
-          }
-
-        }
-        if (newline) print "^";
-
-        if (num_ready == self.actually_attending) {
-          give self on;  ! all the monks are in the right place now
-          rtrue;
-        }
-        ! Don't check singing until service starts
-        rfalse;
+    move_to_service [ _i _m _num_ready ;
+      mm_needs_new_line = false;
+      ! Service hasn't started yet; move monks to sitting in quire
+      for (_i = 0: _i < self.#req_monks / 2: _i++) {
+        _m = self.&req_monks-->_i;
+        if (_m)
+          _num_ready = _num_ready +
+              ~~MoveAMonk(walk_office, _m, waittime_waiting);
+      }
+      if (mm_needs_new_line) new_line;
+      if (_num_ready == self.actually_attending) {
+        give self on;  ! all the monks are in the right place now
+        rtrue;
+      }
+      ! Don't check singing until service starts
+      rfalse;
     ],
-
     daemon [  distant ;
       self.time_left++;
 
@@ -4309,9 +4201,27 @@ SceneService SceneMatins "Matins office"                          ! >SceneMatins
     time_start 3 * 60,
     aldwin_joining true,
     req_monks
-        ! override to add remigio and aelred
-        BrAnselm BrCuthbert BrHugh BrMartin BrOswald BrWilfred
+      ! override to add remigio and aelred
+      BrAnselm BrCuthbert BrHugh BrMartin BrOswald BrWilfred
       BrAelred BrRemigio BrBenedict,
+    move_to_service [ _i _m _num_ready ;
+      ! Service hasn't started yet; move monks to sitting in quire
+      mm_needs_new_line = false;
+
+      for (_i = 0: _i < self.#req_monks / 2: _i++) {
+        _m = self.&req_monks-->_i;
+        if (_m)
+          _num_ready = _num_ready +
+              ~~MoveAMonk(walk_matins, _m, waittime_waiting);
+      }
+      if (mm_needs_new_line) new_line;
+      if (_num_ready == self.#req_monks / 2) {
+        give self on;  ! all the monks are in the right place now
+        rtrue;
+      }
+      ! Don't check singing until service starts
+      rfalse;
+    ],
     scene_stop [;
       self.SceneService::scene_stop();
       SceneWandering.scene_start();
@@ -4933,6 +4843,11 @@ Object CryptGate "crypt gate"                                       ! >CryptGate
     with_key DummyKey,
     found_in HighAltarArea CryptStairs,
     door_dir (u_to) (d_to),
+    before [;
+      Close:
+        if (BrCuthbert in CryptStairs or Crypt or CryptVestry)
+          "Surely, you don't want to trap anyone in the Crypt?";
+    ],
   has
     scenery door locked lockable ~open openable;
 
@@ -4964,9 +4879,6 @@ Room CryptStairs "Crypt Stairs"                                   ! >CryptStairs
     d_to Crypt,
     before [;
       Smell: if (noun == nothing) "Musty and damp.";
-      Close:
-        if (BrCuthbert in CryptStairs or Crypt or CryptVestry)
-          "Surely, you don't want to trap Brother Cuthbert in the Crypt?";
     ],
     cheap_scenery
       1 'crypt' "You can't see it from here, but it's below."
@@ -5739,7 +5651,7 @@ Object WestGate "West Gate"                                          ! >WestGate
     noun_name 'gate' 'door',
     description [;
       print
-        "A wooden door whivch is the entrance for brothers into the Cloister";
+        "A wooden door which is the entrance for brothers into the Cloister";
       if (location == CloisterSW) {
         print ". The bar is ";
         if (self has locked) print "lowered, locking the gate";
@@ -7804,7 +7716,7 @@ Object -> RestBeds "beds"                                            ! >RestBeds
     ],
     before [;
       Receive:
-        "Soon, it will be your daily labuor to plant things
+        "Soon, it will be your daily labour to plant things
         here---but not yet. Not today.";
     ],
   has
@@ -8031,8 +7943,8 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
           if (BrMartin in location)
             print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
           if (BrRemigio hasnt general)
-            "Brother Remigio stops you, apologetically. ~No, not allowed~, he s
-            ays, ~Frate Hugh, he not allow go to cellars.~";
+            "Brother Remigio stops you, apologetically. ~No, not allowed~, he
+            says, ~Frate Hugh, he not allow go to cellars.~";
           f_found_darkness = true;
           if ((~~IndirectlyContains(player, MyCandle)) &&
                 (~~IndirectlyContains(player, TallowCandle))
@@ -8207,7 +8119,7 @@ Room Undercroft "Undercroft"                                       ! >Undercroft
     ~light;
 
 
-Object -> UndercroftTable                                     ! >UndercroftTable
+Object -> UndercroftTable "table"                             ! >UndercroftTable
   with
     name 'table',
     describe 0,
@@ -9794,10 +9706,10 @@ Array quote_stranger static --> 5 27                                  ! >quote_s
   move BrAelred to Dorm;
   move BrAnselm to Dorm;
   move BrHugh to Dorm;
-  move BrMartin to Dorm;
+  move BrBenedict to Dorm;
 
   ! just so they don't all arrive at once, making a long list of text
-  move BrBenedict to Necessarium;
+  move BrMartin to Necessarium;
   move BrWilfred to Necessarium;
 
   ! Starting other places

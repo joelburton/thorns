@@ -15,7 +15,7 @@ FULL_DEBUG = '$$\#FULL_DEBUG'
 	open -a Gargoyle $<
 
 %.up: %.inf
-	inform -E1 +lib -S $<
+	inform -E1 -S $<
 	cp $(<:.inf=).z5 html/
 	cd html && surge . lady-of-thorns.surge.sh
 	open https://lady-of-thorns.surge.sh
