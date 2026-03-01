@@ -40,5 +40,7 @@ test:
 		frotz_ctrlc -s 42 thorns.z5; \
 	fi
 
-playtest: thorns.z5
+.PHONY: playtest
+playtest:
+	inform -E1 -D -S thorns.inf
 	open -a Gargoyle thorns.z5
