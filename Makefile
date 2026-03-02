@@ -1,11 +1,10 @@
-SMALL_FLAG = '$$\#SMALL'
 FULL_DEBUG = '$$\#FULL_DEBUG'
 
 %.z5: %.inf Makefile
 	inform -E1 -D -S $<
 
 %.z3: %.inf Makefile
-	inform  -s $(SMALL_FLAG) '(small.inf)' -v3 -E1 $<
+	inform  -s '(small.inf)' -v3 -E1 $<
 	@echo
 	@echo left $$(( (128 * 1024) - $$(wc -c < thorns.z3) ))
 
@@ -15,6 +14,9 @@ FULL_DEBUG = '$$\#FULL_DEBUG'
 	open -a Gargoyle $<
 
 %.up: %.inf
+	pandoc puzzles.md > html/puzzles.html
+	pandoc plot.md > html/plot.html
+	pandoc style.md > html/style.html
 	inform -E1 -S $<
 	cp $(<:.inf=).z5 html/
 	cd html && surge . lady-of-thorns.surge.sh
@@ -37,7 +39,7 @@ test:
 			code -g "$$first_issue"; \
 		fi; \
 	else \
-		frotz_ctrlc -s 42 thorns.z5; \
+		frotz_ctrlc thorns.z5; \
 	fi
 
 .PHONY: playtest
