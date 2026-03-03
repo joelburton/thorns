@@ -327,9 +327,7 @@ Replace _PrintObjName Original_PrintObjName;
     ^^After several minutes fumbling and failing to get your bearings, terror
     takes you and you begin screaming.
     ^^Soon, Brother Cuthbert arrives bearing a candle. ~Brother Aldwin?~
-    he demands, ~What on earth are you doing here?~
-    ^^When he hears of this, Brother Oswald sentences you to a week of bread
-    and water.";
+    he demands, ~What on earth are you doing here?~";
   KillOff();
 ];
 
@@ -558,15 +556,8 @@ Include "extlib/monk_moves.h";
      }
   }
   if (yes) {
-    print "---you've been caught.
-    ^^For violating a serious rule of the priory, you are sentenced
-    to bread and water for ", (LanguageNumber) yes, " days.";
-    #IfDef DEBUG;
-      print "^*** NOT KILLING during test/debug^";
-    #IfNot;
-      KillOff();
-      rtrue;
-    #EndIf;
+    print "---you've been caught.";
+    KillOff(yes);
   }
   rfalse;
 ];
@@ -625,10 +616,8 @@ Include "extlib/monk_moves.h";
         (MyCandle has light || TallowCandle has light)) {
     print "^", (The) g_narc,
       " catches you carrying the lit candle.
-      ~Where did you get that? Candles aren't to be wasted by novices.~
-      ^^For disobeying the rules of the priory, you are given penance of
-      bread and water for a week.";
-      KillOff();
+      ~Where did you get that? Candles aren't to be wasted by novices.~";
+      KillOff(3);
       rtrue;
   }
 
@@ -650,14 +639,8 @@ Include "extlib/monk_moves.h";
       print
         "notices you openly carrying ", (the) caught_with,
         ". ~Brother Novice, what are you doing with that? That has nothing
-        to do with your duties here.~
-        ^^For disobeying the rules of the priory, you are given penance of
-        bread and water for a week.";
-      #IfDef DEBUG;
-        "^^*** DEBUG: not actually killing you so we can debug this well.^";
-      #IfNot;
-        KillOff();
-      #EndIF;
+        to do with your duties here.~";
+      KillOff(3);
   }
 ];
 
@@ -874,11 +857,17 @@ Constant CLOCK_EVENING 4;
 ];
 
 
-[ KillOff;
-  deadflag = DEAD_FAILED;
+[ KillOff time;
+  if (~~time) time = 7;
   print
-    " By the time your penance ends, any chance of solving any mystery
-    has long passed.";
+    "^^For violating a serious rule of the priory, you are sentenced to bread
+    and water for ", (LanguageNumber) time, " days. By the time your penance
+    ends, any chance of solving any mystery has long passed.";
+  #IfDef DEBUG;
+    "^^*** THIS WOULD KILL YOU, BUT NOT DURING DEBUGGING/PLAYTESTING.^";
+  #IfNot;
+    deadflag = DEAD_FAILED;
+  #EndIf;
 ];
 
 
@@ -1332,6 +1321,8 @@ Verb 'plant'
   *                                       -> Dig;
 
 Extend 'dig'
+  * 'in' noun                             -> Dig
+  * 'in' noun 'with' held                 -> Dig
   *                                       -> Dig;
 
 Extend 'get' first
@@ -1406,9 +1397,23 @@ Verb meta 'who'
 Extend 'shout' replace
   *                                       -> Shout;
 
+Verb 'talk'
+  *                                       -> NoTalk
+  * topic                                 -> NoTalk;
 
+Extend 'answer' first
+  *                                       -> NoTalk
+  * topic                                 -> NoTalk;
 
 ! ------------------------------------------------------------- Verb Subroutines
+
+[ NoTalkSub ;
+  "(Instead, try: ~ASK monk ABOUT person/thing~ or
+  ~TELL monk ABOUT person/thing~.
+  But be warned: many monks follow their vow of silence and others speak
+  only in certain locations.)";
+];
+
 
 [ KnockSub ;
   if (noun hasnt door) "Nothing happens.";
@@ -1998,21 +2003,25 @@ Class Barrel                                                           ! >Barrel
       Receive:
         if (noun == Stick) <<Search self>>;
         "You shouldn't add anything to the barrels.";
+      Dig:
+        <<Search self second>>;
       Search:
         if (self hasnt open) print_ret (string) CANNOT_BARREL_IS_CLOSED;
-        if (parent(Stick) ~= player)
+
+        if (second ~= Stick && Stick notin player)
           "The barrels are much too deep to poke around in easily.";
+
         if (~~f_warned_about_barrel_search_time) {
           f_warned_about_barrel_search_time = true;
-          print "Searching ", (the) self,
-              " will take several minutes. Are you sure? ";
+          print "^Searching a barrel will take several minutes. Continue? ";
           if (YesOrNo() == false) "You think better of it.";
           new_line;
         }
+
       Take: "The barrels are too heavy, and you've no need of the contents.";
       Empty, Pull, Push, Turn:
-        "These are so heavy they're impossible for you to move.
-        Brother Hugh is much stronger than you.";
+        "These are too heavy for you to move. Brother Hugh is much stronger
+        than you.";
       Smell:
         if (self hasnt open) "With it closed, you can't detect any scent.";
       Taste:
@@ -2023,8 +2032,9 @@ Class Barrel                                                           ! >Barrel
       Open:
         if (~~f_warned_about_barrel_open_time) {
           f_warned_about_barrel_open_time = true;
-          print "Opening the sealed ", (name) self,
-              " will take several minutes. Are you sure? ";
+          print
+            "^Opening the sealed barrel will take several minutes.
+            Are you sure? ";
           if (YesOrNo() == false) "You think better of it.";
           new_line;
         }
@@ -2032,11 +2042,11 @@ Class Barrel                                                           ! >Barrel
     after [;
       Open:
         the_time = the_time + 2;
-        "With some effort, you succeed.";
+        "With some prying, you succeed.";
       Close: "You pound on the lid to shut it.";
       Search:
         the_time = the_time + 2;
-        "Digging around with the stick, you find nothing unexpected.";
+        "Searching using the stick, you find nothing unexpected.";
     ]
   has static container openable ~open;
 
@@ -2279,7 +2289,7 @@ Class Monk                                                               ! >Monk
   with
     name 'brother' 'monk',
     orders [;
-      "You're just a novice, and in no position to order anyone around.";
+      "You're a novice, and in no position to order anyone.";
     ],
     attending false,
     describe [;
@@ -2337,8 +2347,7 @@ Class Plant                                                             ! >Plant
         if (TryToTakeNoun(true) ~= 1) {
           PronounNotice(p);
           print
-            "Rather than trying to take the entire plant, you take a sprig
-            of it.^";
+            "Rather than taking the entire plant, you take a sprig of it.^";
           } else {
             move p to self;
           }
@@ -2373,7 +2382,7 @@ Class Statue                                                           ! >Statue
           ##Pull: print "pull";
           ##Turn: print "rotate";
         }
-        " the statue a bit, revealing nothing unexpected. Feeling shame about
+        " the statue a bit, revealing nothing. Feeling shame about
         the potential sacrilege of this action, you reset it as it was.";
       LookUnder:
         "You can't lift the statue to search under it.";
@@ -2423,7 +2432,7 @@ Class Tomb                                                               ! >Tomb
     description [;
       print_ret
         (The) self, " is a stone block with a lid on which his name is carved.
-        It is otherwise like all of the others in the room.";
+        It is otherwise like the others in the room.";
     ],
     react_before [;
       Take, Search, Attack, Dig, Touch, JumpOver,
@@ -2483,7 +2492,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
       "Your beloved mentor. Brother Aelred is in his sixties, tall and
       broad-shouldered, with gentle eyes that often crinkle with quiet
       amusement. In the five months you've studied under him, his kindness has
-      been matched only by his knowledge of God's healing herbs.",
+      been matched only by his knowledge of healing herbs.",
     possess 'aelred^s' 'aelreds',
     home nothing,
     history_text
@@ -2517,7 +2526,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
         }
         wn = consult_from;
         switch (NextWord()) {
-          'himself': <<Ask BrAelred BrAelred>>;
+          'himself': <<Ask self self>>;
         }
     ],
   has
@@ -2591,8 +2600,6 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
     life [;
       Give:
         "~Oh, thank you, but I've no need for that.~";
-      Answer:
-        "~But I didn't ask you a question.~";
       Tell, Show:
         "Brother Anselm seems more interested in answering questions
          about brothers.";
@@ -2607,8 +2614,8 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
           BrAnselm:
             "He looks puzzled. ~We've talked many times, Aldwin.~";
           BrBenedict:
-            "~He's so helpful. When I had quinsy last year, he took excellent
-            care of me.~";
+            "~When I had quinsy last year, he took excellent
+            care of me. We were meeting earlier this morning in the Garth.~";
           BrCuthbert:
             "~He's very strict. He's so serious about the rule of silence
             that I've never really talked to him.~";
@@ -2671,7 +2678,7 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
     walk_matins (d_to) (d_to) Stalls,
     describe [;
       if (location == Infirmary)
-        "^Brother Benedict is here, tidying up the workbench and looking
+        "^Brother Benedict is here, tidying the workbench and looking
         reflective.";
     ],
     description
@@ -2696,15 +2703,17 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
           Pax:
             "~Dear brother, I have no time for such stray animals.~";
           BrHugh:
-            "~Brother Hugh is always very helpful.~";
+            "~Brother Hugh is very helpful. I understand he's been
+            assisting Wilfred in the Library.~";
           BrWilfred:
             "~His hands may tremble and he can drift off---but his mind is as
-            sharp as ever, praise be.~";
+            sharp as ever.~";
           BrRemigio:
             "~How horrible it must have been for him to find Brother Aelred
             like that.~";
           BrAnselm:
-            "~Brother Anselm was very helpful earlier today with the body.~";
+            "~I was talking to him after Matins this morning, and then he was
+            very helpful earlier today with Brother Aelred's body.~";
           BrAelred:
             if (self hasnt general) {
               give self general;
@@ -2723,15 +2732,20 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
                 " He pauses. ~I thought we had more, though. I rarely use it.~";
             "";
           Mirror:
-            "~Ah, the mirror serves medicine, not pride. I can check if pupils
-            respond to light, examine the tongue and throat, see if jaundice
-            yellows the eyes. Observation is half of healing.~";
+            print "~Ah, the mirror serves medicine, not pride.";
+            #Ifv3;
+              "~";
+            #IfNot;
+              " I can check if pupils
+              respond to light, examine the tongue and throat, see if jaundice
+              yellows the eyes. Observation is half of healing.~";
+            #EndIf;
         }
 
         wn = consult_from;
         switch (NextWord()) {
           'himself': <<Ask self self>>;
-          'poison', 'murder', 'smell':
+          'poison', 'murder', 'smell', 'body', 'autopsy', 'corpse':
             print_ret (string) BENEDICT_ON_MURDER;
         }
 
@@ -2739,13 +2753,12 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
         consult_words = second;
         wn = consult_from;
         if (NextWordStopped() ==
-            'body' or 'corpse' or 'poison' or 'aelred' or 'smell')
+            'body' or 'corpse' or 'poison' or 'aelred' or 'smell' or 'murder')
           print_ret (string) BENEDICT_ON_MURDER;
       Show:
         if (noun == Basil) "~I don't know what that plant is.~";
         if (noun ofclass Herb)
-          "~Ah, yes. Brother Aelred grew that
-          in the garden for my use here.~";
+          "~Ah, yes. Brother Aelred grew that in the garden for my use here.~";
         if (noun ofclass Decoction) {
           print "~What are you doing with one of my decoctions? I should be
           dispensing those.~^";
@@ -2812,6 +2825,15 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
       by the brothers. Appointed Cellarer 1342. Manages stores and trade
       with exceptional diligence. Has a widowed sister in the village of Holt
       who visited once.",
+    life [;
+      Ask, Tell:
+        wn = consult_from;
+        switch (NextWord()) {
+          'rose', 'letters', 'sister', 'coins', 'money', 'william':
+            "His mouth opens for a second and then closes.";
+          'murder', 'poison': "~Nonsense.~";
+        }
+    ],
   has
   ;
 
@@ -2845,8 +2867,16 @@ Monk BrMartin "Brother Martin"                                       ! >BrMartin
     ],
     life [;
       Ask:
-        if (second == BrAelred)
-          "~What a tragic day. He was the most gentle of men.~";
+        switch (second) {
+          BrAelred: "~What a tragic day. He was the most gentle of men.~";
+          BrRemigio:
+            if (location ~= Kitchen)
+              "~Remigio is always in the Kitchen. He works very hard.~";
+          BrHugh:
+            print "~I see Brother Hugh often ";
+            if (location == Kitchen) print "here"; else print "in the Kitchen";
+            " since it's just above the Undercroft.~";
+        }
     ],
     history_text
       "Martin (1304-). Entered 1322. Born and raised in Wales by a prominent
@@ -2876,6 +2906,13 @@ Monk BrOswald "Brother Oswald"                                       ! >BrOswald
       "Oswald (1294-). Entered in 1312 from a minor noble family. Elected
       Prior 1338 upon the retirement of Brother Wilfred. Governs
       with strict adherence to the Rule of St Benedict.",
+    life [;
+      Ask, Tell:
+        wn = consult_from;
+        switch (NextWord()) {
+          'murder', 'poison': "~Nonsense, Brother Novice.~";
+        }
+    ]
   ;
 
 
@@ -2975,12 +3012,12 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
             The sun, she is warm. Not like here.~ He glances at the grey
             stone walls around him. ~I not speak of it. Is better not to.~";
           'basil', 'basilico': "~Ah, it makes me happy.~";
+          'badge': "~Ah, you like?~";
         }
 
       Give:
         if (BrMartin in Kitchen)
-          "You shouldn't try to give Brother Remigio anything with
-          Brother Martin here.";
+          "You daren't give Brother Remigio anything with Brother Martin here.";
 
         if (noun == Basil) {
           QuoteBoxSimple(quote_stranger);
@@ -3010,7 +3047,7 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
     ],
     before [;
       Smell: print_ret (The) self,
-        " always smells a bit like the fire in the Kitchen.";
+        " always smells like the fire in the Kitchen.";
     ],
     history_text
       "Remigio (c.1308-). A lay brother from Tuscany, came to the priory in
@@ -3144,7 +3181,7 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
       Give:
         if (noun == Rosemary) {
           remove Rosemary;
-          "Brother Wilfred accepts the gift. ~Thank you. My favorite.~";
+          "Brother Wilfred accepts the gift. ~Thank you, Brother Aldwin.~";
         }
     ],
     before [;
@@ -3161,8 +3198,9 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
       Elected Prior 1310, serving until 1338 when he stepped down due to
       age and failing sight. Now serves as Librarian and master illuminator,
       though his hands tremble with the years. The oldest brother in living
-      memory, he has seen the priory through plague, famine, and decline.^^
-      You note that this entry was written by Brother Wilfred himself, but in
+      memory, he has seen the priory through plague, famine, and decline.
+
+      ^^You note that this entry was written by Brother Wilfred himself, but in
       his way, he tried to maintain a scholarly and truthful tone.",
   has transparent
   ;
@@ -3184,10 +3222,7 @@ Object BrAldwin "you"                                                ! >BrAldwin
 		capacity MAX_CARRIED,
     react_after [;
       Go:
-        if (location == thedark) {
-          NowInDark();
-          #IfDef DEBUG; f_found_darkness = true; #EndIf;
-        }
+        if (location == thedark) NowInDark();
     ],
     history_text
       "Aldwin (1326-). Joined us in 1346, coming from a servant family
@@ -3216,9 +3251,7 @@ Object Pax                                                                ! >Pax
       else print " with hunger";
       ".";
     ],
-    orders [;
-      print_ret "She only mews in response.";
-    ],
+    orders "She only mews in response.",
     life [;
       Give:
         if (noun == Fish) {
@@ -3253,7 +3286,7 @@ Object Pax                                                                ! >Pax
         if (self hasnt general)
           "You dare not. She hisses as you start to try.";
       Smell:
-        "Warm wool and wood smoke, with a faint undercurrent of mouse.";
+        "Wool and wood smoke, with a faint undercurrent of mouse.";
     ],
     after [;
       Take:
@@ -3328,21 +3361,25 @@ Scene SceneWandering "SceneWandering"                          ! >SceneWandering
       self.time_left++;
       switch(self.time_left) {
         8:
-          "^Brother Aelred will be waiting for you in the gardens.";
-        14:
-          "^You feel that you should really get to the gardens. You don't
-          want to keep Brother Aelred waiting.";
-        20:
+          "^You remember Brother Aelred's request to meet him in the gardens
+          after the office.";
+        12:
+          "^You should heading to the gardens.
+          Brother Aelred will be waiting for you.";
+        16:
+          "^You should go to the gardens. It's important
+          to not keep Brother Aelred waiting.";
+        22:
           print
-            "^By the time Brother Remigio finds you, you're too late to see
-            the death of your mentor. You regret spending so much time
-            wandering before going to the gardens.";
+            "^By the time Brother Remigio finds you, Brother Aelred was dead.
+            You regret spending so much time wandering before meeting him.";
           deadflag = 3;
       }
     ],
     react_after [;
       Go:
-        if (location ~= Nave or Quire or HighAltarArea or LadyChapel
+        if (self.time_left >= 6 &&
+              location ~= Nave or Quire or HighAltarArea or LadyChapel
               or TowerStairs or BellTower or NightStairs or Garth or DayStairs
               && ~~location ofclass Cloister)
           print
@@ -3708,16 +3745,6 @@ Scene SceneLibraryCat "SceneCatnap"                           ! >SceneLibraryCat
       self.Scene::scene_stop();
       give BrWilfred awake;
       remove Pax;
-
-      if (LibraryKey notin BrWilfred) { ! && ~~deadflag) {
-        print
-          "^Brother Wilfred discovers that the key is missing from the
-          table---you're caught.
-
-          For violating such a serious rule of the priory, you are sentenced
-          to bread and water for a week.";
-        KillOff();
-      }
     ],
     daemon [;
       self.time_left++;
@@ -3848,10 +3875,8 @@ Scene SceneUndercroft "SceneUndercroft"                       ! >SceneUndercroft
         if (selected_direction == u_to && BrHugh in Kitchen) {
           print
             "^Brother Hugh catches you coming up from the Undercroft.
-            ~What were you doing down there? It's not allowed.~
-            ^^For violating the rules of the priory, you are confined to
-            silent prayer for a week.";
-            KillOff();
+            ~What were you doing down there? It's not allowed.~";
+            KillOff(5);
         }
     ],
     daemon [;
@@ -3890,9 +3915,8 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
       else rfalse;
       print
         "^^When this is reported to Brother Oswald, you are summoned
-        before him. ~Why would you be wandering the crypt?~ he asks unkindly.
-        You are sentenced to confined prayer for a week.";
-      KillOff();
+        before him. ~Why would you be wandering the crypt?~ he asks unkindly.";
+      KillOff(7);
       rtrue;
   ],
   noises [ ;
@@ -4397,11 +4421,10 @@ Class SceneService                                               ! >SceneService
     failed_office [;
       StoryPause();
       print
-        "^After the service, Brother Oswald confronts you about your
-        behaviour. ~Where was your mind, Brother Aldwin? Part of being
-        a monk is joining in song.~ You are confined to silent prayer
-        for three days.";
-      KillOff();
+        "^After the Office, Brother Oswald confronts you about your behaviour.
+        ~Where was your mind, Brother Aldwin? Part of your duty is joining
+        in song.~";
+      KillOff(3);
       return;
     ],
   has ~proper concealed;
@@ -4807,8 +4830,7 @@ Object -> BellRope "bell rope"                                       ! >BellRope
       print
         "^Brother Cuthbert finds you here, his face dark with anger.
         ^^~What madness is this? Ringing the bells without cause?
-        The entire village will think we're under attack!~
-        ^^You are confined to your cell with bread and water for a fortnight.";
+        The entire village will think we're under attack!~";
       KillOff();
     ],
   has ;
@@ -6039,8 +6061,7 @@ Object PriorDoor "prior door"                                       ! >PriorDoor
           if (self has general) { ! already tried once
             print
               ". Brother Oswald stands up in the room, visibly angered.
-              ~How dare you defy me?~ he bellows. You are sentenced to
-              bread and water for a week.";
+              ~How dare you defy me?~ he bellows.";
               KillOff();
               rtrue;
           }
@@ -6082,7 +6103,7 @@ Room PriorsSolar "Prior's Solar"                                  ! >PriorsSolar
       if (BrOswald in self) {
         print
           "^Prior Oswald catches you here. ~What are you doing in my private
-          space?~ he bellows. You are sentenced to a week of bread and water.";
+          space?~ he bellows.";
         KillOff();
       }
     ],
@@ -6621,13 +6642,10 @@ Fireplace -> ScriptoriumFireplace "fireplace"            ! >ScriptoriumFireplace
       Smell:
         if (MandrakeRoot in ScriptoriumFireplace) {
           print
-          "Foolishly, you deeply inhale the mandrake yourself, and
-          wake to find yourself being shaken
-          firmly by Brother Oswald.^^
+          "Foolishly, you deeply inhale the mandrake yourself, and wake to
+          find yourself being shaken firmly by Brother Oswald.^^
 
-          ~What madness, Brother Aldwin? What were you thinking?~
-
-          You are sentenced to bread and water for a week.";
+          ~What madness, Brother Aldwin? What were you thinking?~";
           KillOff();
           rtrue;
       }
@@ -6708,17 +6726,14 @@ Object -> LibraryDoor "library door"                              ! >LibraryDoor
       HintReady(Hint_LibraryKey);
     ],
     #EndIf;
-    each_turn [;
-      if (BrWilfred has awake && self has open) {
-        print
-          "^Brother Wilfred notices the open door to the Library---you're
-          caught!
-
-          For violating a serious rule of the priory, you are sentenced to
-          bread and water for a week.";
-          KillOff();
-      }
-    ],
+    ! each_turn [;
+    !   if (BrWilfred has awake && self has open) {
+    !     print
+    !       "^Brother Wilfred notices the open door to the Library---you're
+    !       caught!";
+    !       KillOff();
+    !   }
+    ! ],
   has
     static door openable ~open lockable locked;
 
