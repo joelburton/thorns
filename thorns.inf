@@ -173,6 +173,7 @@ Global f_enough_evidence;
 Global current_service = nothing;
 Global suspicion_level = 0;
 Global evidence_count = 0;
+Global g_narc;
 
 Global ev_symptoms;            ! examined aelred's body
 Global ev_hen_symptoms;        ! knows symptoms of henbane poisoning
@@ -595,7 +596,7 @@ Include "extlib/monk_moves.h";
 ];
 
 
-[ CheckForContraband mir o caught_with mloc ;
+[ CheckForContraband o caught_with mloc ;
 
   ! TODO: should think on this. is this too generous?
   ! but don't want them dying going to the last service with the psalter,
@@ -617,12 +618,12 @@ Include "extlib/monk_moves.h";
   ! no contraband, safe
   if (caught_with == 0) rfalse;
 
-  mir = NarcInRoom();
-  if (mir == 0) rfalse;
+  NarcInRoom();
+  if (g_narc == 0) rfalse;
 
   if (location ~= Kitchen or Undercroft &&
         (MyCandle has light || TallowCandle has light)) {
-    print "^", (The) mir,
+    print "^", (The) g_narc,
       " catches you carrying the lit candle.
       ~Where did you get that? Candles aren't to be wasted by novices.~
       ^^For disobeying the rules of the priory, you are given penance of
@@ -635,15 +636,15 @@ Include "extlib/monk_moves.h";
   switch (f_warned_contraband) {
     1: rfalse;
     2:
-      print "^You should be more careful. If ", (the) mir, " had noticed";
+      print "^You should be more careful. If ", (the) g_narc, " had noticed";
       " you openly carrying ", (the) caught_with,
       ", you'd have faced severe punishment.";
     3:
       "^Again: be careful! Openly carrying contraband, like ",
       (the) caught_with, ", will get you in trouble.";
     default:
-      print "^", (The) mir, " ", ;
-      mloc = parent(mir);
+      print "^", (The) g_narc, " ", ;
+      mloc = parent(g_narc);
       if (parent(mloc) ~= nothing) mloc = parent(mloc);
       if (mloc ~= location) print "enters the area. He ";
       print
@@ -824,13 +825,13 @@ Constant CLOCK_EVENING 4;
 ! Recursively check if a non-PC monk is in an obj, yes=return monk
 !  non-narcs are sleeping wilfred, aelred, remigio
 
-[ NarcInObj loc m mloc;
+[ _Narc loc m mloc;
   objectloop (m ofclass Monk) {
     if (m == BrWilfred && BrWilfred hasnt awake) continue;
     if (m == BrAelred or BrRemigio) continue;
     mloc = parent(m);
     if (parent(mloc) ~= nothing) mloc = parent(mloc);
-    if (mloc == loc) return m;
+    if (mloc == loc) { g_narc = m; rtrue; }
   }
   rfalse;
 ];
@@ -839,67 +840,36 @@ Constant CLOCK_EVENING 4;
 ! Is a non-narc monk in this area? (searching recursively)
 !  non-narcs are sleeping wilfred, aelred, remigio
 
-[ NarcInRoom loc res;
+[ NarcInRoom loc ;
+  g_narc = 0;
   if (loc == 0) loc = location;
+
+  if (_Narc(loc)) return true;
 
   switch (loc) {
     HighAltarArea:
-      res = NarcInObj(loc); if (res) return res;
-      res = NarcInObj(Quire); if (res) return res;
-      rfalse;
+      return _Narc(Quire);
     Quire:
-      res = NarcInObj(loc); if (res) return res;
-      res = NarcInObj(HighAltarArea); if (res) return res;
-      rfalse;
+      return _Narc(HighAltarArea);
     Garth:
-      res = NarcInObj(CloisterN); if (res) return res;
-      res = NarcInObj(CloisterW); if (res) return res;
-      res = NarcInObj(Garth);     if (res) return res;
-      res = NarcInObj(CloisterE); if (res) return res;
-      res = NarcInObj(CloisterS); if (res) return res;
-      rfalse;
+      return _Narc(CloisterN) || _Narc(CloisterW)
+          || _Narc(CloisterE) || _Narc(CloisterS);
     CloisterNW:
-      res = NarcInObj(CloisterW);  if (res) return res;
-      res = NarcInObj(CloisterNW); if (res) return res;
-      res = NarcInObj(CloisterN);  if (res) return res;
-      rfalse;
+      return _Narc(CloisterW) || _Narc(CloisterN);
     CloisterN:
-      res = NarcInObj(CloisterNW); if (res) return res;
-      res = NarcInObj(CloisterN);  if (res) return res;
-      res = NarcInObj(CloisterNE); if (res) return res;
-      rfalse;
+      return _Narc(CloisterNW) || _Narc(CloisterNE);
     CloisterNE:
-      res = NarcInObj(CloisterN);  if (res) return res;
-      res = NarcInObj(CloisterNE); if (res) return res;
-      res = NarcInObj(CloisterE);  if (res) return res;
-      rfalse;
+      return _Narc(CloisterN) || _Narc(CloisterE);
     CloisterW:
-      res = NarcInObj(CloisterSW); if (res) return res;
-      res = NarcInObj(CloisterW);  if (res) return res;
-      res = NarcInObj(CloisterNW); if (res) return res;
-      rfalse;
+      return _Narc(CloisterSW) || _Narc(CloisterNW);
     CloisterE:
-      res = NarcInObj(CloisterNE); if (res) return res;
-      res = NarcInObj(CloisterE);  if (res) return res;
-      res = NarcInObj(CloisterSE); if (res) return res;
-      rfalse;
+      return _Narc(CloisterNE) || _Narc(CloisterSE);
     CloisterSW:
-      res = NarcInObj(CloisterW);  if (res) return res;
-      res = NarcInObj(CloisterSW); if (res) return res;
-      res = NarcInObj(CloisterS);  if (res) return res;
-      rfalse;
+      return _Narc(CloisterW) || _Narc(CloisterS);
     CloisterS:
-      res = NarcInObj(CloisterSW); if (res) return res;
-      res = NarcInObj(CloisterS);  if (res) return res;
-      res = NarcInObj(CloisterSE); if (res) return res;
-      rfalse;
+      return _Narc(CloisterSW) || _Narc(CloisterSE);
     CloisterSE:
-      res = NarcInObj(CloisterS);  if (res) return res;
-      res = NarcInObj(CloisterSE); if (res) return res;
-      res = NarcInObj(CloisterE);  if (res) return res;
-      rfalse;
-    default:
-      return NarcInObj(loc);
+      return _Narc(CloisterS) || _Narc(CloisterE);
   }
 ];
 
