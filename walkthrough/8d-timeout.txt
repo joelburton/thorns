@@ -1,0 +1,11 @@
+* Timed out ending: reached end of Compline
+GOTO GARTH
+WAIT UNTIL 1
+WAIT UNTIL 3
+WAIT UNTIL 5
+WAIT UNTIL 7
+WAIT UNTIL 8
+UNDO
+UNDO
+UNDO
+UNDO

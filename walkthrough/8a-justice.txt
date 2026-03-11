@@ -1,0 +1,8 @@
+* Justice ending: go to service, shout
+GOTO GARTH
+NORTH
+NORTH
+SHOUT
+UNDO
+UNDO
+UNDO

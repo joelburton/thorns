@@ -1,0 +1,10 @@
+* Meet Remigio and follow him
+GOTO QUIRE
+SOUTH
+EAST
+SOUTH
+SOUTH
+X REMIGIO
+WEST
+EAST
+EAST

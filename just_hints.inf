@@ -11,70 +11,103 @@
 
 Constant CUSTOM_ABBREVIATIONS;
 
-Abbreviate ". ";
-Abbreviate ", ";
-Abbreviate "You ";
-Abbreviate "'t ";
-Abbreviate "thing";
-Abbreviate "There is ";
-Abbreviate "_to/";
-Abbreviate "you ";
-Abbreviate "tion";
-Abbreviate "to ";
-Abbreviate "the";
-Abbreviate "You're";
-Abbreviate "hat ";
-Abbreviate "lready ";
-Abbreviate "are ";
-Abbreviate "can";
-Abbreviate "ave ";
-Abbreviate "But ";
-Abbreviate "would ";
-Abbreviate "ing ";
-Abbreviate "re ";
-Abbreviate "this";
-Abbreviate "The";
-Abbreviate "rea";
-Abbreviate "nderstand ";
-Abbreviate "you";
-Abbreviate "close";
-Abbreviate "which";
-Abbreviate "not ";
-Abbreviate "ome";
-Abbreviate "LookMode";
-Abbreviate "witch";
-Abbreviate "ope";
-Abbreviate "bjects";
-Abbreviate "in ";
-Abbreviate "ints";
-Abbreviate "Inform ";
-Abbreviate "ble";
-Abbreviate "I d";
-Abbreviate "on ";
-Abbreviate "parse";
-Abbreviate "that.";
-Abbreviate "ly ";
-Abbreviate "conta";
-Abbreviate "ve ";
-Abbreviate "when_";
-Abbreviate "put ";
-Abbreviate "ted";
-Abbreviate "ing";
-Abbreviate "en ";
-Abbreviate "ed.";
-Abbreviate "ers";
-Abbreviate "direc";
-Abbreviate "is ";
-Abbreviate "ease ";
-Abbreviate "at ";
-Abbreviate "an ";
-Abbreviate "hink ";
-Abbreviate "ent";
-Abbreviate "er ";
-Abbreviate "first";
-Abbreviate "here.";
-Abbreviate "ate c";
-Abbreviate "ed ";
+Abbreviate "What should I do in";           !    18x21, saved   321
+Abbreviate "Our Lady of Thorns";            !     3x21, saved    36
+Abbreviate "Registrum Fratru";              !     3x18, saved    30
+Abbreviate "How can I get ";                !    10x16, saved   122
+Abbreviate " in this game.";                !     3x15, saved    24
+Abbreviate "Chapter House";                 !     6x15, saved    63
+Abbreviate ", of course.";                  !     5x14, saved    45
+Abbreviate "Scriptorium";                   !     4x12, saved    28
+Abbreviate "You can't ";                    !    16x12, saved   148
+Abbreviate "What's a ~";                    !     6x13, saved    51
+Abbreviate "Undercroft";                    !     5x11, saved    33
+Abbreviate "FitzAlan C";                    !     5x13, saved    40
+Abbreviate "Herbarium";                     !     5x10, saved    28
+Abbreviate " nothing ";                     !    14x 9, saved    89
+Abbreviate "Have you ";                     !    13x10, saved    92
+Abbreviate " able to ";                     !     6x 9, saved    33
+Abbreviate "already ";                      !     9x 8, saved    45
+Abbreviate " of the ";                      !    17x 8, saved    93
+Abbreviate "need to ";                      !    12x 8, saved    63
+Abbreviate "Brother ";                      !    19x 9, saved   124
+Abbreviate ", though";                      !     8x 9, saved    47
+Abbreviate "You can ";                      !    19x 9, saved   124
+Abbreviate "want to ";                      !     8x 8, saved    39
+Abbreviate " in the ";                      !    38x 8, saved   219
+Abbreviate "Cloister";                      !     5x 9, saved    26
+Abbreviate " around";                       !     8x 7, saved    31
+Abbreviate " happen";                       !     6x 7, saved    21
+Abbreviate "Kitchen";                       !     5x 8, saved    21
+Abbreviate "You're ";                       !     7x 9, saved    40
+Abbreviate " useful";                       !     9x 7, saved    36
+Abbreviate "They're";                       !     6x 9, saved    33
+Abbreviate " will ";                        !    16x 6, saved    58
+Abbreviate "other ";                        !    15x 6, saved    54
+Abbreviate "search";                        !    10x 6, saved    34
+Abbreviate "might ";                        !    13x 6, saved    46
+Abbreviate "xamine";                        !    10x 6, saved    34
+Abbreviate "ou'll ";                        !    11x 7, saved    46
+Abbreviate "Aelred";                        !     9x 7, saved    36
+Abbreviate " from ";                        !    12x 6, saved    42
+Abbreviate " about";                        !     8x 6, saved    26
+Abbreviate "There ";                        !    22x 7, saved   101
+Abbreviate " place";                        !    11x 6, saved    38
+Abbreviate "office";                        !     9x 6, saved    30
+Abbreviate " that";                         !    36x 5, saved   102
+Abbreviate " some";                         !    25x 5, saved    69
+Abbreviate " for ";                         !    22x 5, saved    60
+Abbreviate "thing";                         !    44x 5, saved   126
+Abbreviate "ould ";                         !    30x 5, saved    84
+Abbreviate " you ";                         !    60x 5, saved   174
+Abbreviate " and ";                         !    34x 5, saved    96
+Abbreviate " the ";                         !   143x 5, saved   423
+Abbreviate "prior";                         !    14x 5, saved    36
+Abbreviate "PUSH ";                         !     6x 9, saved    33
+Abbreviate "close";                         !    14x 5, saved    36
+Abbreviate "here.";                         !    16x 6, saved    58
+Abbreviate "But ";                          !    21x 5, saved    57
+Abbreviate "can ";                          !    20x 4, saved    34
+Abbreviate "are ";                          !    43x 4, saved    80
+Abbreviate "'ve ";                          !    10x 5, saved    24
+Abbreviate "The ";                          !    30x 5, saved    84
+Abbreviate "It's";                          !    12x 6, saved    42
+Abbreviate "hat ";                          !    32x 4, saved    58
+Abbreviate " of ";                          !    29x 4, saved    52
+Abbreviate "here";                          !    46x 4, saved    86
+Abbreviate "ing ";                          !    51x 4, saved    96
+Abbreviate "n't ";                          !    48x 5, saved   138
+Abbreviate " to ";                          !    77x 4, saved   148
+Abbreviate "You ";                          !    44x 5, saved   126
+Abbreviate "very";                          !    11x 4, saved    16
+Abbreviate "also";                          !    12x 4, saved    18
+Abbreviate "look";                          !    18x 4, saved    30
+Abbreviate "nder";                          !    16x 4, saved    26
+Abbreviate "tion";                          !    23x 4, saved    40
+Abbreviate " it.";                          !    12x 5, saved    30
+Abbreviate " mon";                          !    22x 4, saved    38
+Abbreviate "And ";                          !    14x 5, saved    36
+Abbreviate "have";                          !    28x 4, saved    50
+Abbreviate "ter";                           !    29x 3, saved    26
+Abbreviate "ent";                           !    17x 3, saved    14
+Abbreviate " a ";                           !    47x 3, saved    44
+Abbreviate "the";                           !    61x 3, saved    58
+Abbreviate "est";                           !    28x 3, saved    25
+Abbreviate "rea";                           !    27x 3, saved    24
+Abbreviate " ma";                           !    14x 3, saved    11
+Abbreviate "ing";                           !    35x 3, saved    32
+Abbreviate "'s ";                           !    28x 4, saved    50
+Abbreviate "ed ";                           !    43x 3, saved    40
+Abbreviate "you";                           !    48x 3, saved    45
+Abbreviate " in";                           !    37x 3, saved    34
+Abbreviate "---";                           !     9x 6, saved    30
+Abbreviate "is ";                           !    53x 3, saved    50
+Abbreviate "are";                           !    15x 3, saved    12
+Abbreviate ", ";                            !    87x 3, saved    84
+Abbreviate "e.";                            !    48x 3, saved    45
+Abbreviate "s.";                            !    43x 3, saved    40
+Abbreviate "y.";                            !    37x 3, saved    34
+
 
 ! Use as little memory as reasonably possible
 Constant INITIAL_LOCATION_VALUE = Room;
@@ -104,7 +137,5 @@ Object Room " " with description [;
     ! pointless check for HAS_HINTS -- always true -- but silence warning
     #IfDef HAS_HINTS;
     objectloop (h ofclass Hintobj) HintReady(h);
-    ! move hint_dragon to Hints;
-    ! move hint_intro to Hints;
     #EndIf;
 ];

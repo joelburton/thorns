@@ -56,3 +56,19 @@ Menu Hints "Hints"
 ];
 
 Verb meta 'hint' 'hints' * -> Hint;
+
+#IfDef DEBUG;
+Verb meta 'hintcheck' * -> HintCheck;
+[ HintCheckSub o;
+  objectloop (o ofclass Option) {
+    if (o ofclass Menu) continue;
+    if (~~o ofclass Hintobj)
+      print (name) o, " missing Hintobj class.^";
+    if (~~o provides the_hints)
+      print (name) o, " missing the_hints.^";
+    if (~~o provides in_menu)
+      print (name) o, " missing in_menu.^";
+  }
+  "Done.";
+];
+#EndIf;

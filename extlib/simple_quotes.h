@@ -84,6 +84,8 @@ Constant QUOTE_INDENT_STRING = "";
 
 Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 
+Global f_show_quotes = true;
+
 ! #Ifv3;
 ! [ QuoteBox p_quote_data p_dont_pause _quote_lines _quote_width _screen_width _i _j _k _last_index;
 ! #Ifnot;
@@ -173,6 +175,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 
 #IfV3;
 [ QuoteBoxSimple p_quote_data _quote_lines _quote_width _i;
+	if (~~f_show_quotes) rtrue;
 	_quote_lines = p_quote_data --> 0;
 	_quote_width = p_quote_data --> 1;
 	font off;
@@ -195,6 +198,7 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 ];
 #IfNot;
 [ QuoteBoxSimple p_quote_data _quote_lines _quote_width _screen_width _i _k _last_index;
+	if (~~f_show_quotes) rtrue;
 	_quote_lines = p_quote_data --> 0;
 	_quote_width = p_quote_data --> 1;
 	_screen_width = 0->$21;
@@ -222,3 +226,21 @@ Array quote_buffer -> QUOTE_MAX_LENGTH + 3;
 ];
 #EndIf;
 
+Verb meta 'quotes'
+	* 'on'      -> QuotesOn
+	* 'off'     -> QuotesOff;
+
+[ ChangeQuotes v;
+	print "Quote boxes will ";
+	if (~~v) print "not ";
+	f_show_quotes = v;
+	"be displayed.";
+];
+
+[ QuotesOnSub;
+	ChangeQuotes(true);
+];
+
+[ QuotesOffSub;
+	ChangeQuotes(false);
+];
