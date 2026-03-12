@@ -95,5 +95,5 @@ unit: walkthrough
 	fi
 
 clean:
-	rm -f just_hints.z5 thorns.z3 thorns.z5 walkthrough.rec walkthrough.txt
+	rm -f just_hints.z5 thorns.z3 thorns.z5 walkthrough.rec walkthrough.txt thorns.scr
 	cd html && rm -f final.html plans.html plot.html puzzles.html style.html thorns.z5 walkthrough.txt
