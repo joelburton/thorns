@@ -1,4 +1,4 @@
-* Search upper floor
+* Search dorter
 GOTO GARTH
 NORTH
 EAST
@@ -27,7 +27,7 @@ OPEN HUGHS CHEST
 X LETTERS
 READ THEM
 CLOSE HUGHS CHEST
-* Search Remigio
+* Search Lay Dorter
 GOTO DORTER
 SOUTH
 EAST

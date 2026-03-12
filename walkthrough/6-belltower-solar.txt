@@ -1,4 +1,4 @@
-* Get note
+* Bell Tower, Get note
 GOTO QUIRE
 WEST
 UP
@@ -15,7 +15,7 @@ DOWN
 READ NOTE
 PUT NOTE IN BASKET
 DOWN
-* Get into Prior's Solar
+* Go to Prior's Solar
 GOTO NAVE
 WEST
 SOUTH
@@ -23,7 +23,7 @@ OPEN GATE
 EAST
 NORTH
 NORTH
-* Prior's Solar
+* Enter Prior's Solar
 PUSH CROSS
 PUSH HAMMER
 PUSH SCROLL
@@ -43,7 +43,7 @@ EAST
 CLOSE DOOR
 READ CHRONICLE
 PUT CHRONICLE IN BASKET
-* Locutory
+* Locutory, Talk to Anselm
 GOTO CLOISTER NORTHWEST
 WAIT UNTIL 10
 SOUTH

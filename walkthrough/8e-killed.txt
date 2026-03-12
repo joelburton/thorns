@@ -1,4 +1,4 @@
-* Death ending: caught in undercroft
+* Death: Caught by Hugh
 SOUTH
 SOUTH
 WAIT UNTIL 3

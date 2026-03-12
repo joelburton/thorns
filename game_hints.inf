@@ -72,7 +72,7 @@ the_hints
   ;
 
 
-Option Hint_Prior "What's a ~prior~?"
+Option Hint_Prior "What is a ~prior~?"
   class HintObj
   with in_menu HintExMonk,
 the_hints
@@ -85,7 +85,7 @@ the_hints
 
 
 
-Option Hint_office "What's an ~office~?"
+Option Hint_office "What is an ~office~?"
   class Hintobj
   with in_menu HintExMonk,
 the_hints
@@ -96,7 +96,7 @@ the_hints
   ;
 
 
-Option Hint_quire "What's a ~Quire~?"
+Option Hint_quire "What is a ~Quire~?"
   class Hintobj
   with in_menu HintExMonk,
 the_hints
@@ -105,7 +105,7 @@ the_hints
   ;
 
 
-Option Hint_Slype "What's a ~Slype~?"
+Option Hint_Slype "What is a ~Slype~?"
   class Hintobj
   with in_menu HintExMonk,
 the_hints
@@ -116,7 +116,7 @@ the_hints
     ;
 
 
-Option Hint_WhatNec "What's a ~Necessarium~?"
+Option Hint_WhatNec "What is a ~Necessarium~?"
   class Hintobj
   with in_menu HintExMonk,
 the_hints
@@ -125,7 +125,7 @@ the_hints
   ;
 
 
-Option Hint_LayMonk "What's a ~lay monk~?"
+Option Hint_LayMonk "What is a ~lay monk~?"
   class HintObj
   with in_menu HintExMonk,
 the_hints
@@ -135,7 +135,7 @@ the_hints
   ;
 
 
-Option Hint_Sacristy "What's a ~Sacristy~?"
+Option Hint_Sacristy "What is a ~Sacristy~?"
   class Hintobj,
   with in_menu HintExMonk,
 the_hints
@@ -193,6 +193,14 @@ the_hints
   "Brother Hugh is the Cellarer, and manages this space."
   ;
 
+
+Option Hint_RemigioOffice "Why doesn't Remigio attend some offices?"
+  class Hintobj
+  with in_menu HintExMonk,
+the_hints
+  "Brother Remigio is a lay monk, not a choir monk. He attends
+  Matins but is working during other offices."
+  ;
 
 Option Hint_Real "Is Our Lady of Thorns a real priory?"
   class HintObj
@@ -737,7 +745,7 @@ the_hints
 
 Menu HintExPriorSolar "Prior's Solar";
 
-Option Hint_WhatIsSolar "What's a solar?"
+Option Hint_WhatIsSolar "What is a solar?"
   class Hintobj
   with in_menu HintExPriorSolar,
 the_hints

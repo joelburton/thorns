@@ -14,6 +14,4 @@ X HERBS
 CLIMB TABLE
 X HERBS
 DOWN
-* Other possibility to get key
-* MOVE POT
-* X IT
+" Other way to get key: "MOVE POT"

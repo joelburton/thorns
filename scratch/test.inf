@@ -1,0 +1,72 @@
+!% ++puny
+
+! Example of monk-moving system
+
+Constant INITIAL_LOCATION_VALUE = MidRoom;
+Constant OPTIONAL_NO_DARKNESS;
+Constant OPTIONAL_SIMPLE_DOORS;
+
+Include "globals.h";
+
+! Example: at start of game, people will move using walk_home until done
+Global f_all_moves_done = false;
+
+[ TimePasses ;
+  if (~~f_all_moves_done) {
+    f_all_moves_done = MoveAllMonks(walk_home);
+    if (f_all_moves_done) "^Everyone has settled in for the night.";
+  }
+];
+
+Include "puny.h";
+Include "extlib/monk_moves.h";
+
+! ---------------------------------- grammar to try this out, not needed
+
+Verb 'gon' * -> GoN;
+
+! Example of making someone move manually
+
+[ GoNSub ;
+  mm_needs_new_line = false;
+  MovePerson(Alice, n_to);
+  if (mm_needs_new_line) new_line;
+];
+
+! ----------------------------------- example objects
+
+Class Monk has animate proper;
+
+Object NorthRoom "NorthRoom" with s_to MidRoom, e_to MyDoor;
+
+Object MyDoor "door"
+  with
+    found_in NorthRoom EastRoom,
+    name 'door',
+    door_dir (w_to) (e_to),
+  has scenery door openable open ;
+
+Object EastRoom "EastRoom" with w_to MyDoor;
+
+Monk -> Alice "Alice"
+  with
+    walk_index 0,
+    walk_home 0 (NorthRoom) (s_to) 0 (Chair) (MidRoom) (s_to),
+has animate;
+
+Object MidRoom "MidRoom" with n_to NorthRoom, s_to SouthRoom;
+
+Object -> Chair "cozy chair"
+  with
+  has enterable;
+
+Object SouthRoom "SouthRoom" with n_to MidRoom;
+
+Monk -> Bob "Bob"
+  with
+    walk_index 0,
+    walk_home (n_to) (NorthRoom) (EastRoom),
+has animate;
+
+
+[ Initialise; ];

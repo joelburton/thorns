@@ -33,19 +33,20 @@ Constant EXT_WAITTIME = 1;
 
 
 #Ifndef MAX_WAIT_MOVES;
-Constant MAX_WAIT_MOVES 1440;
+Constant MAX_WAIT_MOVES 120;
 #Endif;
 #Ifndef MAX_WAIT_MINUTES;
-Constant MAX_WAIT_MINUTES 1440;
+Constant MAX_WAIT_MINUTES 120;
 #Endif;
 
 !Action routines for Wait command...
 
 [ WaitMovesSub p_is_minutes _time_left _time_before _minutes_passed;
 	meta = 1;
+	! print "WM ", p_is_minutes, " ", noun, " ", (RealTime) the_time, "^";
 
 	! If it's not a time game, waiting in minutes is changed to moves instead.
-	if (sys_statusline_flag == false) p_is_minutes = false;
+	! if (sys_statusline_flag == false) p_is_minutes = false;
 
 	if (noun == 0) {
 		"Time doesn't pass.";
@@ -62,6 +63,8 @@ Constant MAX_WAIT_MINUTES 1440;
 	_minutes_passed = 1; ! Unless p_is_minutes is set, this value won't change
 
 	while(_time_left > 0 && deadflag == GS_PLAYING && waittime_waiting) {
+		! print "WM1 ", p_is_minutes, " ", noun, " ", (RealTime) the_time, "^";
+
 		_time_before = the_time;
 		EndTurnSequence();
 		_UpdateScoreOrTime();

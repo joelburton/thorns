@@ -1,4 +1,4 @@
-* Search upper floor
+* Search dorter
 GOTO GARTH
 NORTH
 EAST

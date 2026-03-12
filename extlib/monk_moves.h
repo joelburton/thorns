@@ -151,4 +151,5 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
   }
 
   move m to _to;
+  if (_to == PriorsSolar) give PriorDoor locked;
 ];

@@ -1,4 +1,4 @@
-* Get into Prior's Solar
+* Go to Prior's Solar
 GOTO NAVE
 WEST
 SOUTH
@@ -6,7 +6,7 @@ OPEN GATE
 EAST
 NORTH
 NORTH
-* Prior's Solar
+* Enter Prior's Solar
 PUSH CROSS
 PUSH HAMMER
 PUSH SCROLL

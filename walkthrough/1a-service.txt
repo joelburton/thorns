@@ -1,5 +1,4 @@
-PAUSES OFF
-* Opening, perform service
+* Start
 X AELRED
 LOOK
 SMELL

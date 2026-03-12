@@ -1,4 +1,4 @@
-* Mercy ending: go to Wilfred
+* Mercy: confess to Wilfred
 GOTO GARTH
 EAST
 EAST

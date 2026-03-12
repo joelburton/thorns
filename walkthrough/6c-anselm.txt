@@ -1,4 +1,4 @@
-* Locutory
+* Locutory, Talk to Anselm
 GOTO CLOISTER NORTHWEST
 WAIT UNTIL 10
 SOUTH

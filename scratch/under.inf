@@ -1,0 +1,33 @@
+Include "Parser.h";
+Include "Verblib.h";
+Include "Grammar.h";
+
+Object TheRoom "The Room" with n_to NorthRoom, description "Roomy" has light;
+
+Object -> BrBob "Brother Bob"
+  with name 'bob',
+  has animate;
+
+Object -> Nun "Miss Nun"
+  with name 'nun',
+  has animate female;
+
+Object -> Crayons "Crayons"
+  with name 'crayons',
+  has pluralname;
+
+Object -> Stick "stick"
+  with name 'stick',
+  ;
+
+Object -> Coin "coin"
+  with name 'coin',
+  ;
+
+Object NorthRoom "North" with description "North", s_to TheRoom  has light;
+
+
+
+[ Initialise;
+  location  = TheRoom;
+];

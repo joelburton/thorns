@@ -1,4 +1,4 @@
-* Get note
+* Bell Tower, Get note
 GOTO QUIRE
 WEST
 UP

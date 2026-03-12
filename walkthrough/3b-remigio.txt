@@ -1,4 +1,4 @@
-* Visit kitchen, talk to Remigio
+* Kitchen, talk to Remigio
 GOTO CLOISTER SOUTHEAST
 WEST
 SOUTH

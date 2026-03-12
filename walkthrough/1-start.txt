@@ -1,5 +1,4 @@
-PAUSES OFF
-* Opening, perform service
+* Start
 X AELRED
 LOOK
 SMELL
@@ -25,7 +24,7 @@ X WILFRED
 X FLUFF
 SMELL
 WAIT
-* Wander around church and learn some things about it
+* Wander church & learn things
 GET UP
 LOOK
 X ROOD SCREEN
@@ -40,7 +39,7 @@ EXAMINE CARVING
 OPEN DOOR
 EAST
 EAST
-* Meet Remigio and follow him
+* Meet Remigio & follow him
 GOTO QUIRE
 SOUTH
 EAST

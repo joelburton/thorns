@@ -1,4 +1,4 @@
-* Timed out ending: reached end of Compline
+* Time out: End of Compline
 GOTO GARTH
 WAIT UNTIL 1
 WAIT UNTIL 3

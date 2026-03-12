@@ -1,4 +1,4 @@
-* Start to solve case: examine body
+* Start solving: examine body
 GOTO CHAPTER HOUSE
 WEST
 SOUTH
@@ -18,6 +18,6 @@ X EYES
 X STATUE
 X SORE
 PRAY
-* One possibility to get library key: search body
+* Get restricted garden key
 SEARCH BODY
 X IT

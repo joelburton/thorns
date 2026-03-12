@@ -1,4 +1,4 @@
-* Justice ending: go to service, shout
+* Justice: go to service, shout
 GOTO GARTH
 NORTH
 NORTH
@@ -6,7 +6,7 @@ SHOUT
 UNDO
 UNDO
 UNDO
-* Mercy ending: go to Wilfred
+* Mercy: confess to Wilfred
 GOTO GARTH
 EAST
 EAST
@@ -17,7 +17,7 @@ UNDO
 UNDO
 UNDO
 UNDO
-* Inaction ending: offered confession, doesn't
+* Inaction: chose not to confess
 GOTO GARTH
 EAST
 EAST
@@ -33,7 +33,7 @@ UNDO
 UNDO
 UNDO
 UNDO
-* Timed out ending: reached end of Compline
+* Time out: End of Compline
 GOTO GARTH
 WAIT UNTIL 1
 WAIT UNTIL 3
@@ -44,7 +44,7 @@ UNDO
 UNDO
 UNDO
 UNDO
-* Death ending: caught in undercroft
+* Death: Caught by Hugh
 SOUTH
 SOUTH
 WAIT UNTIL 3
