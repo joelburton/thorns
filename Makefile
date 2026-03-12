@@ -27,10 +27,6 @@ surge: html
 	open https://lady-of-thorns.surge.sh
 	rm thorns.z5
 
-clean:
-	rm *.z5 *.html
-	inform -S -D thorns.inf
-
 abbrevs:
 	rm gametext.txt
 	inform -r '$$TRANSCRIPT_FORMAT=1' '(small.inf)' -v3 thorns.inf
