@@ -255,7 +255,7 @@ The public space, where villagers stand for Mass weekly. The stone floor is worn
 The great door to the west is closed.
 
 > X STAINED GLASS
-You remember the first time you saw this glass, on the second day of your novitiate. Unlike some other things in the priory that show sign of decay, these still shine brightly on sunny days. The centre pane, the largest, has a golden hammer labelled "II: LABOR OMNIA VINCIT" ("Work Conquers All"), a reminder of the mission of monks.
+You remember the first time you saw this glass, on the second day of your novitiate. Unlike some other things in the priory that show signs of decay, these still shine brightly on sunny days. The centre pane, the largest, has a golden hammer labelled "II: LABOR OMNIA VINCIT" ("Work Conquers All"), a reminder of the mission of monks.
 
 > X DOOR
 A great oaken door. Carved deeply into its face: EGRESSUS FRUCTUM FERT ("Going out bears fruit"). The door is closed.
@@ -491,7 +491,7 @@ Brother Wilfred yawns sleepily.
 Brothers Oswald, Hugh, Benedict, Cuthbert, and Remigio leave.
 
 > ASK WILFRED ABOUT AELRED
-"What a loss for our community. He would bring me rosemary after he learned that was my mother's name."
+"What a loss for our community. He would bring me rosemary after he learned that that was my mother's name."
 
 Brothers Wilfred, Martin, and Anselm depart, leaving you alone.
 
@@ -593,7 +593,7 @@ His pupils are unnaturally dilated and black.
 It depicts St Roch, patron saint of plague victims and the sick. He's depicted pointing to a plague sore on his leg.
 
 > X SORE
-The artist was clearly aiming for realism with these. You recall Brother Aelred telling you vivid stories off illness he saw on his travels.
+The artist was clearly aiming for realism with these. You recall Brother Aelred telling you vivid stories of illness he saw on his travels.
 
 > PRAY
 You whisper a small sad prayer to your dear mentor. You fervently hope he can hear you.
@@ -782,7 +782,7 @@ Mandrake: called the sleeping root. In small doses brings drowsiness and eases p
 Garden
 Aelred's garden. You can still see where his hands touched everything: the carefully weeded beds, the path worn by his daily rounds. 
 
-You can enter the Herbarium to the north. An open closed gate west guards plants too dangerous for common use.
+You can enter the Herbarium to the north. An open gate west guards plants too dangerous for common use.
 
 > NORTH
 
@@ -900,7 +900,7 @@ The tables are bare and well-washed.
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend outh to the Undercroft below. 
+A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
 A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
 
@@ -1003,13 +1003,13 @@ Brother Wilfred stifles a yawn.
 "A fine cellarer. In the past few months, he's been helping me in the Library."
 
 > ASK WILFRED ABOUT LIBRARY
-"I'm afraid I can't let you in. The Library is off-limit to everyone but me. Strict orders from the prior."
+"I'm afraid I can't let you in. The Library is off-limits to everyone but me. Strict orders from the prior."
 
 Brother Wilfred rubs his eyes.
 
 > THROW MANDRAKE ON FIRE
 (first taking the mandrake root)
-You throw the fireplace into the fireplace.
+You throw the mandrake root into the fireplace.
 
 An unpleasant, acrid stench starts to fill the room. To be cautious, you move to the other side of the room, far from the fireplace.
 
@@ -1637,7 +1637,7 @@ You climb down the ladder.
 FitzAlan Crypt
 A small vaulted chamber, no more than ten feet across. The central tomb bears the effigy of a knight. Flanking this is a smaller undecorated tomb. 
 
-The walls here are finished stone rather than rough-hewn rock, and a narrow recess have been cut into them---likely once holding offerings or relics. The air is still, undisturbed for decades or longer. A patina of dust covers everything, unmarred by footprints save your own.
+The walls here are finished stone rather than rough-hewn rock, and a narrow recess has been cut into them---likely once holding offerings or relics. The air is still, undisturbed for decades or longer. A patina of dust covers everything, unmarred by footprints save your own.
 
 Against the southern wall hangs a faded wooden panel depicting an art scene, its Latin inscription barely legible in the gloom.
 
@@ -1828,7 +1828,7 @@ The Quire is the heart of monastic worship and the centre of the church. Two sta
 Brothers here:
 - Oswald, the Prior
 
-You escaped the Crypt without begin discovered.
+You escaped the Crypt without being discovered.
 
 Faintly, you hear "Must have been a draft from the church above." (You hear him muttering a brief prayer.)
 
@@ -1995,7 +1995,7 @@ You open the wooden chest, revealing nothing.
 You close the wooden chest.
 
 > X DESK
-A fine desk with a single drawer. On it is is a cross.
+A fine desk with a single drawer. On it is a cross.
 
 > X CROSS
 A finely detailed cross in dark wood. The brass base bears a small inscription: "CONVERTIMINI"---"Turn to me".
@@ -2151,7 +2151,7 @@ Time passes.
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend outh to the Undercroft below. 
+A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
 A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
 
@@ -2207,7 +2207,7 @@ It's filled with Hugh's cramped hand. The most recent items listed are the sale 
 
 Opening the sealed barrel will take several minutes. Are you sure? Y
 
-With some prying, you succeed.
+With some prying, you succeed in opening it.
 
 > SMELL MUSTARD
 Sharp and pungent---the unmistakable bite of ground mustard.
@@ -2627,7 +2627,7 @@ Time passes.
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend outh to the Undercroft below. 
+A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
 A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
 

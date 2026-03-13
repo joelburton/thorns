@@ -14,9 +14,10 @@ FULL_DEBUG = '$$\#FULL_DEBUG'
 	open -a Gargoyle $<
 
 html: unit
-	pandoc docs/puzzles.md > html/puzzles.html
-	pandoc docs/plot.md > html/plot.html
-	pandoc docs/style.md > html/style.html
+	pandoc -s docs/puzzles.md > html/puzzles.html
+	pandoc -s docs/plot.md > html/plot.html
+	pandoc -s docs/style.md > html/style.html
+	pandoc -s docs/help.md > html/help.html
 	cp walkthrough.txt html
 	tail +8 thorns.scr |  awk -f scripts/tidy.awk | python3 scripts/transcript_to_html.py > html/final.html
 	# inform -E1 -D -S $<
