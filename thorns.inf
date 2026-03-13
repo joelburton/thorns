@@ -5348,8 +5348,9 @@ Room PassageSouth "The Passage (South)"                          ! >PassageSouth
     after [;
       Go:
         if (selected_direction == e_to)
-          "You push the door open and head east, emerging at the Passage.
-          The door closes behind you.";
+          print
+            "You push the door open and head east, emerging at the Passage.
+            The door closes behind you.^";
     ],
     #EndIf;
     toward_slype n_to,

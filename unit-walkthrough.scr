@@ -3,7 +3,7 @@ Start of a transcript of
 Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com>
-Release 1 / Serial number 260311 / Inform v6.44 PunyInform v6.4.1 DR
+Release 1 / Serial number 260313 / Inform v6.44 PunyInform v6.4.1 DR
 
 
                                                              
@@ -44,7 +44,7 @@ Brother Hugh heads down.
 Dorter (on your cot)
 This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
-A window high up reflects pale moonlight on the floor.
+A window high up reflects pale moonlight on the floor. 
 
 A doorway leads south to the Hall. Narrow stairs descend to the Quire, where offices are held.
 
@@ -228,7 +228,7 @@ You spend several minutes reflecting on your life now: ritual, timing, prayer, s
 Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com>
-Release 1 / Serial number 260311 / Inform v6.44 PunyInform v6.4.1 DR
+Release 1 / Serial number 260313 / Inform v6.44 PunyInform v6.4.1 DR
 
 > * Wander church & learn things
 [Comment recorded]
@@ -887,7 +887,7 @@ The Refectory lies to the south. You can also go west to the southwestern corner
 
 You can see an orange cat here.
 
-The orange cat rubs against the Cloister.
+The orange cat twitches, sensing movement somewhere.
 
 > SOUTH
 
@@ -940,8 +940,6 @@ Arched openings admit cold night air and pale moonlight.
 The Refectory lies to the south. You can also go west to the southwestern corner of the Cloister, east to the southeastern corner, or north to the Garth.
 
 You can see an orange cat here.
-
-The orange cat twitches, sensing movement somewhere.
 
 > EAST
 
@@ -1117,7 +1115,7 @@ To the east is the entrance to the Scriptorium. You can also go north to the nor
 > WEST
 
 Garth
-The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its cool morning light.
+The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its cool morning light. 
 
 In the centre is a sundial and a stone well.
 
@@ -1180,8 +1178,6 @@ The Locutory lies to the west. You can also go north to the northwestern corner 
 
 You can see an orange cat here.
 
-The orange cat wriggles.
-
 > SOUTH
 
 Cloister Southwest
@@ -1201,12 +1197,12 @@ The Locutory lies to the west. You can also go north to the northwestern corner 
 
 You can see an orange cat here.
 
-The orange cat licks a paw contentedly.
+The orange cat twitches, sensing movement somewhere.
 
 > EAST
 
 Garth
-The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its cool morning light.
+The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its cool morning light. 
 
 In the centre is a sundial and a stone well.
 
@@ -1242,7 +1238,7 @@ A plain corridor connecting the two dorters. Wooden floorboards creak underfoot.
 Dorter
 This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
-A window high up reflects cool morning light on the floor.
+A window high up reflects cool morning light on the floor. 
 
 A doorway leads south to the Hall. Narrow stairs descend to the Quire, where offices are held.
 
@@ -1393,7 +1389,7 @@ A plain corridor connecting the two dorters. Wooden floorboards creak underfoot.
 Dorter
 This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
-A window high up reflects cool morning light on the floor.
+A window high up reflects cool morning light on the floor. 
 
 A doorway leads south to the Hall. Narrow stairs descend to the Quire, where offices are held.
 
@@ -1662,7 +1658,7 @@ You push the button and hear a faint click from inside the frame. The panel pops
 [The score has just gone up by 2 points.]
 
 > SOUTH
-You slip through the opening behind the panel, revealing...
+You head south through the opening behind the panel, revealing...
 
 Main Crypt
 The crypt stretches dimly before you, thick stone pillars supporting low vaulted arches. Rows of tombs line the walls; the air is thick and damp. An opening in the north wall reveals a passage.
@@ -1804,7 +1800,7 @@ To the south, you hear "Is someone in the Vestry?"
 > UP
 
 Crypt Stairs
-At the midpoint of these stairs, you can sense the damp below. A thin veil of cool morning light comes from the altar area above, and weak candlelight from the Crypt below.
+At the midpoint of these stairs, you can sense the damp below. A thin veil of cool morning light comes from the altar area above, but the path down descends into darkness.
 
 Faintly, you hear "Helloooo?"
 
@@ -2230,7 +2226,6 @@ You pound on the lid to shut it.
 > EAST
 You push the door open and head east, emerging at the Passage. The door closes behind you.
 
-
 The Passage (South)
 The narrow walkway ends here. This part seems less travelled, with small weeds growing from between the stones underfoot. To the east, the ground slopes down to a wide closed door.
 
@@ -2292,7 +2287,7 @@ The Refectory lies to the south. You can also go west to the southwestern corner
 > NORTH
 
 Garth
-The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its bright afternoon light.
+The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its bright afternoon light. 
 
 In the centre is a sundial and a stone well.
 
@@ -2339,6 +2334,8 @@ The wall of the Nave rises imposingly to the north. A passageway into it leads t
 You can see Pax here.
 
 From a distance, you can hear the singing continue.
+
+Pax twitches, sensing movement somewhere.
 
 > NORTH
 
@@ -2610,6 +2607,8 @@ Arched openings admit slanted autumn sun.
 The Refectory lies to the south. You can also go west to the southwestern corner of the Cloister, east to the southeastern corner, or north to the Garth.
 
 You can see Pax here.
+
+Pax twitches, sensing movement somewhere.
 
 > SOUTH
 
