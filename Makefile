@@ -98,3 +98,9 @@ unit: walkthrough
 clean:
 	rm -f just_hints.z5 thorns.z3 thorns.z5 walkthrough.rec walkthrough.txt thorns.scr
 	cd html && rm -f final.html plans.html plot.html puzzles.html style.html thorns.z5 walkthrough.txt
+
+apple2:
+	scp thorns.z3 lab:FictionTools/myproject.z3
+	ssh lab "cd FictionTools; source .punyrc; APPLE2_Z3_INFOCOM=true puny -b apple2"
+	scp lab:FictionTools/myproject_apple2.dsk /tmp
+	open /tmp/myproject_apple2.dsk
