@@ -32,7 +32,8 @@ the_hints
     ^ROOMS: get a list of all rooms in game.
     ^^Specific to this game:
     ^SETTIME h m: set time (eg: ~SETTIME 14 15~ sets to 2:15 PM).
-    ^TIME: set current time."
+    ^REALTIME: see current time."
+    "^SHOWMONKS: see where all the monks are."
   ;
 #EndIf;
 
@@ -67,7 +68,7 @@ Option Hint_Priory "What is a ~priory~?"
   with in_menu HintExMonk,
 the_hints
   "Like a monastery, but smaller."
-  "And run by a Prior, not an Abbot."
+  "And run by a prior, not an abbot."
   "These are often ~sister priories~ to a nearby monastery."
   ;
 
@@ -78,8 +79,8 @@ Option Hint_Prior "What is a ~prior~?"
 the_hints
   "The administrator of a priory."
   "They're one of the monks, and elected by the other monks."
-  "Brother Oswald is the Prior for Our Lady of Thorns."
-  "In a full monastery, a Prior will report to the Abbot."
+  "Brother Oswald is the prior for Our Lady of Thorns."
+  "In a full monastery, a prior will report to the abbot."
   ;
 
 
@@ -262,6 +263,7 @@ the_hints
   "Have you seen any candles?"
   "You can't take the canonical hour candle in the Night Stairs, though."
   "But surely, there must be some in storage?"
+  "Who manages things like candles?"
   "Have you smelled wax anywhere?"
   "Have you found a room where items are stored?"
   "Go to the Sacristy, south of the Sanctuary, and search carefully."
@@ -334,6 +336,7 @@ the_hints
   "But there's nothing useful in it."
   "This is an area where the public can get to."
   "So an outsider could hide something here."
+  "Do you see anything interesting when examining the leaves?"
   "Look under the chest."
   ;
 
@@ -357,7 +360,7 @@ Option Hint_dorters "What should I do in the dorters?"
 the_hints
   "You've already slept all you will today."
   "But there's plenty to search in these rooms."
-  "Examine the cots and chests."
+  "Examine the chests."
   ;
 
 
@@ -448,7 +451,8 @@ the_hints
   "BONUS: there's one other way to escape, but it requires some prayer."
   "Have you ever tried praying in the St Jude chapel?"
   "Specifically, while you're on the prayer mat."
-  "If so, St Jude will open the gate for you, using up your desperate prayer."
+  "If so, St Jude could open the gate for you, using up your desperate prayer."
+  "Go to the Tower Stairs and PRAY."
   ;
 
 
@@ -546,8 +550,8 @@ Option Hint_Cabinet "How can I open the locked cabinet?"
   with in_menu HintExInfirmary,
 the_hints
   "~Historia nostra, fides nostra~ = ~Our history, our faith~"
-  "Aelred said Benedict was trusting; he had faith in the monks."
   "What might be something about history that the monks would know?"
+  "Brother Aelred figured it out years ago, so it couldn't be a recent thing."
   "The founding date of the monastery."
   "You can discover this in a few ways."
   "Buildings often have a cornerstone showing a building date."
@@ -594,7 +598,7 @@ the_hints
   "It's a pretty room, isn't it? So cosy."
   "And warm, given that fireplace."
   "Plus, Brother Wilfred's latest work, the breviary, is very nice."
-  "There's nothing that useful in the Scriptorium *itself*."
+  "There's nothing that useful in the Scriptorium itself."
   "You really want to get into the Library!"
   ;
 
@@ -618,7 +622,7 @@ the_hints
   "Try burning it."
   "If you don't like this idea, here's another: what's the fluff on his habit?"
   "Orange fur?"
-  "It's from the cat, Pax, who wanders the Cloister"
+  "It's from the cat who wanders the Cloister"
   "Brother Wilfred is very fond of her."
   "And he'll fall asleep if you bring her to him."
   "She might need to be bribed with some food before you can pick her up."
@@ -725,6 +729,7 @@ Option Hint_Barrels "The barrels are too deep to search"
 the_hints
   "With your hands, yes."
   "Is there something around that might help?"
+  "Have you examined the table?"
   "The stick is long."
   "You can DIG IN ___ BARREL WITH STICK or just SEARCH BARREL while holding
       the stick."
@@ -750,7 +755,7 @@ Option Hint_WhatIsSolar "What is a solar?"
   with in_menu HintExPriorSolar,
 the_hints
   "A historic name for his private living quarters."
-  "As the Prior, he gets a bit of privacy."
+  "As the prior, he gets a bit of privacy."
   ;
 
 Option Hint_SolarDoor "How can I get past the lock?"

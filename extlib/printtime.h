@@ -40,4 +40,7 @@
             11: print "eleven";
         }
     #Endif;
+    if (time < 720) print " in the morning";
+    else if (time < 1020) print " in the afternoon";
+    else print " in the evening";
 ];

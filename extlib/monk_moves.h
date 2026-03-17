@@ -25,12 +25,16 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
 !   return (_count == 0);
 ! ];
 
-[ MoveAMonk prop_name m hush _dir ;
+[ MoveAMonk prop_name m hush _dir _res ;
   ! print "---", (the) m, " index=", m.walk_index,
   !     " prop_len=", m.#(prop_name) / 2, "^";
   if (m.walk_index >= m.#(prop_name) / 2) rfalse;
   _dir = m.&(prop_name)-->m.walk_index++;
-  return MovePerson(m, _dir, hush);
+  _res = MovePerson(m, _dir, hush);
+  if (SceneGoHome has active && parent(m) == m.home) {
+    m.went_home();
+  }
+  return _res;
 ];
 
 

@@ -29,12 +29,12 @@ surge: html
 	rm thorns.z5
 
 abbrevs:
-	rm gametext.txt
+	rm -f gametext.txt
 	inform -r '$$TRANSCRIPT_FORMAT=1' '(small.inf)' -v3 thorns.inf
-	 ../zabbrev/zabbrev-osx -x3 -v3 thorns.inf > abbrevs-z3.inf
+	 ../zabbrev/zabbrev-osx -n 95 -x3 -v3 thorns.inf > abbrevs-z3.inf
 	rm gametext.txt
 	inform -r '$$TRANSCRIPT_FORMAT=1' -v5 thorns.inf
-	 ../zabbrev/zabbrev-osx -x3 -v5 thorns.inf > abbrevs-z5.inf
+	 ../zabbrev/zabbrev-osx -n 95 -x3 -v5 thorns.inf > abbrevs-z5.inf
 	rm gametext.txt
 
 test:
@@ -68,6 +68,21 @@ walkthrough:
 	> walkthrough.txt
 	cp walkthrough.txt walkthrough.rec
 
+	cat alts/1[a-z]-*.txt > alts/1-start.txt
+	cat alts/2[a-z]-*.txt > alts/2-initial-investigate.txt
+	cat alts/3[a-z]-*.txt > alts/3-puzzles-east.txt
+	cat alts/4[a-z]-*.txt > alts/4-upper.txt
+	cat alts/5[a-z]-*.txt > alts/5-crypts.txt
+	cat alts/6[a-z]-*.txt > alts/6-belltower-solar.txt
+	cat alts/7[a-z]-*.txt > alts/7-undercroft.txt
+	cat alts/8[a-z]-*.txt > alts/8-endings.txt
+	cd alts && cat 1-* 2-* 3-* 4-* 5-* 6-* 7-* 8-* > 18-combo.txt
+	cat alts/18-combo.txt \
+	| fgrep -v 'GOTO' \
+	> alts/walkthrough.txt
+	cp alts/walkthrough.txt alts/walkthrough.rec
+
+
 .PHONY: playtest
 playtest:
 	rm -f final.txt
@@ -92,15 +107,30 @@ unit: walkthrough
 		fi; \
 	else \
 		echo "\nREPLAY\nwalkthrough\n" | dfrotz -S1000 -m -p thorns.z5; \
-		awk -f scripts/test.awk thorns.scr && diff -u3 --color=always unit-walkthrough.scr thorns.scr && echo -e "\n\n*** MATCHES"; \
+		awk -f scripts/test.awk thorns.scr && diff -N -u3 --color=always unit-walkthrough.scr thorns.scr && echo -e "\n\n*** MATCHES"; \
+	fi
+
+alts: walkthrough
+	rm -f thorns.scr
+	output=$$(inform -E1 -D -S thorns.inf 2>&1); \
+	stat=$$?; \
+	if [ $$stat -ne 0 ] || echo "$$output" | grep -q "Warning"; then \
+		echo "$$output"; \
+		echo ""; \
+		first_issue=$$(echo "$$output" | grep -E "(Error|Warning):" | head -1 | sed -E 's/^([^(]+)\(([0-9]+)\).*/\1:\2/'); \
+		if [ -n "$$first_issue" ]; then \
+			code -g "$$first_issue"; \
+		fi; \
+	else \
+		echo "\nREPLAY\nalts/walkthrough\n" | dfrotz -S1000 -m -p thorns.z5; \
+		awk -f scripts/test.awk thorns.scr && diff -N -u3 --color=always alts/unit-walkthrough.scr thorns.scr && echo -e "\n\n*** MATCHES"; \
 	fi
 
 clean:
 	rm -f just_hints.z5 thorns.z3 thorns.z5 walkthrough.rec walkthrough.txt thorns.scr
 	cd html && rm -f final.html plans.html plot.html puzzles.html style.html thorns.z5 walkthrough.txt
 
-apple2:
-	scp thorns.z3 lab:FictionTools/myproject.z3
-	ssh lab "cd FictionTools; source .punyrc; APPLE2_Z3_INFOCOM=true puny -b apple2"
-	scp lab:FictionTools/myproject_apple2.dsk /tmp
-	open /tmp/myproject_apple2.dsk
+apple2: thorns.z3
+	rm /tmp/thorns_apple2.dsk
+	/Users/joel/if/interlz/interlz3 /Users/joel/if/interlz/info3m.bin thorns.z3 /tmp/thorns_apple2.dsk
+	open /tmp/thorns_apple2.dsk
