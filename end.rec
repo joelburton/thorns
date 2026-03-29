@@ -1,0 +1,20 @@
+_stop
+_stop
+purloin psalter
+x psalter
+purloin sack
+x sack
+purloin note
+x note
+purloin letters
+read letters
+purloin chronicle
+read chronicle
+goto infirmary chapel
+smell aelred
+purloin henbane decoction
+x it
+purloin herbal
+look up henbane
+goto cloister east
+

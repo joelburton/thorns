@@ -1,31 +1,48 @@
 * Justice: go to service, shout
-GOTO GARTH
+GOCHECK GARTH
 NORTH
 NORTH
 SHOUT
 UNDO
+* Reset back for other endings
 UNDO
 UNDO
 * Mercy: confess to Wilfred
-GOTO GARTH
+GOCHECK GARTH
 EAST
 EAST
 WAIT UNTIL 1
 CONFESS TO WILFRED
 MERCY
 UNDO
+* Reset for other endings
+UNDO
 UNDO
 UNDO
 UNDO
 * Inaction: chose not to confess
-GOTO GARTH
+GOCHECK GARTH
 EAST
 EAST
+* Get offer to confess
 WAIT UNTIL 1
+* Hang out in Lavatorium
+WEST
+WEST
+WEST
+SOUTH
+SOUTH
+* Kill time
 WAIT UNTIL 3
 WAIT UNTIL 5
 WAIT UNTIL 7
 WAIT UNTIL 8
+UNDO
+* Reset back for other endings
+UNDO
+UNDO
+UNDO
+UNDO
 UNDO
 UNDO
 UNDO
@@ -34,19 +51,32 @@ UNDO
 UNDO
 UNDO
 * Time out: End of Compline
-GOTO GARTH
+GOCHECK GARTH
+* Hang out in Lavatorium
+WEST
+SOUTH
+SOUTH
+* Kill time
 WAIT UNTIL 1
 WAIT UNTIL 3
 WAIT UNTIL 5
 WAIT UNTIL 7
 WAIT UNTIL 8
 UNDO
+* Reset back for other endings
+UNDO
+UNDO
+UNDO
+UNDO
 UNDO
 UNDO
 UNDO
 * Death: Caught by Hugh
+GOCHECK GARTH
 SOUTH
 SOUTH
+WAIT UNTIL 3
+WAIT UNTIL 3
 WAIT UNTIL 3
 WAIT
 SOUTH
@@ -55,6 +85,12 @@ DOWN
 WAIT UNTIL 3:55
 WAIT
 WAIT
+UNDO
+* Reset for other endings
+UNDO
+UNDO
+UNDO
+UNDO
 UNDO
 UNDO
 UNDO

@@ -1,5 +1,5 @@
 * Search dorter
-GOTO GARTH
+GOCHECK GARTH
 NORTH
 EAST
 UP

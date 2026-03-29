@@ -1,4 +1,424 @@
+
+! ==============================================================================
+
+Menu MenuAbout "About the game";
+
+Option -> About_game "About the game"
+with description
+  "Our Lady of Thorns is ~interactive fiction~ (~IF~), a kind of melding of
+  literature with a game. In this case, you'll be exploring a small monastery in
+  the fourteenth century, and investigating a possible murder.
+
+  ^^Some games like this focus heavily on difficult puzzles to solve; others
+  focus on puzzle-free narrative. This game aims in between those two poles.
+
+  ^^This game uses some non-traditional IF commands; please see the hint
+  section or use the game command HELP to see them.
+
+  ^^If you aren't familiar with monastic terms or locations, you may find the
+  ~Monastic knowledge~ of the HELP section useful."
+  ;
+
+
+Option -> About_author "About the author"
+with description
+  "Our Lady of Thorns was written by Joel Burton.
+
+  ^^I'm a teacher and software developer in San Francisco, California. This is
+  my first attempt at interactive fiction, but I've been playing games like this
+  since the Infocom games of the 1980s. Thank you for your interest in this
+  work!
+
+  ^^While I'm the primary author, many others have helped: please see the
+  section of ~Technical information~ for the languages and libraries used and
+  the section on ~Credits~ for those who have contributed, often in very
+  significant ways.
+
+  ^^If you'd like to reach me, you can do so at intfiction.org, where I am
+  ~joelburton~ or through email to joel@@64joelburton.com."
+;
+
+
+Option -> About_inspiration "Inspirations"
+with description
+  "Like many monastic mystery authors, I was inspired by Umberto Eco's ~The Name
+  of the Rose~. Both the novel and the movie are excellent and rich in the
+  texture of monastic life.
+
+  ^^I also wrote this after enjoying the Cadfael television series (which itself
+  was based on books by Edith Pargeter/Ellis Peters). If you enjoy a lighter
+  mystery series in a similar setting, you may enjoy these.
+
+  ^^While they share the setting of a monastery in a very similar time period,
+  this wasn't consciously influenced the earlier IF work ~Vespers~ by Jason
+  Devlin---only because in the 20 years since I briefly played it, I had
+  unfortunately forgotten about it. Having had several testers point out the
+  similarity in theme, I have since played it through and quite enjoyed it.
+  Given when Our Lady of Thorns is set (right before the Black Plague) and
+  Vespers' setting during the plague, you may consider Vespers an excellent
+  pseudo-sequel, though much darker in tone.
+
+  ^^The piece of IF that I thought of the most in creating this was Gareth
+  Reed's excellent ~Christminster~, a medium-length game rich in setting and
+  with a very specific characterization of the player character. If you're not
+  familiar with it and you enjoyed this, you should check it out."
+  ;
+
+
+Option -> About_dedication "Dedication"
+with description
+  "While there are many humans that provided critical support, I'm dedicating
+  this to Auden, my feline companion for twenty years. He passed away during
+  the testing period of this game, and is much missed.";
+
+
+Option -> About_credits "Credits"
+with description
+  "Like most projects, this was possible only with much help from others.
+  Handles are usernames on intfiction.org.
+
+  ^^PLAYTESTERS:
+  ^- Allyson Gray (@@64Ally)
+  ^- Daniel Stelzer (@@64Draconis)
+  ^- Rovarsson (@@64Rovarsson)
+  ^- Garry Francis (@@64Warrigal)
+  ^- Robert Eggleston (@@64AERobert)
+  ^- Melissa ~Moth~ Higuchi
+  ^- Andy Galilee (@@64AndyG)
+  ^- rh (@@64rh)
+  ^- Hellzon (@@64Hellzon)
+  ^- Andrew (@@64andrewj)
+  ^- Deborah (@@64dsherwood)
+  ^- Javier Garza (@@64Jade)
+  ^- Doug Egan (@@64Doug_Egan)
+  ^- Hannah (@@64Hannah31415)
+  ^- tmack (@@64tmack)
+  ^- Leah Cole
+
+  ^^TECHNICAL ASSISTANCE:
+  ^- Fredrick Ramsberg (@@64fredrik)
+  ^- Daniel Stelzer (@@64Draconis)
+  ^- Andrew (@@64andrewj)
+  ^- Garry Francis (@@64Warrigal)
+  ^- Dannii (@@64Dannii)
+  ^- Giger Kitty (@@64Giger_Kitty)
+  ^- Andrew Plotkin (@@64zarf)
+  ^- Pontus I (@@64pontusi)
+  ^- Tara McGrew (@@64vaporware)"
+  ;
+
+
+Option -> About_tech "Technical information"
+with description
+  "The game is written using:
+
+  ^^- Inform6, primarily authored by Graham Nelson and now managed by David
+  Kinder
+
+  ^^- PunyInform, a replacement library particularly focused on retro
+  computers, primarily authored by Johan Berntsson and Fredrik Ramsberg
+
+  ^^Special thanks to Garry Francis, who supplied some code for better handling
+  of locking/unlocking doors.";
+
+
+Option -> About_ai "Statement on AI use"
+with description
+  "The game text, characters, and puzzle ideas were authored by Joel Burton
+  and without the use of AI.
+
+  ^^Claude Sonnet 4.5 and 4.6 (both from Anthropic) were used to:
+  ^- check for anachronisms and American-isms in text
+  ^- suggest debugging steps for misbehaving code
+  ^- help create non-game scripts, like my testing/build system";
+
+
+Option -> About_bugReports "Reporting a bug"
+with description
+  "If you find a bug in the game or would like to tell me about anything
+  confusing, I'd very much welcome it. I can be reached at
+  joel+thorns@@64joelburton.com.";
+
+
+
+! ==============================================================================
+
+Menu MenuHelp "Help on how to play";
+
+Option -> Help_startHere "Start here"
+with description
+  "Welcome to Our Lady of Thorns!
+
+  ^^Some commands to try out immediately:
+  ^
+  ^- ABOUT: see background information about the game
+  ^- CREDITS: read the credits for the game
+  ^- HINTS: get hints when you're stuck
+
+  ^^You may find it useful to look at the section called ~Monastic knowledge~,
+  which may help you understand some of the vocabulary used in the game.
+
+  ^^If you're not familiar with this kind of game, use the ABOUT command.
+
+  ^^Even if you've played other IF games, please see the sections on
+  the special commands and actions in this game. Some of these are very
+  important.
+
+  ^^Enjoy!";
+
+
+Option -> Help_specialCmds "Special commands"
+with description
+  "These are always available and do not use game time:^
+  ^- HINTS: show context-aware hints
+  ^- MAP: show map of area you're in
+  ^- OBJECTS: list objects you've handled
+  ^- PLACES: list places visited
+  ^- EXITS: show exits from location
+  ^- QUOTES ON|OFF: show boxed quotes (defaults to on)
+  ^- WHO: list all monks in game
+  ^- HERE: list monks in the room
+
+  ^^Time and the passing of is important. You can use:^
+  ^- TIME: get the time from your rough internal clock
+  ^- WAIT UNTIL hh:mm: wait until that time (12 hour clock)
+  ^- WAIT n HOURS|MINUTES: wait that length of time
+
+  ^^There are other commands that will be revealed during game play.";
+
+Option -> Help_actions "Actions to note"
+with description
+  "Some of these are specific to this game; others may be used in other games,
+  but will be especially useful:^
+
+  ^- CLIMB UP thing
+  ^- CONFESS TO person
+  ^- DIG IN thing WITH thing
+  ^- EXTINGUISH source of light
+  ^- HIDE BEHIND thing
+  ^- KNEEL ON thing
+  ^- KNOCK ON thing
+  ^- LISTEN
+  ^- LOOK UNDER thing
+  ^- LOOK UP topic IN book
+  ^- PRAY
+  ^- READ thing
+  ^- RING thing
+  ^- SING
+  ^- SMELL
+  ^- SMELL thing
+  ^- TASTE thing";
+
+
+
+#IfDef DEBUG;
+Option -> Help_debug "Debugging commands"
+with description
+    "There are others, but the most useful for alpha/beta testers:^
+    ^- GOTO location: jump to any area by name.
+    ^- GONEAR obj: jump to area that contains that object.
+    ^- PURLOIN obj: take this object from wherever it is.
+    ^- SCOPE: list all the objects you can see.
+    ^- TREE: show tree of objects in your room.
+    ^- ROOMS: get a list of all rooms in game.
+
+    ^^Specific to this game:^
+    ^- SETTIME h m: set time (eg: ~SETTIME 14 15~ sets to 2:15 PM).
+    ^- REALTIME: see current time.
+    ^- SHOWMONKS: see where all the monks are.
+    ^- SUSPICION: see/change your ~suspicion level~
+    ^- EVIDENCE: get total of ~evidence points~ player has
+    ^- _START name: start a scene or service
+    ^- _STOP: stop current scenes/services
+    "
+  ;
+#EndIf;
+
+
+Menu -> Monastic "Monastic knowledge";
+
+Option -> -> "What is a ~priory~?"
+with description
+  "It's like a monastery, but smaller, and run by a prior, not an abbot.
+  These are often ~sister priories~ to a nearby monastery."
+  ;
+
+
+Option -> -> "What is a ~prior~?"
+with description
+  "The Prior is the the administrator of a priory. They're one of the monks,
+  and elected by the other monks.
+
+  ^^Brother Oswald is the prior for Our Lady of Thorns.
+
+  ^^In a full monastery, a prior will report to the abbot."
+;
+
+
+Option -> -> "What is an ~office~?"
+with description
+  "It's the services monks hold daily, where they chant and pray. There are
+  eight a day.
+
+  ^^You should learn what times these happen; this will help you. Fortunately,
+  there's an in-game way to learn this."
+  ;
+
+
+Option -> -> "What is a ~Quire~?"
+with description
+  "It's an old spelling of ~choir~.
+  It's also the name of the location where you gather and sing during service."
+  ;
+
+
+Option -> -> "What is a ~Slype~?"
+with description
+  "It's the name for the covered outdoor walkway connecting the Cloister
+    to other places.
+  ^^In real life, these often connected to an infirmary, just like in this
+    game."
+    ;
+
+
+Option -> -> "What is a ~Necessarium~?"
+with description
+  "A place for ~necessary~ things---that is, a bathroom."
+  ;
+
+
+Option -> -> "What is a ~lay monk~?"
+with description
+  "This is a monk who hasn't taken full vows. They're a bit like monastic
+  volunteers. They may attend some offices, but not all."
+  ;
+
+Option -> -> "What is a ~choir monk~?"
+with description
+  "This is a monk who has taken full vows. They attend all services, performing
+  by chanting and singing."
+  ;
+
+Option -> -> "What is a ~novice~?"
+with description
+  "Before taking their full vows as a monk and committing to this life,
+  prospective monks typically undergo a novitiate period, where the perform
+  most of the duties of a monk, but on a trial basis. You are playing at a
+  novice in this game."
+  ;
+
+
+Option -> -> "What is a ~Sacristy~?"
+with description
+  "A place in a church where items used during services are kept. This would
+  include things like altar cloths, candles, and incense."
+  ;
+
+
+Option -> -> "What is ~Lauds~, ~Prime~, ~Sext~, etc?"
+with description
+  "These are the names of the daily offices. You can find a full list of them
+  during the game.
+
+  ^^By the way, different monastic practices can have slightly different names
+  of the offices, and different times they're held."
+  ;
+
+
+Option -> -> "What is a ~Scriptorium~?"
+with description
+  "This is the room where copying of books is done. The works created can be
+  simple or very detailed and artistic.
+
+  ^^Brother Wilfred is a master of detailed illustrations, the sale of which
+  is a major source of income for the priory."
+  ;
+
+
+Option -> -> "What is a ~Refectory~?"
+with description
+  "The dining hall, where the monks will take their daily meal together."
+  ;
+
+
+Option -> -> "What is a ~Dorter~?"
+with description
+  "This is a dormitory, where monks sleep. There are two: one for you and the
+  other ~choir monks~, and another for ~lay monks~, like Remigio."
+  ;
+
+
+Option -> -> "What is an ~Undercroft~?"
+with description
+  "This is a cellar, where goods are stored.
+  ^^Brother Hugh is the cellarer, so he manages this space."
+  ;
+
+
+
+
+
+
+
+!===============================================================================
+
+
+Menu HintHint "Hints for during play";
+
+Option Hint_start "Start here" Hints
+with description
+  "- This isn't the kind of game where every object in the room is listed in
+  the room description. Look around and examine objects carefully. You may also
+  find it useful to examine ~ordinary~ objects, like doors and tables.
+
+  ^^- Use other senses. As a novice herbalist, SMELL may be particularly useful.
+
+  ^^- Not every location or object connects to a puzzle. Some locations and
+  objects are present because, thematically, they would be in the priory.
+
+  ^^- Learn the schedule for offices; knowing when services start and stop
+  will let you use your time efficiently.
+
+  ^^- Every location in the priory can be reached in game, though some take
+  some effort to get in to. If you feel stuck and don't know what to do next,
+  try to gain access to the unexplored areas on the map.
+  
+  ^^- Latin phrases appear throughout; some are translated, some are not. While
+  it's not critical, you may find it helpful to translate some of them.
+  Google Translate can be useful for this.";
+
+
 Menu HintGeneral "General";
+
+
+Option Hint_Real "Is Our Lady of Thorns a real priory?"
+  class HintObj
+  with in_menu HintGeneral,
+the_hints
+  "Alas, no."
+  "But I've tried to make it realistic in the architecture and setting."
+  "There are really priories like this."
+  ;
+
+
+Option Hint_Loc "Where is the priory located?"
+  class HintObj
+  with in_menu HintGeneral,
+the_hints
+  "The game doesn't give an exact location."
+  "But references in it strongly suggest the southeastern end of England,
+      near France."
+  ;
+
+Option Hint_Founded "When was the priory founded?"
+  class Hintobj
+  with in_menu HintGeneral,
+the_hints
+  "In the twelfth century."
+  "If you want to learn a more exact date, you'll have to figure it out
+      in the game."
+  ;
+
 
 Option Hint_intro "Who are we, and what's our purpose?"
  class Hintobj
@@ -7,36 +427,8 @@ the_hints
   "You're a novice monk at the priory of Our Lady of Thorns."
   "A dramatic thing happens early in the game that will give you a sense
     of your purpose in the game."
-  "If that hasn't happened yet, wander around the priory until that happens."
+  "If that hasn't happened yet, explore the priory until that happens."
    ;
-
-
-Option Hint_commands "What are uncommon commands used by this game?"
-  class Hintobj
-  with in_menu HintGeneral,
-the_hints
-    "MAP: see a map of the area."
-    ;
-
-#IfDef DEBUG;
-Option Hint_debug "What are secret debugging commands?"
-  class Hintobj
-  with in_menu HintGeneral,
-the_hints
-    "There are others, but the most useful for alpha/beta testers:^
-    ^GOTO location: jump to any area by name.
-    ^GONEAR obj: jump to area that contains that object.
-    ^PURLOIN obj: take this object from wherever it is.
-    ^SCOPE: list all the objects you can see.
-    ^TREE: show tree of objects in your room.
-    ^ROOMS: get a list of all rooms in game.
-    ^^Specific to this game:
-    ^SETTIME h m: set time (eg: ~SETTIME 14 15~ sets to 2:15 PM).
-    ^REALTIME: see current time."
-    "^SHOWMONKS: see where all the monks are."
-  ;
-#EndIf;
-
 
 Option Hint_silence "Why can't I talk to the monks?"
  class Hintobj
@@ -44,13 +436,13 @@ Option Hint_silence "Why can't I talk to the monks?"
 the_hints
   "Many monasteries have strict vows of silence at many times and places."
   "There are many places where you'll never be able to talk to them."
-  "And some monks are strict about the vow of silence.",
+  "And some monks are very strict about the vow of silence.",
   ;
 
 
 Option Hint_dragon "How can I kill the red dragon?"
   class Hintobj
-  with in_menu HintExChurch,
+  with in_menu HintGeneral,
 the_hints
   "He's allergic to cherries."
   "You could try THROW CHERRIES AT DRAGON."
@@ -61,184 +453,14 @@ the_hints
 
 !-------------------------------------------------------------------------------
 
-Menu HintExMonk "Monastic knowledge";
-
-Option Hint_Priory "What is a ~priory~?"
-  class HintObj
-  with in_menu HintExMonk,
-the_hints
-  "Like a monastery, but smaller."
-  "And run by a prior, not an abbot."
-  "These are often ~sister priories~ to a nearby monastery."
-  ;
-
-
-Option Hint_Prior "What is a ~prior~?"
-  class HintObj
-  with in_menu HintExMonk,
-the_hints
-  "The administrator of a priory."
-  "They're one of the monks, and elected by the other monks."
-  "Brother Oswald is the prior for Our Lady of Thorns."
-  "In a full monastery, a prior will report to the abbot."
-  ;
-
-
-
-
-Option Hint_office "What is an ~office~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "It's the services monks hold daily, where they chant and pray."
-  "There are eight a day."
-  "You should learn what times these happen; this will help you."
-  "Fortunately, there's a sign of these somewhere the brothers all gather in."
-  ;
-
-
-Option Hint_quire "What is a ~Quire~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "It's an old spelling of ~choir~."
-  "It's also the name of the location where you gather and sing during service."
-  ;
-
-
-Option Hint_Slype "What is a ~Slype~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "It's the name for the covered outdoor walkway connecting the Cloister
-    to other places."
-  "In real life, these often connected to an infirmary, just like in this
-    game."
-    ;
-
-
-Option Hint_WhatNec "What is a ~Necessarium~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "A place for ~necessary~ things."
-  "That is, a bathroom."
-  ;
-
-
-Option Hint_LayMonk "What is a ~lay monk~?"
-  class HintObj
-  with in_menu HintExMonk,
-the_hints
-  "A monk who hasn't taken full vows."
-  "They're a bit like monastic volunteers."
-  "They may attend some offices, but not all."
-  ;
-
-
-Option Hint_Sacristy "What is a ~Sacristy~?"
-  class Hintobj,
-  with in_menu HintExMonk,
-the_hints
-  "A place in a church where items used during services are kept."
-  "Things like altar cloths, candles, and incense."
-  ;
-
-
-Option Hint_LaudsEtc "What is ~Lauds~, ~Prime~, ~Sext~, etc?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "Names of the daily offices."
-  "You can find a full list by looking at the panel in the Chapter House."
-  "By the way, different monastic practices can have slightly different
-      names of the offices, and different times they're held."
-  ;
-
-
-Option Hint_WhatIsScriptorium "What is a ~Scriptorium~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "A room where copying of books is done."
-  "The works created can be simple or very detailed and artistic."
-  "Brother Wilfred is a master of detailed illustrations, the sale of which
-      is a major source of income for the priory."
-  ;
-
-
-Option Hint_WhatIsRefectory "What is a ~Refectory~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "A monastic dining hall."
-  "The monks eat here together."
-  ;
-
-
-Option Hint_WhatIsDorter "What is a ~Dorter~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "A dormitory, where monks sleep."
-  "There are two: one for you and the other ~choir monks~, and another for
-      ~lay monks~, like Remigio."
-  ;
-
-
-Option Hint_WhatIsUndercroft "What is an ~Undercroft~?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "The cellar, where goods are stored."
-  "Brother Hugh is the Cellarer, and manages this space."
-  ;
-
-
-Option Hint_RemigioOffice "Why doesn't Remigio attend some offices?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "Brother Remigio is a lay monk, not a choir monk. He attends
-  Matins but is working during other offices."
-  ;
-
-Option Hint_Real "Is Our Lady of Thorns a real priory?"
-  class HintObj
-  with in_menu HintExMonk,
-the_hints
-  "Alas, no."
-  "But I've tried to make it realistic in the architecture and setting."
-  "There are really priories like this."
-  ;
-
-
-Option Hint_Loc "Where is the priory located?"
-  class HintObj
-  with in_menu HintExMonk,
-the_hints
-  "The game doesn't give an exact location."
-  "But references in it strongly suggest the southeastern end of England,
-      near France."
-  ;
-
-
-Option Hint_Founded "When was the priory founded?"
-  class Hintobj
-  with in_menu HintExMonk,
-the_hints
-  "In the twelfth century."
-  "If you want to learn a more exact date, you'll have to figure it out
-      in the game."
-  ;
 
 
 ! !-------------------------------------------------------------------------------
 
-Menu HintExChurch "Church Areas";
+Menu HintExChurch "Church Areas" HintHint;
 
 
-Option Hint_chantry "What is the purpose of the FitzAlan Chantry?"
+Option Hint_chantry "What should I do in the FitzAlan Chantry?"
  class Hintobj
  with in_menu HintExChurch,
 the_hints
@@ -249,6 +471,7 @@ the_hints
   "There is a hidden entrance to their private crypt."
   "Have you examined the altar carefully?"
   "The gouges might have come from moving the altar."
+  "Do you know what the family motto means?"
   "Have you tried doing anything with the family arms?"
   "You might need to get closer to them."
   "CLIMB ON ALTAR. PUSH LION. GO DOWN."
@@ -267,7 +490,7 @@ the_hints
   "Have you smelled wax anywhere?"
   "Have you found a room where items are stored?"
   "Go to the Sacristy, south of the Sanctuary, and search carefully."
-  "You can't steal a candle, though, until you've found an area that is dark."
+  "You can't steal the candle, though, until you've found an area that is dark."
   "Then you can light it from another candle."
   "Be careful, though: carrying a candle around in front of other monks will
       get you in trouble."
@@ -318,6 +541,7 @@ the_hints
   "Brother Oswald carries that key."
   "But those keys are a red herring---you'll never get them from him."
   "There must be another way into the crypt."
+  "You can get a clue by studying the map in the Library."
   "There is, in fact, another, private, crypt with a secret entrance."
   "Have you encountered a place funded by a long-lost wealthy family?"
   "Solve the challenge of the FitzAlan Chantry."
@@ -422,6 +646,7 @@ the_hints
   "There's also something important to find."
   "Have you looked carefully in the Crypt Vestry?"
   "Search the shelves."
+  "Where might someone hide something here?"
   "Those coins are very suspicious, and definitely a clue to the mystery."
   ;
 
@@ -435,12 +660,12 @@ the_hints
   "There are three ways to get out."
   "If you got someone else to open the door, you might be able to escape."
   "How could you attract attention in the crypt?"
-  "You could RING BELL."
+  "You could RING BELL or just SHOUT."
   "That will bring a Brother to investigate."
   "But you don't want to get caught down there."
   "So you'll need to find a place to hide."
   "There are two places: one in the crypt, and one in another room."
-  "You could hide in the FitzAlanCrypt, as long as you close the panel."
+  "You could hide in the FitzAlan Crypt, as long as you close the panel."
   "Or you could hide behind one of the tombs."
   "Examine the tomb of Brother Ezra."
   "You could also look him up in the Registrum Fratrum, if you have it."
@@ -468,8 +693,8 @@ Option Hint_HangingHerbs "How can I get the herbs hanging in the herbarium?"
 the_hints
   "They're much too far up."
   "Really---you won't be able to reach them."
-  "But you should figure out what they are;
-    that may give you a hint for elsewhere."
+  "But you should figure out what they are; that may give you a hint for
+        elsewhere."
   "You can do so by climbing on the table."
   ;
 
@@ -483,6 +708,7 @@ the_hints
   "The Herbal will be a useful reference."
   "Two others aren't as easily spotted, but search around."
   "You've already looked on top of the table."
+  "Read that carefully: ~On top of the table~."
   "Look under table: that basket will be useful for carrying things."
   "And particularly: for carrying things without others seeing them."
   "The last thing to search closely is the terracotta pot."
@@ -566,6 +792,18 @@ the_hints
   "Either way, you'll learn: 1152."
   ;
 
+Option Hint_InfirmaryChapel "What should I do in the Infirmary Chapel?"
+  class Hintobj
+  with in_menu HintExInfirmary,
+the_hints
+  "Examine the body, of course."
+  "Just looking at the body in general may not tell everything."
+  "You may remember some descriptions of him when he was dying."
+  "Examine his eyes. Those looked 'strange' during the death scene."
+  "Also, try SMELL AELRED."
+  "Searching body may also be useful."
+;
+
 
 !-------------------------------------------------------------------------------
 
@@ -614,15 +852,14 @@ the_hints
   "If only you could help him fall asleep."
   "There's something in the Restricted Garden that could help."
   "You'll have to look it up in the Herbal to know how to use it."
-  "It's the mandrake root.
-    It is often used to put people under during surgery."
+  "It's the mandrake root. It is often used to put people under during surgery."
   "He won't eat it, though."
   "And you don't have a way to make it into a tea."
   "But it does emit fumes that can be narcotic."
   "Try burning it."
   "If you don't like this idea, here's another: what's the fluff on his habit?"
   "Orange fur?"
-  "It's from the cat who wanders the Cloister"
+  "It's from the cat who wanders the Cloister."
   "Brother Wilfred is very fond of her."
   "And he'll fall asleep if you bring her to him."
   "She might need to be bribed with some food before you can pick her up."
@@ -682,7 +919,7 @@ the_hints
   "You can do hardly anything while Martin is here."
   "Remigio will let you look around once Martin is gone."
   "But there isn't anything you need here."
-  "But you'd really like to get the Undercroft below."
+  "But you'd really like to get to the Undercroft below."
   ;
 
 
@@ -826,4 +1063,48 @@ the_hints
   "Find Wilfred and CONFESS TO WILFRED.",
 has ;
 
-! ! TODO: Pax
+
+Option Hint_Evidence "What are the main pieces of evidence?"
+  class Hintobj
+  with in_menu HintExSolving,
+the_hints
+  "Are you sure you want to see this? This will ruin the game."
+  "The henbane decoction."
+  "The hidden sack of coins."
+  "The treacherous note."
+  "The stolen psalter."
+  "Not as central, but there are other pieces that can help you."
+  "The letters from Rose."
+  "The rosehips left at the St Jude altar."
+  "The Prior's Chronicle, discussing the missing psalter."
+;
+
+
+Option Hint_Solution "What is the full story of the crime?"
+  class Hintobj
+  with in_menu HintExSolving,
+the_hints
+  "Are you sure you want to see this? This will ruin the game."
+  "Brother Hugh has a sister, Rose, with a desperately ill son. She's
+    destitute and couldn't afford care for him. So he stole one of
+    Brother Wilfred's illuminated manuscripts and found an outside buyer
+    for it."
+  "He continues to do this, perhaps for greed and perhaps to help pay for
+    future help for Rose. Brothers Wilfred and Oswald assumed that Wilfred
+    had misplaced these works."
+  "He communicates with the outside buyer through leaving notes under the
+    chest in the Bell Tower, since that's a place where outsiders can get
+    to without anyone being suspicious."
+  "He's been hiding his payments in a sack in the Crypt Vestry, since almost
+    no one ever goes there."
+  "Brother Aelred discovered the crime from noticing how stressed
+    Hugh has been lately and from hearing from Wilfred how Hugh had been
+    'helping' him in the Library. He searched and found the letters from Rose
+    and connected this to the rosehips that Hugh has been leaving on the
+    St Jude altar as a form of prayer for her."
+  "Brother Aelred confronted Hugh. Hugh told Aelred that they could
+    discuss this more completely the next day, and then he broke into the
+    Infirmary medicine cabinet and emptied the henbane decoction into a cup."
+  "When they met the morning of the game, after Matins, Hugh forced him
+    to drink the poison."
+  ;

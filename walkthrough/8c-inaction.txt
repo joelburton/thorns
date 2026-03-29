@@ -1,12 +1,26 @@
 * Inaction: chose not to confess
-GOTO GARTH
+GOCHECK GARTH
 EAST
 EAST
+* Get offer to confess
 WAIT UNTIL 1
+* Hang out in Lavatorium
+WEST
+WEST
+WEST
+SOUTH
+SOUTH
+* Kill time
 WAIT UNTIL 3
 WAIT UNTIL 5
 WAIT UNTIL 7
 WAIT UNTIL 8
+UNDO
+* Reset back for other endings
+UNDO
+UNDO
+UNDO
+UNDO
 UNDO
 UNDO
 UNDO

@@ -1,5 +1,5 @@
 * Go to Prior's Solar
-GOTO NAVE
+GOCHECK NAVE
 WEST
 SOUTH
 OPEN GATE

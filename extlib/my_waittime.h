@@ -33,15 +33,20 @@ Constant EXT_WAITTIME = 1;
 
 
 #Ifndef MAX_WAIT_MOVES;
-Constant MAX_WAIT_MOVES 120;
+Constant MAX_WAIT_MOVES 180;
 #Endif;
 #Ifndef MAX_WAIT_MINUTES;
-Constant MAX_WAIT_MINUTES 120;
+Constant MAX_WAIT_MINUTES 180;
 #Endif;
 
 !Action routines for Wait command...
 
 [ WaitMovesSub p_is_minutes _time_left _time_before _minutes_passed;
+	if (~~f_can_complex_wait) {
+		meta = true;
+		"(You cannot use multi-turn wait commands right now.)";
+	}
+
 	meta = 1;
 	! print "WM ", p_is_minutes, " ", noun, " ", (RealTime) the_time, "^";
 
@@ -81,8 +86,9 @@ Constant MAX_WAIT_MINUTES 120;
 		_time_left = _time_left - _minutes_passed;
 	}
 	if(AfterRoutines() == false && waittime_waiting == 0 && _time_left > 0 &&
-			deadflag == GS_PLAYING)
+			deadflag == GS_PLAYING && ~~f_silent_wait_ending)
 		print "^(waiting stopped)^";
+	f_silent_wait_ending = false;
 	waittime_waiting = 0;
 ];
 

@@ -98,9 +98,11 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
     ! }
 
     if (fakedir) {
-      if (dir has enterable) print " sits in ", (the) dir;
+      if (dir has enterable) print " sits on ", (the) dir;
       else print " goes to ", (the) dir;
-    } else print " heads ", (DirName) dir;
+    } else if (m == BrWilfred && location == Scriptorium)
+      print " takes the silver key from the table and heads out";
+    else print " heads ", (DirName) dir;
     print ".";
 ];
 
@@ -126,6 +128,10 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
       if (parent(m) has enterable ) print " gets up from ", (the) parent(m);
       else print " comes from ", (the) parent(m);
     }
+    else if (m == BrWilfred && location == Scriptorium)
+      print
+        " arrives from the west, places the silver key on the table, and
+        sits";
     else print " arrives from ", (OppDirName) dir;
     print ".";
 ];

@@ -111,7 +111,7 @@ Class Option
     select [;
       self.emblazon(1, 1, 1);
       @set_window 0; font on; style roman; new_line; new_line;
-      if (self provides description) return self.description();
+      if (self provides description) { self.description(); new_line; rtrue; }
       "[Nothing for this option.]^";
     ];
 

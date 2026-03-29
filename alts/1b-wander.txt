@@ -1,10 +1,13 @@
 * Wander church & learn things
+GOCHECK QUIRE
 WEST
 UP
 UP
 DOWN
 EAST
 EAST
+SOUTH
+OPEN DOOR
 EAST
 WEST
 SOUTH

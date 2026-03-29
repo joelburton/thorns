@@ -1,5 +1,5 @@
 * Start solving: examine body
-GOTO CHAPTER HOUSE
+GOCHECK CHAPTER HOUSE
 WEST
 SOUTH
 SOUTH

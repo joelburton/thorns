@@ -1,10 +1,12 @@
 * Mercy: confess to Wilfred
-GOTO GARTH
+GOCHECK GARTH
 EAST
 EAST
 WAIT UNTIL 1
 CONFESS TO WILFRED
 MERCY
+UNDO
+* Reset for other endings
 UNDO
 UNDO
 UNDO

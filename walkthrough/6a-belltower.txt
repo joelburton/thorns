@@ -1,5 +1,5 @@
 * Bell Tower, Get note
-GOTO QUIRE
+GOCHECK QUIRE
 WEST
 UP
 UP

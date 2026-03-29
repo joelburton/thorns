@@ -1,4 +1,5 @@
 * Chapels
+GOCHECK QUIRE
 EAST
 EAST
 X STATUE

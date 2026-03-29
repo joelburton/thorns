@@ -1,10 +1,4 @@
-Start of a transcript of
-
-Our Lady of Thorns
-A medieval monastic mystery/tragedy 
-by Joel Burton <joel@joelburton.com>
-Release 1 / Serial number 260316 / Inform v6.44 PunyInform v6.4.1 DR
-
+Start transcript of Our Lady of Thorns release=1 serial=260328
 
                                                              
                    Behold, how good and how pleasant it is   
@@ -19,12 +13,12 @@ Early autumn, 1346:
 
 The great bell strikes, bolting you out of sleep. One peal---Matins, first of the eight daily offices. Two in the morning, and the wind off the Channel coast has found every gap in the Dorter walls. 
 
-You lie in your cot still in your habit, as the monks of the priory of Our Lady of Thorns must attend office below without delay. Five months a novice here, and you have not yet made peace with the schedule.
+You lie in your cot still in your habit, as the monks of the priory of Our Lady of Thorns must attend office below without delay. Five months a novice here, and still you have not yet made peace with the schedule.
 
 
 Dorter (on your cot)
 
-There are several of your fellow monks here---Brothers Benedict, Hugh, and Anselm---along with your mentor, Brother Aelred.
+There are several of your fellow monks here---Brothers Benedict, Hugh and Anselm---along with your mentor, Brother Aelred.
 
 What will you do, Brother?
 > REPLAY
@@ -42,13 +36,13 @@ Brother Hugh heads down.
 > LOOK
 
 Dorter (on your cot)
-This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
+This great room is used by all the choir monks except the prior, Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
 A window high up reflects pale moonlight on the floor. 
 
 A doorway leads south to the Hall. Narrow stairs descend to the Quire, where offices are held.
 
-You can see three Brothers (Benedict, Anselm and Aelred) here.
+You can see three Brothers (Anselm, Benedict and Aelred) here.
 
 Brother Benedict heads down.
 Brother Martin arrives from the south.
@@ -65,7 +59,7 @@ Brother Wilfred arrives from the south.
 (first getting up from your cot)
 
 Night Stairs
-Midway on the narrow stone stairway connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
+Midway on the narrow stone stairs connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
 
 A lone candle flickers in its niche.
 
@@ -76,7 +70,7 @@ Brother Anselm heads down.
 Brother Martin heads down.
 
 > X CANDLE
-A canonical hour candle is used by Brother Cuthbert to tell the hours for offices. It has burned down past 2 marks, leaving 22 marks remaining below the flame. You estimate the time as two in the morning.
+A "canonical hour candle", it is used by Brother Cuthbert to tell the hours for offices and when to ring the great bell. It has burned down past 2 marks, leaving 22 marks remaining below the flame. From it, you estimate the time as two in the morning.
 
 Brother Remigio arrives from upstairs.
 
@@ -94,19 +88,19 @@ Brothers here:
 - Martin, the kitchener (seated)
 - Oswald, the prior
 
-Brother Oswald sits in the stalls.
+Brother Oswald sits on the stalls.
 Brother Remigio arrives from upstairs.
 
 > SIT
 You sit on a stall next to your mentor, the herbalist Brother Aelred.
 
-Brother Remigio sits in the stalls.
+Brother Remigio sits on the stalls.
 Brother Wilfred arrives from upstairs.
 
 > ASK AELRED ABOUT HIMSELF
 He chuckles gently. "An old herbalist who talks to plants."
 
-Brother Wilfred sits in the stalls.
+Brother Wilfred sits on the stalls.
 
 > ASK AELRED ABOUT ME
 "Son, you must learn to know yourself." He smiles.
@@ -114,8 +108,7 @@ Brother Wilfred sits in the stalls.
 Brother Anselm leads the brethren in song.
 
 > WEST
-(first getting up from the stalls)
-Not during office, surely!
+Surely, you wouldn't leave your stall now.
 
 > SING
 
@@ -130,7 +123,7 @@ Not during office, surely!
 
 You join the others in song. 
 
-(You'll automatically continue singing throughout the office. You may perform other allowed actions. When you'd like to skip to the end of the service, just WAIT.)
+[You'll automatically continue singing throughout the office. You may perform other allowed actions. When you'd like to skip to the end of the service, just WAIT.]
 
 [The score has just gone up by 1 point.]
 
@@ -174,7 +167,7 @@ Brother Benedict, the infirmarer, is a heavyset man in his forties with gentle h
 You continue to sing with the others.
 
 > X CUTHBERT
-Brother Cuthbert, the sacrist, is in his late forties. Dark-haired and sharp-featured, he keeps the sacred vessels spotless, the candles well-stocked, and the canonical hours precise. He rarely smiles.
+Brother Cuthbert, the sacrist, is in his late forties. Dark-haired and sharp-featured, he keeps the sacred vessels spotless, the candles well-stocked, and the bell hours precise. He rarely smiles.
 
 You continue to sing with the others.
 
@@ -204,7 +197,7 @@ Brother Wilfred is the most venerated of the brethren, well over seventy. He's l
 You continue to sing with the others.
 
 > X FLUFF
-Looking more closely, it looks like animal fur.
+Brother Wilfred's habit is a plain black robe, like yours. You're not sure what the orange fluff is.
 
 You continue to sing with the others.
 
@@ -214,27 +207,33 @@ Centuries of incense have worked themselves into the very stone here. The smell 
 You continue to sing with the others.
 
 > WAIT
+Using WAIT during a service skips to the end of the service. 
+
+Is this what you want (y/n)? Y
+
 (skipping about twenty-five minutes to end of service)
 
      ----------------------- && -----------------------
 
 The office ends.
 
-Brother Aelred touches your shoulder. "Son, take your time here. When you're done, come meet me in the gardens."
+Brother Aelred touches your shoulder. "The hour is early, my son, but our herbs call for our care. First, though, I must conclude a conversation with another brother. Seek me out in the gardens when you are ready. The air is pleasant this morning, is it not?" 
 
-You spend several minutes reflecting on your life now: ritual, timing, prayer, silence. It feels both comforting and confining. You're not sure which feeling prevails.
+All of the brethren head out, leaving you alone in the Quire. 
+
+You spend several long minutes reflecting on your life now: ritual, timing, prayer, silence. It feels both comforting and confining. You're not sure which feeling prevails.
 
 
 Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com>
-Release 1 / Serial number 260316 / Inform v6.44 PunyInform v6.4.1 DR
-
-> * Wander church & learn things
-[Comment recorded]
+Release 1 / Serial number 260328 / Inform v6.44 PunyInform v6.4.1 DR
 
 > GET UP
 You stand up from the stalls.
+
+> * Wander church & learn things
+[Comment recorded]
 
 > LOOK
 
@@ -260,8 +259,6 @@ You remember the first time you saw this glass, on the second day of your noviti
 > X DOOR
 A great oaken door. Carved deeply into its face: EGRESSUS FRUCTUM FERT ("Going out bears fruit"). The door is closed.
 
-You remember Brother Aelred's request to meet him in the gardens after the office.
-
 > OPEN DOOR
 You open the great door.
 
@@ -274,6 +271,8 @@ You can go south out to the covered walkway the brothers call "The Passage", or 
 
 The great door is open, revealing the Nave to the east.
 
+You remember Brother Aelred's request to meet him this morning. You know he'll be in the gardens, south of the Cloister.
+
 > CLOSE DOOR
 You close the west door, revealing the carving on this face.
 
@@ -284,8 +283,6 @@ A great oaken door. Carved deeply into its face:
   FUNDATUM ANNO DOMINI MCLII
 
 Almost two hundred years of wind and rain have worn the letters down. The door is closed.
-
-You should go to the gardens. Brother Aelred will be waiting.
 
 [The score has just gone up by 1 point.]
 
@@ -313,6 +310,8 @@ Cloister North
 You emerge on the northern edge of the Cloister walk, the covered stone arcade at the centre of the priory. It's a continuous square path surrounding the Garth, a large open yard. Arched openings admit cold night air and pale moonlight.
 
 The wall of the Nave rises imposingly to the north. A passageway into it leads to the Quire. You can also go west to the northwest corner, east to the northeastern corner, or south into the Garth.
+
+You know you should go to the gardens. You wouldn't want to keep your mentor waiting.
 
 > EAST
 
@@ -349,7 +348,7 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The Refectory lies in to the south. You can also go west to the southwestern corner of the Cloister, east to the southeastern corner, or north to the Garth.
 
-Brother Remigio really wants you to follow him east to the Slype.
+Brother Remigio desperately signals you to follow him east to the Slype.
 
 > EAST
 You follow Brother Remigio east.
@@ -359,17 +358,17 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
 
-Brother Remigio really wants you to follow him east to the Slype.
+Brother Remigio desperately signals you to follow him east to the Slype.
 
 > EAST
 You follow Brother Remigio east.
 
 Slype
-A long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
+The Slype is a long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
 
 Brother Remigio is here, looking terrified.
 
-Brother Aelred is lying on the stone floor.
+Brother Aelred lies on the stone floor.
 
 Brother Aelred is clearly unwell. His movements are frantic and his eyes look unusual.
 
@@ -379,10 +378,10 @@ Brother Aelred is clearly unwell. His movements are frantic and his eyes look un
 > X AELRED
 Your beloved mentor. In normal moments, Brother Aelred's eyes twinkled with kindness. Right now, though, he looks desperately ill. Sweat beads on his flushed face, and his pupils look strange. His limbs grab wildly at his habit, making it seem as though he is trying to remove something that isn't there.
 
-Brother Aelred seems gripped with delirium. "My son..." he whispers, addressing you. "Gathering... he was always gathering... I wanted to know why..."
+Brother Aelred seems gripped with delirium. "Gathering... he was always gathering... I wanted to know why..."
 
 > X PUPILS
-His pupils are unnaturally dilated and black.
+His pupils are unnaturally dilated and black, like you have never seen in a person living or dead.
 
 Brother Aelred's hand jerks, trembling, gesturing north toward the bushes lining the Slype and the Scriptorium behind. His lips move. "The letter... the letter told me everything..."
 
@@ -449,14 +448,14 @@ It shows the offices:
 
 (Since you know these by heart, you can see this list at any time with the command OFFICES).
 
-Brother Oswald continues: "Brother Benedict has placed him in the Infirmary Chapel. You may pay visits to our dear brother there."
+Brother Oswald continues: "We will observe a day of fasting today and break our fast after Matins tomorrow. Brother Benedict has placed our dear brother in the Infirmary Chapel. You may pay your final respects to him there."
 
 [The score has just gone up by 1 point.]
 
 > X STATUE
-A wooden statue, worn and with the paint flaking in places. You know it to be Brother Gordian, the founder of the priory. His face is filled with reverence and curiosity, and he is depicted holding a scroll reading "III: SAPIENTIA", reflecting one of his three creeds, wisdom.
+It's a wooden statue, worn and with the paint flaking in places. You know it to be Brother Gordian, the founder of the priory. His face is filled with reverence and curiosity, and he is depicted holding a scroll reading "III: SAPIENTIA", reflecting one of his three creeds, wisdom.
 
-Brother Oswald continues: "Our novice"---he gestures toward you---"is doing adequately in his role, and will spend today cataloguing the gardens. He and I will meet after the burial to decide how to proceed without our herbalist."
+Brother Oswald continues: "Our novice"---he gestures toward you---"is doing adequately in his role, and will spend today cataloguing the gardens. He and I will meet after the burial tomorrow to decide how to proceed without our herbalist."
 
 > LOOK UNDER TABLE
 You dare not disturb the meeting with such an action.
@@ -486,16 +485,16 @@ Brothers here:
 
 Brother Wilfred yawns sleepily.
 
-Brothers Oswald, Hugh, Benedict, Cuthbert, and Remigio leave.
+Brothers Oswald, Hugh, Benedict, Cuthbert and Remigio leave.
 
 > ASK WILFRED ABOUT AELRED
-"What a loss for our community. He would bring me rosemary after he learned that that was my mother's name."
+"What a loss for our community. I knew him his entire adult life, and such a a pleasant acquaintance it was. He was always thoughtful---he began to bring me rosemary sprigs after he learned that that was my mother's name."
 
-Brothers Wilfred, Martin, and Anselm depart, leaving you alone.
+Brothers Wilfred, Martin and Anselm depart, leaving you alone.
 
 You feel a deep sense of obligation to Brother Aelred. Something about this death doesn't feel right or natural. You vow to discover what happened and why. You'll need to finish your investigation by the end of Compline tonight, since Brother Aelred will be buried tomorrow morning. 
 
-You're not sure where to begin, but examining his body in the Infirmary Chapel or searching his Herbarium might be good starts. 
+You're not sure where to begin, but examining his body in the Infirmary Chapel or searching his Herbarium might be good places to start. 
 
 Of course, such an investigation would be unsanctioned by the prior. You'll have to cover your tracks carefully.
 
@@ -524,7 +523,7 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
 
-(There is no clock, but between bells ringing for offices and your own internal sense, you decide that it is very approximately four in the morning. You can check this sense at any time with the command TIME).
+[There is no clock, but between bells ringing for offices and your own internal sense, you decide that it is very approximately four in the morning. You can check this sense at any time with the command TIME.]
 
 > TIME
 From your vague sense of time, it is four in the morning.
@@ -532,7 +531,7 @@ From your vague sense of time, it is four in the morning.
 > EAST
 
 Slype
-A long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
+The Slype is a long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
 
 > EAST
 
@@ -543,7 +542,7 @@ The Infirmary Chapel is to the south, and the Slype is out to the west.
 
 Brother Benedict is here, tidying the workbench and looking reflective.
 
-The medicine cabinet sits against a wall, closed.
+A curious cabinet, perhaps for medicines, sits against a wall.
 
 A polished metal mirror hangs on the wall.
 
@@ -559,7 +558,11 @@ A young face, barely requiring shaving, stares back at you. Your black Benedicti
 > SOUTH
 
 Infirmary Chapel
-A tiny chapel attached to the Infirmary, barely large enough for a priest and one or two others. A simple stone altar stands against a wall. This chapel is where the dying receive Last Rites, where the desperately ill make their final prayers. The air is heavy with the memory of fear and hope. The only exit is out to the north.
+This is a tiny chapel attached to the Infirmary, barely large enough for a priest and one or two others. A simple stone altar stands against a wall, and a statue stands in a corner, worn smooth by many hands.
+
+This chapel is where the dying receive extreme unction, where the desperately ill make their final prayers. The air is heavy with the memory of fear and hope.
+
+The only exit, for the living, is out to the north.
 
 You can see an altar (with Brother Aelred's body on it) here.
 
@@ -576,16 +579,16 @@ A simple stone altar, worn by generations of prayer. On it is Brother Aelred's b
                                  --- The Book of Psalms   
                                                           
 
-Your beloved mentor lies still on the altar, still dressed. His face is peaceful now, though you remember his agony earlier. His eyes are open---staring upward as if fixed on Heaven---and his hands are folded across his chest. Something seems odd about him, though you can't quite place it.
+Your beloved mentor lies still on the altar, still dressed. His face is peaceful now, though you remember his agony earlier. His eyes are wide open---staring upward as if fixed on Heaven---and his hands are folded across his chest. Something seems odd about him, though you can't quite place it.
 
 > SMELL BODY
 There's an odd smell about his remains, something like alcohol and urine in his mouth. Unusual.
 
 > X EYES
-His pupils are unnaturally dilated and black.
+His pupils are unnaturally dilated and black, like you have never seen in a person living or dead.
 
 > X STATUE
-It depicts St Roch, patron saint of plague victims and the sick. He's depicted pointing to a plague sore on his leg.
+It depicts St Roch, patron saint of the plague-stricken and the sick. He's depicted as a pilgrim, with a hand pointing to a sore on his leg.
 
 > X SORE
 The artist was clearly aiming for realism with these. You recall Brother Aelred telling you vivid stories of illness he saw on his travels.
@@ -602,7 +605,7 @@ In an inner pocket of his robe, you find an iron key. You take it.
 [The score has just gone up by 2 points.]
 
 > X IT
-A heavy iron key, its surface pitted with rust from years hanging in the damp Herbarium. You know this key from seeing Aelred use it: it opens the gate to the Restricted Garden where the dangerous herbs are grown.
+Heavy and iron, its surface pitted with rust from years hanging in the damp Herbarium. You know this key from seeing Aelred use it: it opens the gate to the Restricted Garden where the dangerous herbs are grown.
 
 > * Next step: go to herbarium
 [Comment recorded]
@@ -616,14 +619,14 @@ The Infirmary Chapel is to the south, and the Slype is out to the west.
 
 Brother Benedict is here, tidying the workbench and looking reflective.
 
-The medicine cabinet sits against a wall, closed.
+A curious cabinet, perhaps for medicines, sits against a wall.
 
 A polished metal mirror hangs on the wall.
 
 > WEST
 
 Slype
-A long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
+The Slype is a long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
 
 > SOUTH
 
@@ -633,7 +636,7 @@ This room still carries Brother Aelred's presence in every corner. Bundles of dr
 The Slype lies north, and the Garden---his garden---waits to the south.
 
 > X TABLE
-A large, heavy table where you and Brother Aelred did your daily work. On top of it are some jars, some gloves and Aelred's Herbal.
+The table is the one where you and Brother Aelred did your daily work. On top of it are some jars, some gloves and Aelred's Herbal.
 
 > LOOK UNDER TABLE
 Looking below the table, you find Brother Aelred's basket, which he used for gathering and carrying herbs.
@@ -645,7 +648,6 @@ Taken.
 There are almost two dozen of them, each carefully labelled. You know these well---managing these has been your daily labour for the past few months. You don't see anything missing or unusual about them.
 
 > GET ALL
-iron key: You already have it.
 gloves: Taken.
 Aelred's Herbal: (putting the iron key into the basket to make room)
 Taken.
@@ -686,14 +688,14 @@ Neat rows of raised beds, carefully tended and weeded. Woody rosemary grows tall
 
 > GET ROSEMARY
 (putting the gloves into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire rosemary plant, you take a sprig of it.
 
 > SMELL IT
 It smells of pine sap and wood.
 
 > GET THYME
 (putting Aelred's Herbal into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire thyme plant, you take a sprig of it.
 
 Spending time here reminds you of a conversation from spring, when Brother Aelred was tending a corner of the garden. "This one's a challenge, my son," he said, gesturing at a new, small plant. "It wants warmth and sun we can barely give it here. But there's a brother of ours---he came from sunnier lands, seeking refuge. He never complains, but I see the homesickness in his eyes." Aelred touched the leaves gently. "If I can coax this to grow, it will remind him of home. A small kindness, perhaps, but sometimes those matter most." You will miss Aelred so much.
 
@@ -702,14 +704,14 @@ Strongly earthy with a note of mint.
 
 > GET FEVERFEW
 (putting the rosemary sprig into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire feverfew plant, you take a sprig of it.
 
 > SMELL IT
 Strong and bitter, almost medicinal. Like chamomile but sharper.
 
 > GET BASIL
 (putting the thyme sprig into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire basil plant, you take a sprig of it.
 
 > SMELL IT
 It's strong and peppery, with notes of anise.
@@ -733,28 +735,30 @@ Aelred brought you here only twice, making you repeat each plant's name, its use
 
 The only exit is out through the gate to the east, which is open.
 
+A small gnarled mandrake root pushes from the earth, pale and forked like a tiny human figure.
+
 > WEAR GLOVES
 (first taking the gloves)
 You pause for a second. His gloves, and now they'll pass to you. You hope you can honour his work in the garden.
 
-You are now wearing the gloves.
+You put on Aelred's gloves.
 
 > GET MONKSHOOD
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire monkshood plant, you take a sprig of it.
 
 > SMELL IT
 You cautiously sniff: barely any scent at all. The plant saves its power for those who consume it.
 
 > GET FOXGLOVE
 (putting the basil sprig into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+Rather than taking the entire foxglove plant, you take a sprig of it.
 
 > SMELL IT
 Barely any scent at all, just a faint greenness, like cut stems.
 
-> GET HENBANE
+> PICK HENBANE
 (putting the monkshood sprig into the basket to make room)
-Rather than taking the entire plant, you take a sprig of it.
+You break a sprig off of it.
 
 > SMELL IT
 Reminiscent of stale urine. Very unpleasant.
@@ -764,11 +768,11 @@ You wouldn't dare. You've been taught that it's very toxic.
 
 > GET MANDRAKE
 (putting the foxglove sprig into the basket to make room)
-Taken.
+You wrap your fingers around it carefully and pull it free. The root forks into two distinct limbs below the crown---the shape the ancients called anthropomorphon, the man-formed. They said it screamed when pulled from the earth. The silence feels like a small mercy.
 
 > LOOK UP MANDRAKE IN HERBAL
 (first taking Aelred's Herbal)
-Mandrake: called the sleeping root. In small doses brings drowsiness and eases pain. A large root consumed or its smoke deeply breathed brings profound sleep, useful before surgery or for serious insomnia. Not dangerous to handle, but it should not be eaten.
+Mandrake: called also Mandragora, and by some the sleeping root or gallows root. In small doses brings drowsiness and eases pain. The smoke of the dried root, carefully breathed, brings a deep and restful sleep---useful before surgery or for the gravely restless. The root itself should not be eaten in quantity, but it is not dangerous to handle.
 
 [The score has just gone up by 1 point.]
 
@@ -789,7 +793,7 @@ The Slype lies north, and the Garden---his garden---waits to the south.
 > NORTH
 
 Slype
-A long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
+The Slype is a long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
 
 > * Open medicine cabinet
 [Comment recorded]
@@ -799,7 +803,8 @@ Time passes.
 
 "RING! RING!" You hear the bell ring two times to call the Brothers to the Lauds office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT
 You wait a minute.
 
@@ -812,16 +817,19 @@ Several narrow beds line the western wall. A workbench holds mortars and bowls f
 
 The Infirmary Chapel is to the south, and the Slype is out to the west.
 
-The medicine cabinet sits against a wall, closed.
+A curious cabinet, perhaps for medicines, sits against a wall.
 
 A polished metal mirror hangs on the wall.
 
 > TURN WHEELS TO 1152
 You turn the wheels to 1152.
 
-You hear a satisfying click as the lock disengages and the cabinet opens.
+You hear a satisfying click as the lock disengages.
 
 [The score has just gone up by 3 points.]
+
+> OPEN CABINET
+You open the medicine cabinet, revealing three decoctions (foxglove, henbane and feverfew).
 
 > GET ALL DECOCTIONS
 foxglove decoction: (putting the mandrake root into the basket to make room)
@@ -854,12 +862,12 @@ This was murder.
 
 > LOOK UP HENBANE IN HERBAL
 (first taking Aelred's Herbal)
-Henbane: can treat toothache and rheumatism. While useful, it can be deadly: symptoms preceding death include extremely dilated eyes and strange visions.
+Henbane: of great virtue against toothache and the pains of rheumatism when taken in very small amounts as a decoction. Yet henbane is treacherous in larger quantity. The dying man's eyes grow wide and strange, the pupils swallowed up by darkness, as though he looks upon things unseen. Visions come upon him---some report them as blessed, others as torments. Let the infirmarer dispense this herb with great caution, for the difference between remedy and poison is a matter of mere drops.
 
 > WEST
 
 Slype
-A long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
+The Slype is a long east-west corridor lined with decorative bushes. West is the Cloister, east is the Infirmary. A small passage heads south to the Herbarium and the gardens.
 
 > WEST
 
@@ -868,7 +876,7 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
 
-Tip: Now that you've searched both gardens and examined the body in the Infirmary Chapel, your next step could be to search all the Priory locations looking for evidence.
+Hint: Now that you've searched both gardens and examined the body in the Infirmary Chapel, your next step could be to search all the Priory locations looking for evidence.
 
 > * Kitchen, talk to Remigio
 [Comment recorded]
@@ -887,9 +895,9 @@ The orange cat twitches, sensing movement somewhere.
 > SOUTH
 
 Refectory
-The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along a wall admit pale moonlight that barely reaches the stone floor. The smell of pottage lingers faintly in the air. 
+The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along the wall admit pale moonlight that barely reaches the floor. The smell of pottage lingers faintly in the air. 
 
-A doorway to the south leads to the Kitchen, and a wide opening to the north return out to the Cloister.
+A doorway to the south leads to the Kitchen, and a wide opening to the north returns out to the Cloister.
 
 > X TABLES
 The tables are bare and well-washed.
@@ -897,9 +905,9 @@ The tables are bare and well-washed.
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
+The priory kitchen is a large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
-A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
+A large table dominates the centre, scattered with implements and vessels. A hearth is built into a wall, its fire warming the room.
 
 Brother Remigio is here, tidying the table.
 
@@ -927,9 +935,9 @@ Brother Remigio stops you, apologetically. "No, not allowed", he says, "Frate Hu
 > NORTH
 
 Refectory
-The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along a wall admit pale moonlight that barely reaches the stone floor. The smell of pottage lingers faintly in the air. 
+The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along the wall admit pale moonlight that barely reaches the floor. The smell of pottage lingers faintly in the air. 
 
-A doorway to the south leads to the Kitchen, and a wide opening to the north return out to the Cloister.
+A doorway to the south leads to the Kitchen, and a wide opening to the north returns out to the Cloister.
 
 > NORTH
 
@@ -947,6 +955,8 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
 
+Hint: Now that you've searched both gardens and examined the body in the Infirmary Chapel, your next step could be to search all the Priory locations looking for evidence.
+
 > * Go to Scriptorium
 [Comment recorded]
 
@@ -960,13 +970,11 @@ To the east is the entrance to the Scriptorium. You can also go north to the nor
 > EAST
 
 Scriptorium
-This chamber is where brothers work to create illuminated manuscripts and to copy books. To the west is out to the Cloister; to the east heads in to the Library. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the pale moonlight the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
-A fireplace has a small fire going, warming the room and helping keep the manuscripts dry from the sea air. 
+The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
-A large table is at the centre where the work is done, on which are several items.
-
-The library door is closed.
+The Cloister is out to west; the Library is east, through the closed door.
 
 > X TABLE
 Large enough for four monks to work here, the table is laden with implements for producing illuminated manuscripts. A breviary, presumably a current work, is open on the table.
@@ -980,7 +988,9 @@ The breviary lies open to Psalm 23. The Latin reads: "Dominus regit me, et nihil
 > WAIT UNTIL 6:00
 Time passes.
 
-Brother Wilfred rubs his temples wearily.
+Brother Wilfred arrives from the west, places the silver key on the table, and sits.
+
+(waiting stopped because of movement here)
 
 > X SILVER KEY
 A silver key, tarnished with age. Brother Wilfred guards it jealously: it's his responsibility as librarian to control access to the priory's precious books.
@@ -991,18 +1001,16 @@ A silver key, tarnished with age. Brother Wilfred guards it jealously: it's his 
 > X WILFRED
 Brother Wilfred is the most venerated of the brethren, well over seventy. He's lean and wiry, with wisps of white hair shooting in all directions from his head. His habit has bits of orange fluff or fur on it.
 
-Brother Wilfred stifles a yawn.
-
 > ASK WILFRED ABOUT BREVIARY
-"Do you like it? It's my latest work."
+"Ah, my breviary. I have done finer work." A pause that does not invite contradiction. "But the patterns are sound. Whatever else, the patterns are sound."
+
+Brother Wilfred rubs his temples wearily.
 
 > ASK WILFRED ABOUT HUGH
 "A fine cellarer. In the past few months, he's been helping me in the Library."
 
 > ASK WILFRED ABOUT LIBRARY
 "I'm afraid I can't let you in. The Library is off-limits to everyone but me. Strict orders from the prior."
-
-Brother Wilfred rubs his eyes.
 
 > THROW MANDRAKE ON FIRE
 (first taking the mandrake root)
@@ -1028,7 +1036,7 @@ Being as quiet as you can, you take the key from the table.
 
 Brother Wilfred seems deeply asleep.
 
-Carrying items not related to your work here (such as the silver key) is against priory rules. Find a way to hide these or carry them unnoticed.
+[Carrying items not related to your work here (such as the silver key) is against priory rules. Find a way to hide these or carry them unnoticed.]
 
 > UNLOCK DOOR
 (with the silver key)
@@ -1044,8 +1052,6 @@ The mandrake root has burned, and the air starts to clear. Wilfred is still deep
 Library
 This is a small private room. There is a bookshelf on one wall and a large map of the priory on the other. The only exit is out to the west.
 
-The library door is open.
-
 [The score has just gone up by 3 points.]
 
 > X BOOKSHELF
@@ -1056,9 +1062,9 @@ The bookshelf has about fifty items, most of which are manuscripts, used for the
 You carefully remove the Registrum Fratrum from the shelf. Brother Wilfred would be furious if he knew.
 
 > PUT FRATRUM IN BASKET
-You put Registrum Fratrum into the basket.
+You put the Registrum Fratrum into the basket.
 
-You found a way to carry illicit things around without others noticing. 
+You found a way to carry illicit things unnoticed. 
 
 [The score has just gone up by 1 point.]
 
@@ -1076,13 +1082,11 @@ Now that you think of it, while you've been in the crypt once for a service, you
 > WEST
 
 Scriptorium
-This chamber is where brothers work to create illuminated manuscripts and to copy books. To the west is out to the Cloister; to the east heads in to the Library. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the cool morning light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
-A fireplace has a small fire going, warming the room and helping keep the manuscripts dry from the sea air. 
+The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
-A large table is at the centre where the work is done, on which are several items.
-
-The library door is open.
+The Cloister is out to west; the Library is east, through the open door.
 
 Brother Wilfred sits at the table, close to the fireplace, snoring heavily.
 
@@ -1121,15 +1125,15 @@ In the centre is a sundial and a stone well.
 > X WELL
 An old stone well, its edges worn down by centuries of drawing water.
 
-You can recall a story Aelred told about this: "The summer of... thirty-one, I think it was. Perhaps thirty-two. The well ran so low you could hear the bucket scrape the bottom, and Brother Oswald, then our cellarer, was rationing water like a miser counts farthings. We processed around the garth singing the Litany, 'Ora pro nobis.'" 
+You can recall a story Aelred told about this: "The summer of... thirty-one, I think it was. Perhaps thirty-two. The well ran so low you could hear the bucket scrape the bottom, and Brother Oswald, then our cellarer, was rationing water like a miser counts farthings. We processed around the garth singing the litany, 'Ora pro nobis'." 
 
 "Nothing happened, of course. Not that day. We went to bed parched and unconvinced. But in the morning the level had risen a foot. Prior Wilfred wept for joy. Brother Oswald said it was condensation."
 
 > X SUNDIAL
-The sundial casts a shadow showing the time as half past six in the morning.
+The sundial casts a shadow showing the time as quarter past six in the morning.
 
 > LOOK UP AELRED IN FRATRUM
-(first taking Registrum Fratrum)
+(first taking the Registrum Fratrum)
 Aelred (1284-). Entered the priory 1295 as a youth. Serves as herbalist. Fluent in several languages beyond English and Latin.
 
 Written below this, in fresh ink in Wilfred's scratchy hand, it reads: "Requiescat in pace, care frater".
@@ -1163,7 +1167,7 @@ Wilfred (1273-). Entered 1290 from a scholarly family in Norwich. Elected prior 
 You note that this entry was written by Brother Wilfred himself, but in his way, he tried to maintain a scholarly and truthful tone.
 
 > LOOK UP ME IN FRATRUM
-Aldwin (1326-). Joined us in 1346, coming from a family serving the Lord of Thornbury. Educated by that Lord. Mother died young. Interested in gardening, so he is being mentored by Brother Aelred.
+Aldwin (1326-). Joined us in 1346, coming from a family serving Lord Thornbury. Educated by that Lord. Mother died young. Interested in gardening, so he is being mentored by Brother Aelred.
 
 > LOOK UP GORDIAN IN FRATRUM
 Gordian (1112-1192). Founder of the priory in 1152, formerly Master Builder to the Earl of Pembroke. A man of great skill and piety, he lived by three great creeds that he impressed upon the brethren drawn to the new priory. 
@@ -1172,11 +1176,12 @@ Gordian designed the church and Cloister himself, from the great bell in the tow
 
 It is said he built the priory as penance for worldly pride, each clever mechanism a reminder that God's mysteries surpass man's cleverness. He served as prior from its founding until his death.
 
-> LOOK UP CAT IN FRATRUM
+> LOOK UP CAT
+(consulting the Registrum Fratrum)
 In the margin, you find a note: "Pax: First spotted in 1342 by Remigio. She's an excellent ratter and conversationalist, though her Latin is poor."
 
 > PUT FRATRUM IN BASKET
-You put Registrum Fratrum into the basket.
+You put the Registrum Fratrum into the basket.
 
 > WEST
 
@@ -1235,17 +1240,19 @@ The Chapter House is in to the east, and the Day Stairs to the upper floor head 
 > UP
 
 Day Stairs
-You're in the middle of a set of broad stone steps. The steps dip in the centre from generations of sandaled feet. Above is the upper living areas and below is the Cloister walk.
+You're in the middle of a set of broad stone steps. The steps dip in the centre from generations of sandaled feet. This staircase is used by you and the brethren to travel between the Cloister and the dorters above when there's enough light and warmth to use outdoor stairs. 
+
+Above is the upper living areas and below is the Cloister walk.
 
 > UP
 
 Hall
-A plain corridor connecting the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
+This plain corridor connects the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
 
 > NORTH
 
 Dorter
-This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
+This great room is used by all the choir monks except the prior, Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
 A window high up reflects cool morning light on the floor. 
 
@@ -1284,8 +1291,6 @@ You close Brother Benedict's chest.
 > OPEN CUTHBERTS CHEST
 You open Brother Cuthbert's chest, revealing a comb.
 
-"RING! RING! RING!" You hear the bell ring three times to call the Brothers to the Prime office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
-
 > X COMB
 A plain wooden comb.
 
@@ -1295,6 +1300,8 @@ You close Brother Cuthbert's chest.
 > OPEN MARTINS CHEST
 You open Brother Martin's chest, revealing nothing.
 
+"RING! RING! RING!" You hear the bell ring three times to call the Brothers to the Prime office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+
 > CLOSE IT
 You close Brother Martin's chest.
 
@@ -1302,7 +1309,7 @@ You close Brother Martin's chest.
 You open Brother Wilfred's chest, revealing a sketch.
 
 > X SKETCH
-A simple ink sketch of the priory.
+A fine ink sketch of the priory entrance, showing the artistry of the masonry and the door carving. You recognize Brother Wilfred's distinctive style.
 
 > CLOSE WILFREDS CHEST
 You close Brother Wilfred's chest.
@@ -1311,7 +1318,7 @@ You close Brother Wilfred's chest.
 You open Brother Hugh's chest, revealing some letters.
 
 > X LETTERS
-A set of letters on rough paper.
+A pair of letters on rough, cheap paper.
 
 > READ THEM
 (first taking the letters)
@@ -1360,21 +1367,21 @@ You close Brother Hugh's chest.
 > SOUTH
 
 Hall
-A plain corridor connecting the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
+This plain corridor connects the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
 
 > EAST
 
 Necessarium
-A narrow stone chamber extending from the Hall. A wooden bench with several latrine holes runs along the east wall, each opening onto the dung pit far below. The smell is overpowering. Cold, foul air rises from the pit below. The only exit is out to the west.
+This narrow chamber extends from the Hall. A wooden bench with several latrine holes runs along one wall, each opening onto the dung pit far below. The smell is overpowering. Cold, foul air rises from the pit below. The only exit is out to the west.
 
 > WEST
 
 Hall
-A plain corridor connecting the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
+This plain corridor connects the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
 
 > SOUTH
 
-Lay Brothers' Cells
+Lay Dorter
 This chamber was built to house the lay brothers, those who serve without taking full vows. The walls are marked with darker patches where other cots once stood, and you can see the worn floorboards where chests were dragged back and forth over the years. Now the room holds only Brother Remigio's single cot and chest, pushed against a far wall. The priory's decline is nowhere more visible than in this emptiness, this quiet room that once held the sounds of simple men at their evening prayers.
 
 The only exit is north to the Hall.
@@ -1391,12 +1398,12 @@ You close Brother Remigio's chest.
 > NORTH
 
 Hall
-A plain corridor connecting the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
+This plain corridor connects the two dorters. Wooden floorboards creak underfoot. There are passages to the north, south, and east. Broad stairs lead down to the Cloister.
 
 > NORTH
 
 Dorter
-This great room is used by all the choir monks except Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
+This great room is used by all the choir monks except the prior, Brother Oswald. It could easily provide rest for twenty brothers, but there are only eight cots in here now. Each cot has a chest at its foot for any meagre possessions the brother has. 
 
 A window high up reflects cool morning light on the floor. 
 
@@ -1405,16 +1412,16 @@ A doorway leads south to the Hall. Narrow stairs descend to the Quire, where off
 > DOWN
 
 Night Stairs
-Midway on the narrow stone stairway connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
+Midway on the narrow stone stairs connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
 
 A lone candle flickers in its niche.
 
-From a distance, you can hear the singing continue.
+From a distance, you can hear your brothers singing.
 
 > X CANDLE
-A canonical hour candle is used by Brother Cuthbert to tell the hours for offices. It has burned down past 7 marks, leaving 17 marks remaining below the flame. You estimate the time as quarter past seven in the morning.
+A "canonical hour candle", it is used by Brother Cuthbert to tell the hours for offices and when to ring the great bell. It has burned down past 7 marks, leaving 17 marks remaining below the flame. From it, you estimate the time as quarter past seven in the morning.
 
-From a distance, you can hear the singing continue.
+From a distance, you can hear your brothers singing.
 
 > WAIT UNTIL 7:55
 Time passes.
@@ -1432,7 +1439,7 @@ The Quire is the heart of monastic worship and the centre of the church. Two sta
 > EAST
 
 Sanctuary
-A domed ceiling rises above this, where Prior Oswald leads public Mass. A chapel is to the east. The Sacristy lies south. A closed gate bars the narrow stairs descending to the Crypt.
+A domed ceiling rises above this, the area where Prior Oswald leads public Mass. The Quire is to the west and a chapel is to the east. The Sacristy is through a doorway to the south. A closed gate bars the path descending to the Crypt.
 
 You can see the high altar here.
 
@@ -1444,7 +1451,7 @@ The largest of the three chapels, dedicated to the Blessed Virgin. This chapel s
 A statue of Mary stands in a niche and a stone altar is next to her.
 
 > X STATUE
-A stone statue of the Blessed Virgin Mary. Her hands are open in a gesture of welcome and mercy. Her carved face is serene.
+A stone statue of the Blessed Virgin Mary. Her hands are open in a gesture of welcome and mercy. Her carved face is serene. 
 
 Carved on the base:
 
@@ -1473,7 +1480,7 @@ Small seed pods. You don't know them by sight, though.
 Someone carefully gathered these as an offering. They're fresh and fragrant, picked within the last day or two.
 
 > SMELL THEM
-A faint, floral scent.
+A faint, floral scent, but clearly of a rosehip.
 
                                                        
                          I am the rose of Sharon,      
@@ -1482,7 +1489,7 @@ A faint, floral scent.
                                  --- Song of Solomon   
                                                        
 
-This action brings back a memory from summer: Aelred in the Garden, showing you a red rose in full bloom. "Beautiful now, Brother, but its true gift comes later. These petals fall, and by autumn the hip swells with seed, tart and rich. We gather them after the first frost for winter cordials." He'd smiled. "The rose serves us twice: beauty in summer, medicine in autumn." He pauses, then continues: "For some, though, they portend painful loss."
+This action brings back a memory from summer: Aelred in the Garden, showing you a rose in full bloom. "Beautiful now, Brother, but its true gift comes later. These petals fall, and by autumn the hip swells with seed, tart and rich. We gather them after the first frost for winter cordials." He'd smiled. "The rose serves us twice: beauty in summer, medicine in autumn." He pauses, then continues: "For some, though, they portend painful loss."
 
 St Jude is the patron of lost causes. Brother Hugh has a sister in desperate need, and someone has been leaving offerings here, quietly, privately. You feel certain you know who.
 
@@ -1500,7 +1507,7 @@ A statue of Mary stands in a niche and a stone altar is next to her.
 FitzAlan Chantry
 The FitzAlan family chantry, endowed long ago for masses. But the FitzAlans are gone now---their line ended in the pestilence---and no masses are said here anymore. You can return out to the Lady Chapel through the south.
 
-A stone altar is set against the east wall.
+A stone altar is set against a wall.
 
 > * FitzAlan Chantry
 [Comment recorded]
@@ -1509,13 +1516,13 @@ A stone altar is set against the east wall.
 A heavy-looking block of stone on the floor. Gouges in the floor by the altar testify to its weight. Above the altar, carved into the wall, are the FitzAlan arms and motto.
 
 > X ARMS
-A lion, perhaps? It's a bit too far up to see clearly.
+A lion? It's a bit too far up to see clearly.
 
 > X MOTTO
-It's high above the altar, but you can make it out: "LEO VIAM CUSTODIT" ("The lion guards the way"). They certainly thought highly of themselves.
+It's high above the altar, but you can make it out: "LEO VIAM DUCIT". They certainly thought highly of themselves.
 
 > CLIMB ALTAR
-You climb onto the altar. From here you can reach the carved arms above.
+You climb onto the altar. From here you can better see the arms above.
 
 > X ARMS
 A finely-detailed brass rampant lion standing out from the stone.
@@ -1527,7 +1534,7 @@ You push against the lion and, surprisingly, it moves inward slightly. A deep cl
 You climb down from the altar.
 
 > PUSH ALTAR
-You push against the altar and it swings away from the wall, revealing an opening in the floor. 
+You push against the altar and it swings away from the wall, revealing an opening in the floor.
 
                                                         
                         Roll a great stone to me here.  
@@ -1555,7 +1562,7 @@ A statue of Mary stands in a niche and a stone altar is next to her.
 > WEST
 
 Sanctuary
-A domed ceiling rises above this, where Prior Oswald leads public Mass. A chapel is to the east. The Sacristy lies south. A closed gate bars the narrow stairs descending to the Crypt.
+A domed ceiling rises above this, the area where Prior Oswald leads public Mass. The Quire is to the west and a chapel is to the east. The Sacristy is through a doorway to the south. A closed gate bars the path descending to the Crypt.
 
 You can see the high altar here.
 
@@ -1573,15 +1580,15 @@ Through the open door, cool morning light spills in from the Sanctuary.
 You find linens, chalices, a pewter platter, and other smaller vestry items useful for services.
 
 > X ITEMS
-Among the miscellany: some candles and a brush.
+Among the miscellany: a beeswax candle and a brush.
 
 > GET CANDLE
-You take a single candle, feeling the weight of this small theft.
+You take it, promising yourself you will return it.
 
 > NORTH
 
 Sanctuary
-A domed ceiling rises above this, where Prior Oswald leads public Mass. A chapel is to the east. The Sacristy lies south. A closed gate bars the narrow stairs descending to the Crypt.
+A domed ceiling rises above this, the area where Prior Oswald leads public Mass. The Quire is to the west and a chapel is to the east. The Sacristy is through a doorway to the south. A closed gate bars the path descending to the Crypt.
 
 You can see the high altar here.
 
@@ -1596,7 +1603,7 @@ The Quire is the heart of monastic worship and the centre of the church. Two sta
 > UP
 
 Night Stairs
-Midway on the narrow stone stairway connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
+Midway on the narrow stone stairs connecting the Dorter to the Quire. These are the Night Stairs: three times each night, monks file down in darkness for Matins, Lauds, and Prime. The walls are close, the air still.
 
 A lone candle flickers in its niche.
 
@@ -1613,7 +1620,7 @@ The Quire is the heart of monastic worship and the centre of the church. Two sta
 > EAST
 
 Sanctuary
-A domed ceiling rises above this, where Prior Oswald leads public Mass. A chapel is to the east. The Sacristy lies south. A closed gate bars the narrow stairs descending to the Crypt.
+A domed ceiling rises above this, the area where Prior Oswald leads public Mass. The Quire is to the west and a chapel is to the east. The Sacristy is through a doorway to the south. A closed gate bars the path descending to the Crypt.
 
 You can see the high altar here.
 
@@ -1629,9 +1636,7 @@ A statue of Mary stands in a niche and a stone altar is next to her.
 FitzAlan Chantry
 The FitzAlan family chantry, endowed long ago for masses. But the FitzAlans are gone now---their line ended in the pestilence---and no masses are said here anymore. You can return out to the Lady Chapel through the south.
 
-An opening in the floor reveals a ladder leading down into darkness.
-
-A stone altar is set against the east wall.
+A stone altar is swung open from the wall (revealing a ladder leading down into darkness).
 
 > DOWN
 
@@ -1640,7 +1645,7 @@ You climb down the ladder.
 "SNAP!" As you step off the bottom rung, a counterweight somewhere in the mechanism snaps the ladder back to the ceiling, far out of reach. Are you trapped?
 
 FitzAlan Crypt
-A small vaulted chamber, no more than ten feet across. The central tomb bears the effigy of a knight. Flanking this is a smaller undecorated tomb. 
+This is a small vaulted chamber, no more than ten feet across. The central tomb bears the effigy of a knight. Flanking this is a smaller undecorated tomb. 
 
 The walls here are finished stone rather than rough-hewn rock, and a narrow recess has been cut into them---likely once holding offerings or relics. The air is still, undisturbed for decades or longer. A patina of dust covers everything, unmarred by footprints save your own.
 
@@ -1656,7 +1661,7 @@ Large, heavy, and sealed. The carving shows a knight in chainmail, his hands cla
 Probably for the FitzAlan wife or children, this is a simple square block, fully sealed.
 
 > X PANEL
-A large wooden painted panel set in a distinctive brass frame, it depicts the Three Living and the Three Dead---three noble youths recoiling from three crowned corpses who gesture toward them. Woven beneath in Gothic script: "QUOD FUIMUS, ESTIS; QUOD SUMUS, ERITIS" (What we were, you are; what we are, you will be). Dampness has taken its toll on the pigments.
+A large wooden painted panel set in a distinctive brass frame, it depicts the Three Living and the Three Dead---three noble youths recoiling from three crowned corpses who gesture toward them. Woven beneath in Gothic script: "QUOD FUIMUS, ESTIS; QUOD SUMUS, ERITIS" (What we were, you are; what we are, you will be). Time has taken its toll on the pigments.
 
 > X FRAME
 The brass frame encloses the art panel. Examining it closely, you find a small button on the right-hand side of the panel.
@@ -1672,9 +1677,7 @@ You head south through the opening behind the panel, revealing...
 Main Crypt
 The crypt stretches dimly before you, thick stone pillars supporting low vaulted arches. Rows of tombs line the walls; the air is thick and damp. An opening in the north wall reveals a passage.
 
-A large bell is in a stand by the stairs heading upward, and a small doorway leads south.
-
-You can see a crypt bell here.
+A large bell is in a stand by the stairs heading upward, and a small doorway is to the south.
 
 > * Main crypt and vestry
 [Comment recorded]
@@ -1699,22 +1702,26 @@ Brother Gordian's tomb is a stone block with a lid on which his name is carved. 
 > X EZRA TOMB
 Brother Ezra's tomb is a stone block with a lid on which his name is carved. It sits in the dankest corner of the crypt, positioned between two thick pillars that cast deep shadows behind it.
 
-> LOOK UP EZRA IN FRATRUM
-(first taking Registrum Fratrum)
+> LOOK UP EZRA
+(first taking the Registrum Fratrum)
+(consulting the Registrum Fratrum)
 Ezra (1155-1212). Elected as the second prior in 1192 and served in this role for 18 years. He built out the Infirmary and the Infirmary Chapel and opened the priory to religious pilgrims travelling to Wales. Contemporary brothers remembered him for his flaming orange hair and for his bravery: he always said he would protect his brethren from danger to his very limits.
 
 > PUT FRATRUM IN BASKET
-You put Registrum Fratrum into the basket.
+You put the Registrum Fratrum into the basket.
 
 > SOUTH
 
 Crypt Vestry
-A long passage of rough stone. This may have originally been designed to be another crypt, but it is used to store materials needed for masses held in the crypt, and there are some such things on a ledge. 
+The Crypt Vestry is a long passage of rough stone. This may have originally been designed to be another crypt, but it is used to store materials needed for masses held in the crypt, and there are some such things on a ledge. The room is very infrequently used, since such masses are quite rare. 
 
 The only exit out is the way you came.
 
 > X LEDGE
 It's a thick plank fastened to the wall. It contains several items, likely needed for services held down here.
+
+> SEARCH CLOTH
+Aha! While the cloths are rotting and ruined, under them, you find a sack.
 
 > X SACK
 The sack is dark burlap, smeared with yellow powder, tied with simple cord. Opening it, your hands tremble: the weight is unmistakable. Silver coins spill into view: groats and pennies, perhaps ten shillings' worth. 
@@ -1736,9 +1743,7 @@ You put the sack of coins into the basket.
 Main Crypt
 The crypt stretches dimly before you, thick stone pillars supporting low vaulted arches. Rows of tombs line the walls; the air is thick and damp. An opening in the north wall reveals a passage.
 
-A large bell is in a stand by the stairs heading upward, and a small doorway leads south.
-
-You can see a crypt bell here.
+A large bell is in a stand by the stairs heading upward, and a small doorway is to the south.
 
 > * Escape from crypt
 [Comment recorded]
@@ -1777,9 +1782,7 @@ The footsteps are closer, and you can see some light coming from the stairs.
 Main Crypt (hiding)
 The crypt stretches dimly before you, thick stone pillars supporting low vaulted arches. Rows of tombs line the walls; the air is thick and damp. A section of the north wall has been covered with wood planks.
 
-A large bell is in a stand by the stairs heading upward, and a small doorway leads south.
-
-You can see a crypt bell here.
+A large bell is in a stand by the stairs heading upward, and a small doorway is to the south.
 
 > WAIT
 You wait a minute.
@@ -1796,12 +1799,12 @@ You wait a minute.
 
 Very close, you hear "Helloooo?"
 
+"RING! RING! RING! RING!" You hear the bell ring four times to call the Brothers to the Terce office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+
 > WAIT
 You wait a minute.
 
 The light moves to the south and you sense Brother Cuthbert is now searching the Crypt Vestry.
-
-"RING! RING! RING! RING!" You hear the bell ring four times to call the Brothers to the Terce office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 > UP
 You stand.
@@ -1811,7 +1814,7 @@ To the south, you hear "Is someone in the Vestry?"
 > UP
 
 Crypt Stairs
-At the midpoint of these stairs, you can sense the damp below. A thin veil of cool morning light comes from the altar area above, but the path down descends into darkness.
+At the midpoint of these stairs, you can sense the damp below. A thin veil of cool morning light comes from the area above, but the path down descends into darkness.
 
 Faintly, you hear "Helloooo?"
 
@@ -1819,7 +1822,7 @@ Faintly, you hear "Helloooo?"
 You slip through the open gate.
 
 Sanctuary
-A domed ceiling rises above this, where Prior Oswald leads public Mass. A chapel is to the east. The Sacristy lies south. The crypt gate is open.
+A domed ceiling rises above this, the area where Prior Oswald leads public Mass. The Quire is to the west and a chapel is to the east. The Sacristy is through a doorway to the south. The crypt gate is open.
 
 You can see the high altar here.
 
@@ -1831,14 +1834,16 @@ Quire
 The Quire is the heart of monastic worship and the centre of the church. Two stalls face each other across a narrow gap, where the brothers gather to chant the Divine Offices. The high altar rises to the east. The Nave lies west, beyond the rood screen. The Night Stairs ascend to the Dorter, and a path leads south, out to the Cloister.
 
 Brothers here:
-- Oswald, the prior
+- Anselm, the cantor
+- Oswald, the prior (seated)
 
 You escaped the Crypt without being discovered.
 
 Faintly, you hear "Must have been a draft from the church above." (You hear him muttering a brief prayer.)
 
-Brother Anselm arrives from the south.
-Brother Oswald sits in the stalls.
+Brother Anselm sits on the stalls.
+Brother Martin arrives from the south.
+Brother Wilfred arrives from the south.
 
 [The score has just gone up by 3 points.]
 
@@ -1856,7 +1861,7 @@ The great door is open, revealing the Porch to the west.
 > UP
 
 Tower Stairs
-A spiral staircase winds up and down from here. The stone steps are narrow and treacherously steep. Cold air and cool morning light flows down from above.
+A spiral staircase winds up and down from here. The stone steps are narrow and treacherously steep. Cool air and cool morning light flows down from above.
 
 > UP
 
@@ -1896,13 +1901,15 @@ You put the note into the basket.
 > DOWN
 
 Tower Stairs
-A spiral staircase winds up and down from here. The stone steps are narrow and treacherously steep. Cold air and cool morning light flows down from above.
+A spiral staircase winds up and down from here. The stone steps are narrow and treacherously steep. Cool air and cool morning light flows down from above.
 
 > READ NOTE
 (first taking the note)
-The note is folded and sealed with wax. You tear it open and unfold it. 
+The note is folded and sealed with wax. You tear it open and unfold it.
 
-It is written in an educated hand on fine paper. It reads: "The manuscript was exquisite---the illumination work exceptional. Should other such works become available, I remain most interested. Leave word at our usual place." It is unsigned.
+It is written in an educated hand on fine paper. It reads: "The manuscript was exquisite---the illumination work exceptional. 
+
+Should other such works become available, I remain most interested. Leave word at our usual place." It is unsigned.
 
 Who wrote this note? An outsider? Buying precious priory property? And who was meant to find it and read it?
 
@@ -1923,7 +1930,7 @@ The public space, where villagers stand for Mass weekly. The stone floor is worn
 
 The great door is open, revealing the Porch to the west.
 
-From a distance, you can hear the singing continue.
+From a distance, you can hear your brothers singing.
 
 > * Go to Prior's Solar
 [Comment recorded]
@@ -2009,7 +2016,7 @@ You close the wooden chest.
 A well-crafted desk with a single drawer. On it is a cross.
 
 > X CROSS
-A finely detailed cross in dark wood. The brass base bears a small inscription: "CONVERTIMINI"---"Turn to me". The words are from the prophet Joel, a call to repentance and return to God.
+A finely detailed cross in dark wood. The brass base bears a small inscription: "CONVERTIMINI". You recognize this from the prophet Joel, a call to repentance and turning to God.
 
 > OPEN DRAWER
 Though you don't see a lock on the drawer, it won't open.
@@ -2043,7 +2050,7 @@ The chronicle contains the prior's notes on daily affairs. The recent entries:
 
 6 July 1346: Brother Hugh informs me that the sale of our honey and beeswax brought less income than anticipated. Several benefactors who once supported us have redirected their charity elsewhere. Our revenues have declined steadily these past three years.
 
-28 July 1346: Brother Wilfred has misplaced his latest work---a small psalter with illuminations of remarkable quality. He recalls completing the opening of Beatus vir with azure and gold, but cannot remember where he shelved it. At his age, such lapses are not uncommon---this is the second time in this season he's misplaced a work. This is causing a significant loss of income for us.
+28 July 1346: Brother Wilfred has misplaced his latest work---a small psalter with illuminations of remarkable quality. He recalls completing the opening of Beatus vir with azure and gold, but cannot remember where he shelved it. At his age, such lapses are not uncommon---this is the second time in this season he's lost a work. This is causing a significant loss of income for us.
 
 3 August 1346: The roof above the Refectory shows signs of damage from the autumn storms. Brother Benedict inspected it and says it will require material and builders to repair---funds we can ill afford. I have written to the Bishop requesting assistance, but hold little hope of reply.
 
@@ -2056,9 +2063,6 @@ You put the chronicle into the basket.
 
 > * Locutory, Talk to Anselm
 [Comment recorded]
-
-> WAIT UNTIL 10
-Time passes.
 
 > SOUTH
 
@@ -2081,9 +2085,14 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 Locutory
 A sparse rectangular room. A plain table is in the centre, surrounded by two benches. This is the Locutory, where the prior meets with merchants, where brothers discuss monastery business, where the silence of the Rule may be broken for practical needs. 
 
-The only exit is the way you came.
+The only exit is out the way you came.
 
-Brother Anselm is standing here, smiling at you.
+> WAIT UNTIL 10
+Time passes.
+
+Brother Anselm arrives from the east.
+
+(waiting stopped because of movement here)
 
 > ASK ANSELM ABOUT AELRED
 "He was so kind." Anselm's voice catches. "We're all going to miss him terribly."
@@ -2098,7 +2107,7 @@ He looks puzzled. "We've talked many times, Aldwin."
 "When I had quinsy last year, he took excellent care of me. We were meeting earlier this morning in the Garth."
 
 > ASK ANSELM ABOUT CUTHBERT
-"He's very strict. He's so serious about the rule of silence that I've never really talked to him."
+"He's so serious about the rule of silence that I've never really talked to him."
 
 > ASK ANSELM ABOUT HUGH
 "Brother Hugh used to be so joyful when I arrived. I fear something has been on his mind for months."
@@ -2106,8 +2115,8 @@ He looks puzzled. "We've talked many times, Aldwin."
 > ASK ANSELM ABOUT MARTIN
 "He's so busy in the Kitchen that I almost never get to talk with him."
 
-> ASK ANSELM ABOUT OSWALKD
-Brother Anselm is more interested in questions about other brothers.
+> ASK ANSELM ABOUT OSWALD
+"He's extremely capable---but I never get a chance to talk with him."
 
 > ASK ANSELM ABOUT REMIGIO
 "Oh, our poor foreign lay brother. He seems a bit like a lost soul. It must be very lonely for him here, especially given how little English he has."
@@ -2130,6 +2139,8 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 
 You can see Pax here.
 
+Pax twitches, sensing movement somewhere.
+
 > * Go to kitchen
 [Comment recorded]
 
@@ -2150,27 +2161,36 @@ The Refectory lies in to the south. You can also go west to the southwestern cor
 > SOUTH
 
 Refectory
-The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along a wall admit cool morning light that barely reaches the stone floor. The smell of pottage lingers faintly in the air. 
+The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along the wall admit cool morning light that barely reaches the floor. The smell of pottage lingers faintly in the air. 
 
-A doorway to the south leads to the Kitchen, and a wide opening to the north return out to the Cloister.
+A doorway to the south leads to the Kitchen, and a wide opening to the north returns out to the Cloister.
 
 > WAIT UNTIL 12
 Time passes.
 
 "RING! RING! RING! RING! RING!" You hear the bell ring five times to call the Brothers to the Sext office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT 3 MINUTES
 Time passes.
+
+Brother Martin arrives from the south.
+
+(waiting stopped because of movement here)
 
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
+The priory kitchen is a large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
-A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
+A large table dominates the centre, scattered with implements and vessels. A hearth is built into a wall, its fire warming the room.
 
 Brother Remigio is here, tidying the table.
+
+You can also see Brother Hugh here.
+
+Brother Hugh heads north.
 
 > GIVE BASIL TO REMIGIO
 (first taking the basil sprig)
@@ -2197,7 +2217,7 @@ You light the beeswax candle using the hearth.
 Brother Remigio looks away slyly as you head down the stairs.
 
 Undercroft
-Barrels crowd this vaulted space beneath the Refectory. Everything the priory needs to survive is here: tallow, salt, wine, mustard, grain. Various smaller items are spread across the table in the corner. The cellarer's careful hand is evident in the organisation---each item labelled, stacked, accounted for.
+Barrels crowd this vaulted space beneath the Refectory. Many things the priory needs to survive are here: tallow, salt, wine, mustard, grain. Smaller items are spread across a table in the corner. The cellarer's careful hand is evident in the organisation---each item labelled, stacked, accounted for.
 
 As cellarer, Brother Hugh alone manages this space: organising the stores, counting what remains, arranging what must be purchased. No other brother would have reason to come here uninvited.
 
@@ -2210,7 +2230,7 @@ Stairs lead up to the Kitchen. A wide door to the west allows barrels to be roll
 Musty and filled with fragrances from the barrels, especially with the overpowering odour of tallow.
 
 > X TABLE
-A rough wooden table. On it are a ledger and a pointed stick.
+The table here is made of rough wood. On it are a ledger and a pointed stick.
 
 > READ LEDGER
 It's filled with Hugh's cramped hand. The most recent items listed are the sale of beeswax candles, a purchase of a barrel of mustard seeds, and the sale of sheep from the priory's fields.
@@ -2222,7 +2242,7 @@ It's filled with Hugh's cramped hand. The most recent items listed are the sale 
 
 Opening the sealed barrel will take several minutes. Are you sure? Y
 
-With some prying, you succeed in opening it.
+With some time and effort, you succeed in opening it.
 
 > SMELL MUSTARD
 Sharp and pungent---the unmistakable bite of ground mustard.
@@ -2243,6 +2263,7 @@ After digging around with the stick for several minutes, you find something buri
 You pound on the lid to shut the mustard barrel.
 
 > WEST
+You push the door open and head west, emerging at the Passage. The door closes behind you.
 
 The Passage (South)
 The narrow walkway ends here. This part seems less travelled, with small weeds growing from between the stones underfoot. To the east, the ground slopes down to a wide closed door.
@@ -2269,9 +2290,9 @@ You untie the cord, revealing a small illuminated psalter.
 
 A small psalter, exquisitely crafted. The leather cover is tooled with a design of intertwined vines and lilies. Opening it, you see Brother Wilfred's unmistakable hand, each page a work of devotion. The opening initial 'B' of Psalm 1 ("Beatus vir") is illuminated in brilliant azure and gold leaf, depicting a tree bearing fruit by streams of water. Marginal decorations show doves, wheat, and grapes. 
 
-This is clearly one of Wilfred's finest works. It should be kept in the Library before it is sold, not hidden here.
+This is clearly one of Wilfred's finest works. It should be kept in the Library before it is sold, not hidden away.
 
-There's some serious wrongdoing here. Why was this hidden here? This must be related to its disappearance, and to that note you found about stealing illuminated manuscripts.
+There's some serious wrongdoing here. Why was this hidden? This must be related to its disappearance, and to that note you found about stealing illuminated manuscripts.
 
 [The score has just gone up by 5 points.]
 
@@ -2333,11 +2354,14 @@ The score is made up as follows:
      1 consulted Aelred's Herbal
      1 discovered a source of light
      1 participated in an office
-     1 suspected foul play about Aelred
+     1 noticed suspicious symptoms
      1 identified a plant
      1 learned schedule of offices
 
     55 total (out of 55)
+
+> INVENTORY
+You're carrying a mustard-yellow package (which contains an illuminated psalter), a beeswax candle, some gloves (worn), a basket (which contains the chronicle, a treacherous note, a sack of coins, the Registrum Fratrum, some letters, Aelred's Herbal, an iron key, three decoctions (feverfew, henbane and foxglove) and six sprigs (henbane, foxglove, monkshood, feverfew, thyme and rosemary)) and your robe (worn).
 
 > * Justice: go to service, shout
 [Comment recorded]
@@ -2351,9 +2375,7 @@ The wall of the Nave rises imposingly to the north. A passageway into it leads t
 
 You can see Pax here.
 
-From a distance, you can hear the singing continue.
-
-Pax twitches, sensing movement somewhere.
+From a distance, you can hear your brothers singing.
 
 > NORTH
 
@@ -2369,11 +2391,9 @@ Brothers here:
 - Oswald, the prior (seated)
 - Wilfred, the librarian (seated)
 
-You know this may be your best chance to make the accusation and help catch the killer. If you'd like to do so, SHOUT to interrupt the office.
-
-Office! Entering the Quire when a service is underway means you'll be obligated to participate in it.
-
 The brothers look at you, puzzled. Why aren't you seated?
+
+Accusation? You know this may be your best chance to make the accusation and help catch the killer. If you'd like to do so, SHOUT to interrupt the office.
 
 > SHOUT
 You shout loudly. Every face turns to you---shocked, confused, some afraid. 
@@ -2396,10 +2416,13 @@ Brother Aelred's words echo: "One life for two, my son." You will never know if 
 
   *** You chose justice ***
 
-In that game you scored 55 out of a possible 55, in 568 turns.
+In that game you scored 55 out of a possible 55, in 564 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
 Previous turn undone.
+
+> * Reset back for other endings
+[Comment recorded]
 
 > UNDO
 Previous turn undone.
@@ -2422,22 +2445,24 @@ You can see Pax here.
 > EAST
 
 Scriptorium
-This chamber is where brothers work to create illuminated manuscripts and to copy books. To the west is out to the Cloister; to the east heads in to the Library. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
-A fireplace has a small fire going, warming the room and helping keep the manuscripts dry from the sea air. 
+The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
-A large table is at the centre where the work is done, on which are several items.
-
-The library door is closed.
+The Cloister is out to west; the Library is east, through the closed door.
 
 > WAIT UNTIL 1
 Time passes.
 
+Brother Wilfred arrives from the west, places the silver key on the table, and sits.
+
+(waiting stopped because of movement here)
+
 Brother Wilfred looks up from his work and immediately sees the pain and confusion in your face, the weight of carrying around what you've discovered. 
 
-"My child", he says, "I can see that you carry much sorrow. Would you like to unburden yourself? Might I offer you confession?" 
+"My child", he says, "I can see that you carry much sorrow. Would you like to unburden yourself? Might I offer you confession?"
 
-(You can do so with CONFESS TO WILFRED.)
+Talk with Brother Wilfred about the murder? You can do so with CONFESS TO WILFRED.
 
 > CONFESS TO WILFRED
 
@@ -2465,9 +2490,15 @@ Still, you wonder. A murderer walks free. Does forgiveness make you holy, or com
 
   *** You chose mercy ***
 
-In that game you scored 55 out of a possible 55, in 592 turns.
+In that game you scored 55 out of a possible 55, in 586 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
+Previous turn undone.
+
+> * Reset for other endings
+[Comment recorded]
+
+> UNDO
 Previous turn undone.
 
 > UNDO
@@ -2491,44 +2522,97 @@ To the east is the entrance to the Scriptorium. You can also go north to the nor
 
 You can see Pax here.
 
+Pax twitches, sensing movement somewhere.
+
 > EAST
 
 Scriptorium
-This chamber is where brothers work to create illuminated manuscripts and to copy books. To the west is out to the Cloister; to the east heads in to the Library. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
-A fireplace has a small fire going, warming the room and helping keep the manuscripts dry from the sea air. 
+The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
-A large table is at the centre where the work is done, on which are several items.
+The Cloister is out to west; the Library is east, through the closed door.
 
-The library door is closed.
+> * Get offer to confess
+[Comment recorded]
 
 > WAIT UNTIL 1
 Time passes.
 
+Brother Wilfred arrives from the west, places the silver key on the table, and sits.
+
+(waiting stopped because of movement here)
+
 Brother Wilfred looks up from his work and immediately sees the pain and confusion in your face, the weight of carrying around what you've discovered. 
 
-"My child", he says, "I can see that you carry much sorrow. Would you like to unburden yourself? Might I offer you confession?" 
+"My child", he says, "I can see that you carry much sorrow. Would you like to unburden yourself? Might I offer you confession?"
 
-(You can do so with CONFESS TO WILFRED.)
+Talk with Brother Wilfred about the murder? You can do so with CONFESS TO WILFRED.
+
+> * Hang out in Lavatorium
+[Comment recorded]
+
+> WEST
+
+Cloister East
+This is one of the eight sections of the Cloister. Arched openings admit slanted autumn sun.
+
+To the east is the entrance to the Scriptorium. You can also go north to the northeastern corner, south to the southeastern corner, or west into the Garth.
+
+You can see Pax here.
+
+> WEST
+
+Garth
+The Garth is the small grass courtyard at the heart of the Cloister. The covered Cloister walk surrounds it on all sides, its arches framing the sky above with its bright afternoon light. 
+
+In the centre is a sundial and a stone well.
+
+> WEST
+
+Cloister West
+This is one of the eight sections of the Cloister. Arched openings admit slanted autumn sun.
+
+The Locutory lies in to the west. You can also go north to the northwestern corner of the Cloister, south to the southwestern corner, or east into the Garth.
+
+> SOUTH
+
+Cloister Southwest
+This is one of the eight sections of the Cloister. Arched openings admit slanted autumn sun.
+
+A small alcove, the Lavatorium, is to the south. You can go north to the western edge, or east to the southern edge. The West Gate, allowing outsiders to enter the Cloister, is to the west and open.
+
+> SOUTH
+
+Lavatorium
+A small alcove off the Cloister where the brothers wash before entering the Refectory. A basin is built into the wall. You can only return the way you came.
+
+A threadbare towel hangs on a peg by the basin.
+
+> * Kill time
+[Comment recorded]
 
 > WAIT UNTIL 3
 Time passes.
 
 "RING! RING! RING! RING! RING! RING!" You hear the bell ring six times to call the Brothers to the None office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 5
 Time passes.
 
 "RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the Brothers to the Vespers office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 7
 Time passes.
 
 "RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the Brothers to the Compline office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 8
 Time passes.
 
@@ -2544,9 +2628,27 @@ Three brothers lost. The Rule continues, but the light grows dimmer.
 
   *** You chose inaction ***
 
-In that game you scored 55 out of a possible 55, in 1002 turns.
+In that game you scored 55 out of a possible 55, in 999 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
+Previous turn undone.
+
+> * Reset back for other endings
+[Comment recorded]
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
 Previous turn undone.
 
 > UNDO
@@ -2570,6 +2672,35 @@ Previous turn undone.
 > * Time out: End of Compline
 [Comment recorded]
 
+> * Hang out in Lavatorium
+[Comment recorded]
+
+> WEST
+
+Cloister West
+This is one of the eight sections of the Cloister. Arched openings admit slanted autumn sun.
+
+The Locutory lies in to the west. You can also go north to the northwestern corner of the Cloister, south to the southwestern corner, or east into the Garth.
+
+You can see Pax here.
+
+> SOUTH
+
+Cloister Southwest
+This is one of the eight sections of the Cloister. Arched openings admit slanted autumn sun.
+
+A small alcove, the Lavatorium, is to the south. You can go north to the western edge, or east to the southern edge. The West Gate, allowing outsiders to enter the Cloister, is to the west and open.
+
+> SOUTH
+
+Lavatorium
+A small alcove off the Cloister where the brothers wash before entering the Refectory. A basin is built into the wall. You can only return the way you came.
+
+A threadbare towel hangs on a peg by the basin.
+
+> * Kill time
+[Comment recorded]
+
 > WAIT UNTIL 1
 Time passes.
 
@@ -2578,19 +2709,22 @@ Time passes.
 
 "RING! RING! RING! RING! RING! RING!" You hear the bell ring six times to call the Brothers to the None office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 5
 Time passes.
 
 "RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the Brothers to the Vespers office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 7
 Time passes.
 
 "RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the Brothers to the Compline office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT UNTIL 8
 Time passes.
 
@@ -2600,15 +2734,30 @@ With the end of Compline, it is the end of the day for the priory.
 
 Brother Aelred was buried the next day in the priory graveyard, marked only by a simple wooden cross. 
 
-On warm days, you bring him rosemary and lay it next to his cross.26
+On warm days, you bring him rosemary and lay it next to his cross.
 
 You reflect on what you learned. The strange death. The coins hidden among the dead. The discovered stolen psalter. The deadly henbane decoction. The note seeking priory manuscripts. The letters to Rose, showing previous payment. Still, you can't shake the feeling that you failed him, that the last thing you could have done for your mentor, you left undone. At least you can give Brother Oswald the stolen psalter and sack of silver, saving the priory from further financial ruin.
 
   *** You ran out of time ***
 
-In that game you scored 55 out of a possible 55, in 1002 turns.
+In that game you scored 55 out of a possible 55, in 999 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
+Previous turn undone.
+
+> * Reset back for other endings
+[Comment recorded]
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
 Previous turn undone.
 
 > UNDO
@@ -2637,16 +2786,33 @@ Pax twitches, sensing movement somewhere.
 > SOUTH
 
 Refectory
-The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along a wall admit bright afternoon light that barely reaches the stone floor. The smell of pottage lingers faintly in the air. 
+The Refectory is a long, austere hall where the community takes its meals in silence while one brother reads aloud from the lectern. Two rows of trestle tables stretch the length of the room, their surfaces scrubbed clean. High windows along the wall admit bright afternoon light that barely reaches the floor. The smell of pottage lingers faintly in the air. 
 
-A doorway to the south leads to the Kitchen, and a wide opening to the north return out to the Cloister.
+A doorway to the south leads to the Kitchen, and a wide opening to the north returns out to the Cloister.
+
+> WAIT UNTIL 3
+Time passes.
+
+Brother Hugh arrives from the north.
+Brother Martin arrives from the north.
+
+(waiting stopped because of movement here)
+
+> WAIT UNTIL 3
+Time passes.
+
+Brother Hugh heads south.
+Brother Martin heads south.
+
+(waiting stopped because of movement here)
 
 > WAIT UNTIL 3
 Time passes.
 
 "RING! RING! RING! RING! RING! RING!" You hear the bell ring six times to call the Brothers to the None office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
-(stopped waiting since a service is starting)
+(waiting stopped because the bell rang)
+
 > WAIT
 You wait a minute.
 
@@ -2655,9 +2821,9 @@ Brother Martin arrives from the south.
 > SOUTH
 
 Kitchen
-A large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
+The priory kitchen is a large room, lit by high windows. A door leads north to the Refectory, and stairs descend to the Undercroft below. 
 
-A large working table dominates the centre, scattered with implements and vessels. A hearth is built into the east wall, its fire warming the room.
+A large table dominates the centre, scattered with implements and vessels. A hearth is built into a wall, its fire warming the room.
 
 Brother Remigio is here, tidying the table.
 
@@ -2672,7 +2838,7 @@ You light the beeswax candle using the hearth.
 Brother Remigio looks away slyly as you head down the stairs.
 
 Undercroft
-Barrels crowd this vaulted space beneath the Refectory. Everything the priory needs to survive is here: tallow, salt, wine, mustard, grain. Various smaller items are spread across the table in the corner. The cellarer's careful hand is evident in the organisation---each item labelled, stacked, accounted for.
+Barrels crowd this vaulted space beneath the Refectory. Many things the priory needs to survive are here: tallow, salt, wine, mustard, grain. Smaller items are spread across a table in the corner. The cellarer's careful hand is evident in the organisation---each item labelled, stacked, accounted for.
 
 Stairs lead up to the Kitchen. A wide door to the west allows barrels to be rolled in and out for deliveries.
 
@@ -2693,13 +2859,31 @@ Brother Hugh catches you here. "You!" he snarls, "What are you doing here?" Sear
 
 You feel a hard object smash against the back of your head. You fall to the ground, gasping.
 
-You feel yourself being stuffed into an empty barrel, and can hear him hammering the lid shut. You pass out---perhaps mercifully---so you don't feel yourself being rolled off the cliffs and into the dark sea.
+You feel yourself being stuffed into an empty barrel, and can hear him hammering the lid shut. You pass out---mercifully---so you don't feel yourself being rolled off the cliffs and into the dark sea.
 
   *** You have died ***
 
-In that game you scored 55 out of a possible 55, in 768 turns.
+In that game you scored 55 out of a possible 55, in 765 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
+Previous turn undone.
+
+> * Reset for other endings
+[Comment recorded]
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
+Previous turn undone.
+
+> UNDO
 Previous turn undone.
 
 > UNDO

@@ -2,6 +2,12 @@
 
 ![](lady-of-thorns.jpg)
 
+
+
+
+
+**PLAYTESTERS:** Also, please see [Testing Page](test.html)
+
 Welcome! In this Interactive Fiction game, you're playing a novice monk investigating a mysterious death at the priory of Our Lady of Thorns in 1346. Can you find the killer and the motive before the end of Compline?
 
 [**Download .z5**](thorns.z5)   [**Play in Browser**](/)
@@ -106,7 +112,7 @@ Allyson Gray (@Ally), Daniel Stelzer (@Draconis), @andrewj, Melissa "Moth" Higuc
 
 ### Special Thanks
 
-Fredrik Ramsberg (@fredrik), @andrewj, @Dannii, Garry Francis (@Warrigal), @Giger_Kitty, Andrew Plotkin (@zarf), Daniel Stelzer (@Draconis), @Pontus_I, and Tara McGraw
+Fredrik Ramsberg (@fredrik), @andrewj, @Dannii, Garry Francis (@Warrigal), @Giger_Kitty, Andrew Plotkin (@zarf), Daniel Stelzer (@Draconis), @Pontus_I, and Tara McGrew
 (@vaporware) for providing technical assistance.
 
-Handles provided are usernames at [The Interactive Fiction Community Forum](https://intfiction.com).
+Handles provided are usernames at [The Interactive Fiction Community Forum](https://intfiction.org).

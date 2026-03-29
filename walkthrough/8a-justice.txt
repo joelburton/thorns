@@ -1,8 +1,9 @@
 * Justice: go to service, shout
-GOTO GARTH
+GOCHECK GARTH
 NORTH
 NORTH
 SHOUT
 UNDO
+* Reset back for other endings
 UNDO
 UNDO

@@ -1,5 +1,5 @@
 * Meet Remigio & follow him
-GOTO QUIRE
+GOCHECK QUIRE
 SOUTH
 EAST
 SOUTH
