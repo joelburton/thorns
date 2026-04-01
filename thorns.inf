@@ -4,6 +4,7 @@
 !% $MAX_ABBREVS=95
 !% -~S
 !% -e
+!% -E1
 !% $MAX_DYNAMIC_STRINGS=1
 !% $OMIT_UNUSED_ROUTINES=1
 !% $ZCODE_LESS_DICT_DATA=1
@@ -19,14 +20,12 @@
 ! Constant DEBUG_SCOPE;
 
 
-! TODO: helpful comments (hiding contraband, etc) could be in square brackets.
-
-
 
 Constant Story "Our Lady of Thorns";
 Constant Headline
   "^A medieval monastic mystery/tragedy
-  ^by Joel Burton <joel@@64joelburton.com>^";
+  ^by Joel Burton <joel@@64joelburton.com>
+  ^Site: https://lady-of-thorns.netlify.app^";
 ! Release 1;
 ! Array UUID_ARRAY string "UUID://2BB74FC0-C667-485D-9D4A-0DB142E4FF57";
 #IfDef UUID_ARRAY; #EndIf;

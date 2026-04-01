@@ -3,11 +3,6 @@ FULL_DEBUG = '$$\#FULL_DEBUG'
 %.z5: %.inf Makefile
 	inform -s -E1 $(if $(NODEBUG),,-D) -S $<
 
-%.z3: %.inf Makefile
-	inform  -s '(small.inf)' -v3 -E1 $<
-	@echo
-	@echo left $$(( (128 * 1024) - $$(wc -c < thorns.z3) ))
-
 %.play: %.z5
 	# frotz $<
 	killall Gargoyle || echo "not running"
@@ -31,9 +26,6 @@ surge: html
 
 abbrevs:
 	rm -f gametext.txt
-	inform -r '$$TRANSCRIPT_FORMAT=1' '(small.inf)' -v3 thorns.inf
-	 ../zabbrev/zabbrev-osx -n 95 -x3 -v3 thorns.inf > abbrevs-z3.inf
-	rm gametext.txt
 	inform -r '$$TRANSCRIPT_FORMAT=1' -v5 thorns.inf
 	 ../zabbrev/zabbrev-osx -n 95 -x3 -v5 thorns.inf > abbrevs-z5.inf
 	rm gametext.txt
