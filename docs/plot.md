@@ -1,4 +1,4 @@
-# Our Lady of Thorns
+# Plot Notes
 
 ## Characters
 

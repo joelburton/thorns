@@ -87,13 +87,12 @@ with description
   ^- Andy Galilee (@@64AndyG)
   ^- rh (@@64rh)
   ^- Hellzon (@@64Hellzon)
+  ^- Doug Egan (@@64Doug_Egan)
   ^- Andrew (@@64andrewj)
   ^- Deborah (@@64dsherwood)
   ^- Javier Garza (@@64Jade)
-  ^- Doug Egan (@@64Doug_Egan)
   ^- Hannah (@@64Hannah31415)
   ^- tmack (@@64tmack)
-  ^- Leah Cole
 
   ^^TECHNICAL ASSISTANCE:
   ^- Fredrick Ramsberg (@@64fredrik)
@@ -124,8 +123,8 @@ with description
 
 Option -> About_ai "Statement on AI use"
 with description
-  "The game text, characters, and puzzle ideas were authored by Joel Burton
-  and without the use of AI.
+  "The game text, characters, and puzzle ideas were authored by Joel Burton and
+  without the use of AI.
 
   ^^Claude Sonnet 4.5 and 4.6 (both from Anthropic) were used to:
   ^- check for anachronisms and American-isms in text
@@ -160,9 +159,8 @@ with description
 
   ^^If you're not familiar with this kind of game, use the ABOUT command.
 
-  ^^Even if you've played other IF games, please see the sections on
-  the special commands and actions in this game. Some of these are very
-  important.
+  ^^Even if you've played other IF games, please see the sections on the special
+  commands and actions in this game. Some of these are very important.
 
   ^^Enjoy!";
 
@@ -229,9 +227,7 @@ with description
     ^- SUSPICION: see/change your ~suspicion level~
     ^- EVIDENCE: get total of ~evidence points~ player has
     ^- _START name: start a scene or service
-    ^- _STOP: stop current scenes/services
-    "
-  ;
+    ^- _STOP: stop current scenes/services";
 #EndIf;
 
 
@@ -274,10 +270,11 @@ with description
 
 Option -> -> "What is a ~Slype~?"
 with description
-  "It's the name for the covered outdoor walkway connecting the Cloister
-    to other places.
+  "It's the name for the covered outdoor walkway connecting the Cloister to
+  other places.
+
   ^^In real life, these often connected to an infirmary, just like in this
-    game."
+  game."
     ;
 
 
@@ -377,12 +374,21 @@ with description
   objects are present because, thematically, they would be in the priory.
 
   ^^- Learn the schedule for offices; knowing when services start and stop
-  will let you use your time efficiently.
+  will let you use your time efficiently. There are useful commands for waiting
+  for a longer time than just a minute; see the section on ~Special commands~
+  in HELP if you haven't already.
 
-  ^^- Every location in the priory can be reached in game, though some take
-  some effort to get in to. If you feel stuck and don't know what to do next,
-  try to gain access to the unexplored areas on the map.
-  
+  ^^- Every location in the priory can be reached in-game, though some take
+  some effort to access. If you feel stuck and don't know what to do next,
+  try to get into to the unexplored areas on the map.
+
+  ^^- In some interactive fiction, you're supposed to try to collect any item
+  you find, in case it's important for a puzzle. This isn't a game like that;
+  while there are some important things you should take, simply trying to get
+  everything you can will be burdensome and likely to get you into trouble.
+  Think of the priory like a real place: you wouldn't just steal everything in
+  sight for no reason.
+
   ^^- Latin phrases appear throughout; some are translated, some are not. While
   it's not critical, you may find it helpful to translate some of them.
   Google Translate can be useful for this.";
@@ -450,6 +456,43 @@ the_hints
   "There's also no dragon."
   "Don't read hints for problems you're not facing---they'll spoil the game."
   ;
+
+Option Hint_contraband "How can I carry things without being caught?"
+  class Hintobj
+  with in_menu HintGeneral,
+the_hints
+  "Firstly, this isn't a game where you should try you take everything.
+    Think of the priory like a real place, filled with real people: you
+    shouldn't just try to steal everything, and there can be consequences
+    if you do."
+  "If you do take things not related to your duties, you'll need to find a
+    way to hide them."
+  "There's are two containers that will let you carry things without others
+  noticing."
+  "One is something you can find in a location Aelred used."
+  "Another is something you already have."
+  "Search the Herbarium."
+  "Or examine your habit."
+  "In the Herbarium, LOOK UNDER TABLE and GET BASKET."
+  "Or X HOOD and then you can PUT ___ IN HOOD."
+  ;
+
+Option Hint_stuck "I'm not sure what to do next"
+  class Hintobj
+  with in_menu HintGeneral,
+the_hints
+  "If you haven't witnessed a death and sat through a meeting, just explore."
+  "Once you have, the game will give you some hints: examine the body and
+    search the gardens."
+  "Once you've done that, you should explore the priory. Every location can
+    be reached (though some require some effort)."
+  "There are four main pieces of evidence (each giving 5 points) and some
+    less critical pieces of evidence. You don't need to find them all to solve
+    the mystery."
+  "If you're still stuck, look at the hints for specific locations and that
+    can give you ideas of what to do there."
+  ;
+
 
 !-------------------------------------------------------------------------------
 
@@ -1009,7 +1052,7 @@ Option Hint_SolarDoor "How can I get past the lock?"
   "Have you seen a statue of him around?"
   "You can find his creed in the stained glass in the Nave, on his
     statue in the Chapter House, and on the bell in the tower."
-  "PUSH CROSS.^PUSH HAMMER.^PUSH BOOK."
+  "PUSH CROSS.^PUSH HAMMER.^PUSH SCROLL."
   ;
 
 Option Hint_PriorGone "How can I get past Oswald to enter the solar?"

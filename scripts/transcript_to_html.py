@@ -364,8 +364,7 @@ HTML_TEMPLATE = '''<!DOCTYPE html>
   blockquote {
     font-family: 'IM Fell English', Georgia, serif;
     font-style: italic;
-    font-size: 1.2rem;
-    line-height: 1.8;
+    font-size: 1.5rem;
     color: var(--faded-ink);
     margin: 1.8rem 0 1.8rem 2rem;
     padding: 0.5rem 0 0.5rem 1.5rem;

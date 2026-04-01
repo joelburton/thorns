@@ -15,18 +15,18 @@ FULL_DEBUG = '$$\#FULL_DEBUG'
 
 .PHONY: html
 html:
-	pandoc -s docs/puzzles.md > html/puzzles.html
-	pandoc -s docs/plot.md > html/plot.html
-	pandoc -s docs/style.md > html/style.html
-	pandoc -s docs/help.md > html/help.html
+	pandoc -T "Our Lady of Thorns" -H html/styles.html -s docs/puzzles.md > html/puzzles.html
+	pandoc -T "Our Lady of Thorns" -H html/styles.html -s docs/plot.md > html/plot.html
+	pandoc -T "Our Lady of Thorns" -H html/styles.html -s docs/style.md > html/style.html
+	pandoc -T "Our Lady of Thorns" -H html/styles.html -s docs/help.md > html/index.html
 	cp walkthrough.txt html
 	tail +8 thorns.scr |  awk -f scripts/tidy.awk | python3 scripts/transcript_to_html.py > html/final.html
 	inform -E1 -S thorns.inf
 	cp thorns.z5 html/
 
 surge: html
-	cd html && surge . lady-of-thorns.surge.sh
-	open https://lady-of-thorns.surge.sh
+	cd html && netlify deploy -p -d .
+	open https://lady-of-thorns.netlify.app/
 	rm thorns.z5
 
 abbrevs:

@@ -1,4 +1,4 @@
-Start transcript of Our Lady of Thorns release=1 serial=260328
+Start transcript of Our Lady of Thorns release=1 serial=260401
 
                                                              
                    Behold, how good and how pleasant it is   
@@ -227,7 +227,7 @@ You spend several long minutes reflecting on your life now: ritual, timing, pray
 Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com>
-Release 1 / Serial number 260328 / Inform v6.44 PunyInform v6.4.1 DR
+Release 1 / Serial number 260401 / Inform v6.44 PunyInform v6.4.1 DR
 
 > GET UP
 You stand up from the stalls.
@@ -310,6 +310,8 @@ Cloister North
 You emerge on the northern edge of the Cloister walk, the covered stone arcade at the centre of the priory. It's a continuous square path surrounding the Garth, a large open yard. Arched openings admit cold night air and pale moonlight.
 
 The wall of the Nave rises imposingly to the north. A passageway into it leads to the Quire. You can also go west to the northwest corner, east to the northeastern corner, or south into the Garth.
+
+[Since the Cloister is so large, it is divided into eight parts: Cloister Northwest, Cloister North, and so on.]
 
 You know you should go to the gardens. You wouldn't want to keep your mentor waiting.
 
@@ -467,7 +469,7 @@ You listen intently to Brother Oswald.
 
 The meeting draws to a close and the brethren stand. 
 
-(You can always get a list of brothers with you with the command HERE)
+[You can always get a list of brothers with you with the command HERE.]
 
 > HERE
 Brothers here:
@@ -523,7 +525,7 @@ This is one of the eight sections of the Cloister. Arched openings admit cold ni
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
 
-[There is no clock, but between bells ringing for offices and your own internal sense, you decide that it is very approximately four in the morning. You can check this sense at any time with the command TIME.]
+[There is no clock here, but between bells ringing for offices and your own internal sense, you decide that it is very approximately four in the morning. You can check this sense at any time with the command TIME.]
 
 > TIME
 From your vague sense of time, it is four in the morning.
@@ -697,7 +699,7 @@ It smells of pine sap and wood.
 (putting Aelred's Herbal into the basket to make room)
 Rather than taking the entire thyme plant, you take a sprig of it.
 
-Spending time here reminds you of a conversation from spring, when Brother Aelred was tending a corner of the garden. "This one's a challenge, my son," he said, gesturing at a new, small plant. "It wants warmth and sun we can barely give it here. But there's a brother of ours---he came from sunnier lands, seeking refuge. He never complains, but I see the homesickness in his eyes." Aelred touched the leaves gently. "If I can coax this to grow, it will remind him of home. A small kindness, perhaps, but sometimes those matter most." You will miss Aelred so much.
+Spending time here reminds you of a conversation from spring, when Brother Aelred was tending part of the garden. "This one's a challenge, my son," he said, gesturing at a new, small plant. "It wants warmth and sun we can barely give it here. But there's a brother of ours---he came from sunnier lands, seeking refuge. He never complains, but I see the homesickness in his eyes." Aelred touched the leaves gently. "If I can coax this to grow, it will remind him of home. A small kindness, perhaps, but sometimes those matter most." You will miss Aelred so much.
 
 > SMELL IT
 Strongly earthy with a note of mint.
@@ -772,7 +774,7 @@ You wrap your fingers around it carefully and pull it free. The root forks into 
 
 > LOOK UP MANDRAKE IN HERBAL
 (first taking Aelred's Herbal)
-Mandrake: called also Mandragora, and by some the sleeping root or gallows root. In small doses brings drowsiness and eases pain. The smoke of the dried root, carefully breathed, brings a deep and restful sleep---useful before surgery or for the gravely restless. The root itself should not be eaten in quantity, but it is not dangerous to handle.
+Mandrake: called also Mandragora, and by some the sleeping root or gallows root. In small doses brings drowsiness and eases pain. The smoke of the root, carefully breathed, brings a deep and restful sleep---useful before surgery or for the gravely restless. The root itself should not be eaten in quantity, but it is not dangerous to handle.
 
 [The score has just gone up by 1 point.]
 
@@ -822,7 +824,7 @@ A curious cabinet, perhaps for medicines, sits against a wall.
 A polished metal mirror hangs on the wall.
 
 > TURN WHEELS TO 1152
-You turn the wheels to 1152.
+You set the wheels to 1-1-5-2.
 
 You hear a satisfying click as the lock disengages.
 
@@ -954,8 +956,6 @@ Cloister Southeast
 This is one of the eight sections of the Cloister. Arched openings admit cold night air and pale moonlight.
 
 The long Slype, leading to the Infirmary and the Herbarium, lies to the east. You can also go north to the eastern end of the Cloister, and west to the southern end.
-
-Hint: Now that you've searched both gardens and examined the body in the Infirmary Chapel, your next step could be to search all the Priory locations looking for evidence.
 
 > * Go to Scriptorium
 [Comment recorded]
@@ -1134,7 +1134,7 @@ The sundial casts a shadow showing the time as quarter past six in the morning.
 
 > LOOK UP AELRED IN FRATRUM
 (first taking the Registrum Fratrum)
-Aelred (1284-). Entered the priory 1295 as a youth. Serves as herbalist. Fluent in several languages beyond English and Latin.
+Aelred (1284-). Entered the priory 1295 as a youth. Serves as herbalist. Fluent in several languages beyond English and Latin. 
 
 Written below this, in fresh ink in Wilfred's scratchy hand, it reads: "Requiescat in pace, care frater".
 
@@ -1372,7 +1372,7 @@ This plain corridor connects the two dorters. Wooden floorboards creak underfoot
 > EAST
 
 Necessarium
-This narrow chamber extends from the Hall. A wooden bench with several latrine holes runs along one wall, each opening onto the dung pit far below. The smell is overpowering. Cold, foul air rises from the pit below. The only exit is out to the west.
+This narrow chamber extends from the Hall. A wooden bench with several latrine holes runs along one wall, each opening onto the dung pit far below. The smell is overpowering. Cold, foul air rises from the pit. The only exit is out to the west.
 
 > WEST
 
@@ -1534,7 +1534,7 @@ You push against the lion and, surprisingly, it moves inward slightly. A deep cl
 You climb down from the altar.
 
 > PUSH ALTAR
-You push against the altar and it swings away from the wall, revealing an opening in the floor.
+You push against the altar and it swings away from the wall, revealing an opening in the floor. 
 
                                                         
                         Roll a great stone to me here.  
@@ -1724,6 +1724,9 @@ It's a thick plank fastened to the wall. It contains several items, likely neede
 Aha! While the cloths are rotting and ruined, under them, you find a sack.
 
 > X SACK
+(first taking the sack)
+You take it, noting metallic clinking as you do.
+
 The sack is dark burlap, smeared with yellow powder, tied with simple cord. Opening it, your hands tremble: the weight is unmistakable. Silver coins spill into view: groats and pennies, perhaps ten shillings' worth. 
 
 Your breath catches. A small fortune, enough to feed the priory for a season. Hidden here, among the dead, where none have need of it.
@@ -1731,9 +1734,6 @@ Your breath catches. A small fortune, enough to feed the priory for a season. Hi
 These coins are certainly evidence of wrongdoing, but you're not sure where they came from.
 
 [The score has just gone up by 5 points.]
-
-> GET IT
-You take the sack, trying to ignore how the coins shift and clink. Your vow of poverty weighs heavier than the silver.
 
 > PUT IT IN BASKET
 You put the sack of coins into the basket.
@@ -1799,12 +1799,12 @@ You wait a minute.
 
 Very close, you hear "Helloooo?"
 
-"RING! RING! RING! RING!" You hear the bell ring four times to call the Brothers to the Terce office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
-
 > WAIT
 You wait a minute.
 
 The light moves to the south and you sense Brother Cuthbert is now searching the Crypt Vestry.
+
+"RING! RING! RING! RING!" You hear the bell ring four times to call the Brothers to the Terce office. You've been excused from this office, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 > UP
 You stand.
@@ -1834,16 +1834,14 @@ Quire
 The Quire is the heart of monastic worship and the centre of the church. Two stalls face each other across a narrow gap, where the brothers gather to chant the Divine Offices. The high altar rises to the east. The Nave lies west, beyond the rood screen. The Night Stairs ascend to the Dorter, and a path leads south, out to the Cloister.
 
 Brothers here:
-- Anselm, the cantor
-- Oswald, the prior (seated)
+- Oswald, the prior
 
 You escaped the Crypt without being discovered.
 
 Faintly, you hear "Must have been a draft from the church above." (You hear him muttering a brief prayer.)
 
-Brother Anselm sits on the stalls.
-Brother Martin arrives from the south.
-Brother Wilfred arrives from the south.
+Brother Anselm arrives from the south.
+Brother Oswald sits on the stalls.
 
 [The score has just gone up by 3 points.]
 
@@ -1961,7 +1959,7 @@ This is one of the eight sections of the Cloister. Arched openings admit fresh m
 
 A small alcove, the Lavatorium, is to the south. You can go north to the western edge, or east to the southern edge. The West Gate, allowing outsiders to enter the Cloister, is to the west and open.
 
-You can see an orange cat here.
+You can also see an orange cat here.
 
 > NORTH
 
@@ -2192,8 +2190,10 @@ You can also see Brother Hugh here.
 
 Brother Hugh heads north.
 
+> GET BASIL
+Taken.
+
 > GIVE BASIL TO REMIGIO
-(first taking the basil sprig)
 
 
                                                       
@@ -2266,7 +2266,7 @@ You pound on the lid to shut the mustard barrel.
 You push the door open and head west, emerging at the Passage. The door closes behind you.
 
 The Passage (South)
-The narrow walkway ends here. This part seems less travelled, with small weeds growing from between the stones underfoot. To the east, the ground slopes down to a wide closed door.
+The narrow walkway ends here. This part seems less travelled, with weeds growing from between the stones underfoot. To the east, the ground slopes down to a wide closed door.
 
 Your candle blows out in the breeze.
 
@@ -2416,7 +2416,7 @@ Brother Aelred's words echo: "One life for two, my son." You will never know if 
 
   *** You chose justice ***
 
-In that game you scored 55 out of a possible 55, in 564 turns.
+In that game you scored 55 out of a possible 55, in 565 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
 Previous turn undone.
@@ -2476,9 +2476,11 @@ He sighs deeply. "I have grown more forgiving in my old age. I no longer feel it
 
 He looks at you steadily. "So I leave this to you, Aldwin. Will you bring these accusations to our prior? If you do, Hugh will surely hang. Or will you forgive him, even knowing justice may demand otherwise? 
 
-"This is your choice. Choose wisely, and choose with prayer."
+"This is your choice. Choose wisely, and choose with prayer." 
 
-Do you choose justice or mercy? > MERCY
+What will you do? Choose justice or mercy?
+
+> MERCY
 
 You and Brother Wilfred find Hugh and tell him to leave. Tonight. Before questions are asked. He takes flight, and you never learn what becomes of him---or Rose. 
 
@@ -2490,7 +2492,7 @@ Still, you wonder. A murderer walks free. Does forgiveness make you holy, or com
 
   *** You chose mercy ***
 
-In that game you scored 55 out of a possible 55, in 586 turns.
+In that game you scored 55 out of a possible 55, in 587 turns.
 
 Would you like to RESTART, RESTORE, UNDO the last move, give the FULL score for that game or QUIT? UNDO
 Previous turn undone.

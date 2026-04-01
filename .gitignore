@@ -7,11 +7,14 @@ html/plans.html
 html/plot.html
 html/puzzles.html
 html/style.html
-html/help.html
+html/index.html
 html/walkthrough.txt
 thorns.scr
 walkthrough.rec
 walkthrough.txt
-
 transcripts/
+
 puny/
+
+# Local Netlify folder
+.netlify
