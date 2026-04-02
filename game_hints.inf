@@ -12,8 +12,8 @@ with description
   ^^Some games like this focus heavily on difficult puzzles to solve; others
   focus on puzzle-free narrative. This game aims in between those two poles.
 
-  ^^This game uses some non-traditional IF commands; please see the hint
-  section or use the game command HELP to see them.
+  ^^This game uses some non-traditional IF commands; please see the hint section
+  or use the game command HELP to see them.
 
   ^^If you aren't familiar with monastic terms or locations, you may find the
   ~Monastic knowledge~ of the HELP section useful."
@@ -50,7 +50,7 @@ with description
   mystery series in a similar setting, you may enjoy these.
 
   ^^While they share the setting of a monastery in a very similar time period,
-  this wasn't consciously influenced the earlier IF work ~Vespers~ by Jason
+  this wasn't consciously influenced the earlier IF work ~Vespers~, by Jason
   Devlin---only because in the 20 years since I briefly played it, I had
   unfortunately forgotten about it. Having had several testers point out the
   similarity in theme, I have since played it through and quite enjoyed it.
@@ -235,15 +235,15 @@ Menu -> Monastic "Monastic knowledge";
 
 Option -> -> "What is a ~priory~?"
 with description
-  "It's like a monastery, but smaller, and run by a prior, not an abbot.
-  These are often ~sister priories~ to a nearby monastery."
+  "It's like a monastery, but smaller, and run by a prior, not an abbot. These
+  are often ~sister priories~ to a nearby monastery."
   ;
 
 
 Option -> -> "What is a ~prior~?"
 with description
-  "The Prior is the the administrator of a priory. They're one of the monks,
-  and elected by the other monks.
+  "The Prior is the the administrator of a priory. They're one of the monks, and
+  elected by the other monks.
 
   ^^Brother Oswald is the prior for Our Lady of Thorns.
 
@@ -327,8 +327,8 @@ with description
   "This is the room where copying of books is done. The works created can be
   simple or very detailed and artistic.
 
-  ^^Brother Wilfred is a master of detailed illustrations, the sale of which
-  is a major source of income for the priory."
+  ^^Brother Wilfred is a master of detailed illustrations, the sale of which is
+  a major source of income for the priory."
   ;
 
 
@@ -348,13 +348,9 @@ with description
 Option -> -> "What is an ~Undercroft~?"
 with description
   "This is a cellar, where goods are stored.
+
   ^^Brother Hugh is the cellarer, so he manages this space."
   ;
-
-
-
-
-
 
 
 !===============================================================================
@@ -364,23 +360,23 @@ Menu HintHint "Hints for during play";
 
 Option Hint_start "Start here" Hints
 with description
-  "- This isn't the kind of game where every object in the room is listed in
-  the room description. Look around and examine objects carefully. You may also
-  find it useful to examine ~ordinary~ objects, like doors and tables.
+  "- This isn't the kind of game where every object in the room is listed in the
+  room description. Look around and examine objects carefully. You may also find
+  it useful to examine ~ordinary~ objects, like doors and tables.
 
   ^^- Use other senses. As a novice herbalist, SMELL may be particularly useful.
 
   ^^- Not every location or object connects to a puzzle. Some locations and
   objects are present because, thematically, they would be in the priory.
 
-  ^^- Learn the schedule for offices; knowing when services start and stop
-  will let you use your time efficiently. There are useful commands for waiting
-  for a longer time than just a minute; see the section on ~Special commands~
-  in HELP if you haven't already.
+  ^^- Learn the schedule for offices; knowing when services start and stop will
+  let you use your time efficiently. There are useful commands for waiting for a
+  longer time than just a minute; see the section on ~Special commands~ in HELP
+  if you haven't already.
 
-  ^^- Every location in the priory can be reached in-game, though some take
-  some effort to access. If you feel stuck and don't know what to do next,
-  try to get into the unexplored areas on the map.
+  ^^- Every location in the priory can be reached in-game, though some take some
+  effort to access. If you feel stuck and don't know what to do next, try to get
+  into the unexplored areas on the map.
 
   ^^- In some interactive fiction, you're supposed to try to collect any item
   you find, in case it's important for a puzzle. This isn't a game like that;
@@ -390,8 +386,8 @@ with description
   sight for no reason.
 
   ^^- Latin phrases appear throughout; some are translated, some are not. While
-  it's not critical, you may find it helpful to translate some of them.
-  Google Translate can be useful for this.";
+  it's not critical, you may find it helpful to translate some of them. Google
+  Translate can be useful for this.";
 
 
 Menu HintGeneral "General";
@@ -402,7 +398,9 @@ Option Hint_Real "Is Our Lady of Thorns a real priory?"
   with in_menu HintGeneral,
 the_hints
   "Alas, no."
+
   "But I've tried to make it realistic in the architecture and setting."
+
   "There are really priories like this."
   ;
 
@@ -412,85 +410,108 @@ Option Hint_Loc "Where is the priory located?"
   with in_menu HintGeneral,
 the_hints
   "The game doesn't give an exact location."
-  "But references in it strongly suggest the southeastern end of England,
-      near France."
+
+  "But references in it strongly suggest the southeastern end of England, near
+  France."
   ;
 
 Option Hint_Founded "When was the priory founded?"
-  class Hintobj
+  class HintObj
   with in_menu HintGeneral,
 the_hints
   "In the twelfth century."
-  "If you want to learn a more exact date, you'll have to figure it out
-      in the game."
+
+  "If you want to learn a more exact date, you'll have to figure it out in the
+  game."
   ;
 
 
 Option Hint_intro "Who are we, and what's our purpose?"
- class Hintobj
+ class HintObj
  with in_menu HintGeneral,
 the_hints
   "You're a novice monk at the priory of Our Lady of Thorns."
-  "A dramatic thing happens early in the game that will give you a sense
-    of your purpose in the game."
+
+  "A dramatic thing happens early in the game that will give you a sense of your
+  purpose in the game."
+
   "If that hasn't happened yet, explore the priory until that happens."
    ;
 
 Option Hint_silence "Why can't I talk to the monks?"
- class Hintobj
+ class HintObj
  with in_menu HintGeneral,
 the_hints
   "Many monasteries have strict vows of silence at many times and places."
+
   "There are many places where you'll never be able to talk to them."
+
   "And some monks are very strict about the vow of silence.",
   ;
 
 
 Option Hint_dragon "How can I kill the red dragon?"
-  class Hintobj
+  class HintObj
   with in_menu HintGeneral,
 the_hints
   "He's allergic to cherries."
+
   "You could try THROW CHERRIES AT DRAGON."
+
   "Of course, there are no cherries."
+
   "There's also no dragon."
+
   "Don't read hints for problems you're not facing---they'll spoil the game."
   ;
 
+
 Option Hint_contraband "How can I carry things without being caught?"
-  class Hintobj
+  class HintObj
   with in_menu HintGeneral,
 the_hints
-  "Firstly, this isn't a game where you should try you take everything.
-    Think of the priory like a real place, filled with real people: you
-    shouldn't just try to steal everything, and there can be consequences
-    if you do."
-  "If you do take things not related to your duties, you'll need to find a
-    way to hide them."
+  "Firstly, this isn't a game where you should try you take everything. Think of
+  the priory like a real place, filled with real people: you shouldn't just try
+  to steal everything, and there can be consequences if you do."
+
+  "If you do take things not related to your duties, you'll need to find a way
+  to hide them."
+
   "There are two containers that will let you carry things without others
   noticing."
+
   "One is something you can find in a location Aelred used."
+
   "Another is something you already have."
+
   "Search the Herbarium."
+
   "Or examine your habit."
+
   "In the Herbarium, LOOK UNDER TABLE and GET BASKET."
+
   "Or X HOOD and then you can PUT ___ IN HOOD."
   ;
 
+
 Option Hint_stuck "I'm not sure what to do next"
-  class Hintobj
+  class HintObj
   with in_menu HintGeneral,
 the_hints
   "If you haven't witnessed a death and sat through a meeting, just explore."
-  "Once you have, the game will give you some hints: examine the body and
-    search the gardens."
-  "Once you've done that, you should explore the priory. Every location can
-    be reached (though some require some effort)."
-  "There are four main pieces of evidence (each giving 5 points) and some
-    less critical pieces of evidence. You don't need to find them all to solve
-    the mystery."
-  "If you're still stuck, look at the hints for specific locations and that
-    can give you ideas of what to do there."
+
+  "Once you have, the game will give you some hints: examine the body and search
+  the gardens."
+
+  "Once you've done that, you should explore the priory. Every location can be
+  reached (though some require some effort)."
+
+  "There are four main pieces of evidence (each giving 5 points) and some less
+  critical pieces of evidence. You don't need to find them all to solve the
+  mystery."
+
+  "If you're still stuck, look at the hints for specific locations and that can
+  give you ideas of what to do there."
   ;
 
 
@@ -504,112 +525,157 @@ Menu HintExChurch "Church Areas" HintHint;
 
 
 Option Hint_chantry "What should I do in the FitzAlan Chantry?"
- class Hintobj
+ class HintObj
  with in_menu HintExChurch,
 the_hints
-  "Wealthy families sometimes bought private chapels where prayers would be
-    said for them."
+  "Wealthy families sometimes bought private chapels where prayers would be said
+  for them."
+
   "They would also often have the right to be buried in the crypt."
+
   "Or even have a private crypt."
+
   "There is a hidden entrance to their private crypt."
+
   "Have you examined the altar carefully?"
+
   "The gouges might have come from moving the altar."
+
   "Do you know what the family motto means?"
+
   "Have you tried doing anything with the family arms?"
+
   "You might need to get closer to them."
+
   "CLIMB ON ALTAR. PUSH LION. GO DOWN."
+
   "PUSH ALTAR."
 ;
 
 
 Option Hint_candle "How can I get a light source?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChurch,
 the_hints
   "Have you seen any candles?"
+
   "You can't take the canonical hour candle in the Night Stairs, though."
+
   "But surely, there must be some in storage?"
+
   "Who manages things like candles?"
+
   "Have you smelled wax anywhere?"
+
   "Have you found a room where items are stored?"
+
   "Go to the Sacristy, south of the Sanctuary, and search carefully."
+
   "You can't steal the candle, though, until you've found an area that is dark."
+
   "Then you can light it from another candle."
-  "Be careful, though: carrying a candle around in front of other monks will
-      get you in trouble."
+
+  "Be careful, though: carrying a candle around in front of other monks will get
+  you in trouble."
       ;
 
 
 Option Hint_Jude "What should I do in the St Jude Chapel?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChurch,
 the_hints
   "Pray for desperate causes, of course."
+
   "It looks like someone has beat you to this."
+
   "What are those red berries?"
+
   "You can also pray here."
+
   "You might want to get on the prayer mat first."
-  "If you do pray to St Jude, you may get a blessing when you
-    are in a desperate state."
+
+  "If you do pray to St Jude, you may get a blessing when you are in a desperate
+  state."
   ;
 
 
 Option Hint_Berries "What are the red berries?"
- class Hintobj
+ class HintObj
  with in_menu HintExChurch,
 the_hints
-  "You've studied herbalism with Brother Aelred;
-    what could you do with them to try to figure out what they are?"
+  "You've studied herbalism with Brother Aelred; what could you do with them to
+  try to figure out what they are?"
+
   "Try SMELL BERRIES or TASTE BERRIES."
+
   "Rosehips, hmm? The final stage of decline for a rose.
+
   That might be useful to think on."
   ;
 
 
 Option Hint_Mary "What should I do in the Lady Chapel?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChurch,
 the_hints
   "Our Lady is the patroness of the priory."
+
   "This chapel is visited often by the brothers."
+
   "There's nothing specific you need to do here."
   ;
 
 
 Option Hint_gate "How can I open the crypt gate?"
- class Hintobj
+ class HintObj
  with in_menu HintExChurch,
 the_hints
   "With a key, of course."
+
   "Brother Oswald carries that key."
+
   "But those keys are a red herring---you'll never get them from him."
+
   "There must be another way into the crypt."
+
   "You can get a clue by studying the map in the Library."
+
   "There is, in fact, another, private, crypt with a secret entrance."
+
   "Have you encountered a place funded by a long-lost wealthy family?"
+
   "Solve the challenge of the FitzAlan Chantry."
 ;
 
 
 Option Hint_belltower "What should I do in the Bell Tower?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChurch,
 the_hints
   "Enjoy the views?"
+
   "The bell is also very handsome."
+
   "And cast by the founder, Brother Gordian."
+
   "And has an inscription on it."
+
   "The chest begs to be opened."
+
   "But there's nothing useful in it."
+
   "This is an area where the public can get to."
+
   "So an outsider could hide something here."
+
   "Do you see anything interesting when examining the leaves?"
+
   "Look under the chest."
   ;
 
 
 Option Hint_Nave "What should I do in the Nave?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChurch,
 the_hints
   "The stained glass is worth looking at."
@@ -622,28 +688,31 @@ Menu HintUpper "Upper Floor";
 
 
 Option Hint_dorters "What should I do in the dorters?"
-  class Hintobj
+  class HintObj
   with in_menu HintUpper,
 the_hints
   "You've already slept all you will today."
+
   "But there's plenty to search in these rooms."
+
   "Examine the chests."
   ;
 
 
-
 Option Hint_not_suspicious "Why can't I search the cots and chests?"
-  class Hintobj
+  class HintObj
   with in_menu HintUpper,
 the_hints
     "You're just a novice monk---you can't just pry into things for no reason."
+
     "Once you've established that Aelred's death was suspicious, you can."
+
     "Examine his body closely."
   ;
 
 
 Option Hint_Hall "What should I do in the Hall?"
-  class Hintobj
+  class HintObj
   with in_menu HintUpper,
 the_hints
   "It's just a hallway between the dorters."
@@ -651,11 +720,13 @@ the_hints
 
 
 Option Hint_Nec "What should I do in the Necessarium?"
-  class Hintobj
+  class HintObj
   with in_menu HintUpper,
 the_hints
   "You're not feeling a call of nature."
+
   "So there's nothing you need here."
+
   "But if you want to destroy anything, you can throw it down the latrines."
   ;
 
@@ -667,59 +738,93 @@ Menu HintExUnderground "Crypt Area";
 
 
 Option Hint_FACrypt "How can I get out of the FitzAlan Crypt?"
-  class Hintobj
+  class HintObj
   with in_menu HintExUnderground,
 the_hints
  "The ladder is too far up to reach."
+
  "It really is---you won't be able to reach it, no matter what you do."
+
  "There is another way out."
+
  "Have you examined everything in the room?"
+
  "That art panel is striking."
+
  "And there's a part of it that is distinctive."
+
  "Examine the frame."
+
  "Once you have, you can PUSH BUTTON."
  ;
 
 
 Option Hint_Crypt "What am I supposed to do in the crypt?"
-  class Hintobj
+  class HintObj
   with in_menu HintExUnderground,
 the_hints
   "You can learn interesting things about the former priors."
+
   "There's also something important to find."
+
   "Have you looked carefully in the Crypt Vestry?"
+
   "Search the shelves."
+
   "Where might someone hide something here?"
+
   "Those coins are very suspicious, and definitely a clue to the mystery."
   ;
 
 
 Option Hint_CryptEscape "How can I get out of the crypt?"
-  class Hintobj
+  class HintObj
   with in_menu HintExUnderground,
 the_hints
   "The gate is locked and you don't have a key."
+
   "And you'll never get it. It's guarded closely."
+
   "There are three ways to get out."
+
   "If you got someone else to open the door, you might be able to escape."
+
   "How could you attract attention in the crypt?"
+
   "You could RING BELL or just SHOUT."
+
   "That will bring a Brother to investigate."
+
   "But you don't want to get caught down there."
+
   "So you'll need to find a place to hide."
+
   "There are two places: one in the crypt, and one in another room."
+
   "You could hide in the FitzAlan Crypt, as long as you close the panel."
+
   "Or you could hide behind one of the tombs."
+
   "Examine the tomb of Brother Ezra."
+
   "You could also look him up in the Registrum Fratrum, if you have it."
+
   "You can HIDE BEHIND EZRA'S TOMB."
+
   "If you do the latter, you'll need to close the panel from this room."
+
   "And extinguish your candle."
+
   "Then, once Cuthbert starts searching the vestry, you can escape up."
+
   "BONUS: there's one other way to escape, but it requires some prayer."
+
   "Have you ever tried praying in the St Jude chapel?"
+
   "Specifically, while you're on the prayer mat."
+
   "If so, St Jude could open the gate for you, using up your desperate prayer."
+
   "Go to the Tower Stairs and PRAY."
   ;
 
@@ -731,71 +836,97 @@ Menu HintExGardens "Herbarium and gardens";
 
 
 Option Hint_HangingHerbs "How can I get the herbs hanging in the herbarium?"
-  class Hintobj
+  class HintObj
   with in_menu HintExGardens,
 the_hints
   "They're much too far up."
+
   "Really---you won't be able to reach them."
+
   "But you should figure out what they are; that may give you a hint for
-        elsewhere."
+  elsewhere."
+
   "You can do so by climbing on the table."
   ;
 
 
 Option Hint_Herbarium "What should I do in the Herbarium?"
-  class Hintobj
+  class HintObj
   with in_menu HintExGardens,
 the_hints
   "There are several things to find."
+
   "Look on the table."
+
   "The Herbal will be a useful reference."
+
   "Two others aren't as easily spotted, but search around."
+
   "You've already looked on top of the table."
+
   "Read that carefully: ~On top of the table~."
+
   "Look under table: that basket will be useful for carrying things."
+
   "And particularly: for carrying things without others seeing them."
+
   "The last thing to search closely is the terracotta pot."
+
   "There may be a clue when you do so for finding something else."
   ;
 
 
 Option Hint_Garden "What should I do in the Garden?"
-  class Hintobj
+  class HintObj
   with in_menu HintExGardens,
 the_hints
   "You should examine the beds."
-  "One of them might stand out, if you've managed to identify
-     the herbs hanging in the Herbarium."
+
+  "One of them might stand out, if you've managed to identify the herbs hanging
+  in the Herbarium."
+
   "The basil wasn't hanging---perhaps Aelred was saving it for another purpose?"
+
   "It might be a nice gift for someone."
   ;
 
 
 Option Hint_GardenGate "How can I get into the Restricted Garden?"
-  class Hintobj
+  class HintObj
   with in_menu HintExGardens,
 the_hints
   "With a key, of course."
+
   "Who managed the restricted garden?"
+
   "Brother Aelred---so the key is somewhere he could control it."
+
   "A possibility is that he hid it somewhere in the Herbarium."
+
   "Where's a place lots of people hide keys outside their homes?"
+
   "Look under the terracotta pot."
+
   "It's not there, but that will give you a clue."
+
   "Brother Aelred might have carried the key with him."
+
   "And therefore it would still be on his body."
 ;
 
 
-Option Hint_RestGarden
-      "Why can't I touch or take the plants in the restricted garden?"
-  class Hintobj,
+Option Hint_RestGarden "Why can't I touch the plants in the restricted garden?"
+  class HintObj,
   with in_menu HintExGardens,
 the_hints
   "They're toxic and harmful to touch."
+
   "But Brother Aelred must have been able to handle them safely."
+
   "What might he have used?"
+
   "Find the gloves."
+
   "They're in the Herbarium."
   ;
 
@@ -805,45 +936,65 @@ the_hints
 Menu HintExInfirmary "Infirmary and its chapel";
 
 Option Hint_Infirmary "What should I do in the infirmary?"
-  class Hintobj
+  class HintObj
   with in_menu HintExInfirmary,
 the_hints
   "Mirrors are very rare in monasteries. You can look at yourself."
+
   "That's all it's really good for, though."
+
   "The locked cabinet just begs to be opened."
   ;
 
 
 Option Hint_Cabinet "How can I open the locked cabinet?"
-  class Hintobj
+  class HintObj
   with in_menu HintExInfirmary,
 the_hints
   "~Historia nostra, fides nostra~ = ~Our history, our faith~"
+
   "What might be something about history that the monks would know?"
+
   "Brother Aelred figured it out years ago, so it couldn't be a recent thing."
+
   "The founding date of the monastery."
+
   "You can discover this in a few ways."
+
   "Buildings often have a cornerstone showing a building date."
+
   "Unfortunately, the priory doesn't have that, exactly."
+
   "But it's carved onto the West Door."
+
   "You'll need to look at the face of the door from the outside to see it."
-  "Another possibility is you could use the Registrum Fratrum,
-     if you've found it."
+
+  "Another possibility is you could use the Registrum Fratrum, if you've found
+  it."
+
   "Do you know who the founder was?"
+
   "There's a statue of him in the Chapter House."
+
   "You can look up Brother Gordian in the registry."
+
   "Either way, you'll learn: 1152."
   ;
 
 Option Hint_InfirmaryChapel "What should I do in the Infirmary Chapel?"
-  class Hintobj
+  class HintObj
   with in_menu HintExInfirmary,
 the_hints
   "Examine the body, of course."
+
   "Just looking at the body in general may not tell everything."
+
   "You may remember some descriptions of him when he was dying."
+
   "Examine his eyes. Those looked 'strange' during the death scene."
+
   "Also, try SMELL AELRED."
+
   "Searching body may also be useful."
 ;
 
@@ -853,16 +1004,21 @@ the_hints
 Menu HintExChapterHouse "Chapter House";
 
 Option Hint_ChapterHouse "What should I do in the Chapter House?"
-  class Hintobj
+  class HintObj
   with in_menu HintExChapterHouse,
 the_hints
   "During the meeting, just pay attention and don't act up."
-  "Brother Oswald will invite everyone to pay respects to Brother Aelred
-      in the Infirmary Chapel. That's a good idea."
+
+  "Brother Oswald will invite everyone to pay respects to Brother Aelred in the
+  Infirmary Chapel. That's a good idea."
+
   "Otherwise, there are two useful things here."
+
   "The panel shows the hours of the offices, which is very useful."
-  "Knowing these can help you plan when to visit locations, in case you
-      need a monk there or in case you need a monk not to be there."
+
+  "Knowing these can help you plan when to visit locations, in case you need a
+  monk there or in case you need a monk not to be there."
+
   "The statue is also worth examining."
   ;
 
@@ -873,56 +1029,86 @@ Menu HintExLibrary "Scriptorium and Library";
 
 
 Option Hint_Scriptorium "What should I do in the Scriptorium?"
-  class Hintobj
+  class HintObj
   with in_menu HintExLibrary,
 the_hints
   "It's a pretty room, isn't it? So cosy."
+
   "And warm, given that fireplace."
+
   "Plus, Brother Wilfred's latest work, the breviary, is very nice."
+
   "There's nothing that useful in the Scriptorium itself."
+
   "You really want to get into the Library!"
   ;
 
 
 Option Hint_LibraryKey "How can I get into the Library?"
-  class Hintobj
+  class HintObj
   with in_menu HintExLibrary,
 the_hints
   "You could use the key, of course."
+
   "But Brother Wilfred guards it jealously."
+
   "Can you distract him?"
+
   "He's old enough that he always seems close to sleep."
+
   "If only you could help him fall asleep."
+
   "There's something in the Restricted Garden that could help."
+
   "You'll have to look it up in the Herbal to know how to use it."
+
   "It's the mandrake root. It is often used to put people under during surgery."
+
   "He won't eat it, though."
+
   "And you don't have a way to make it into a tea."
+
   "But it does emit fumes that can be narcotic."
+
   "Try burning it."
+
   "If you don't like this idea, here's another: what's the fluff on his habit?"
+
   "Orange fur?"
+
   "It's from the cat who wanders the Cloister."
+
   "Brother Wilfred is very fond of her."
+
   "And he'll fall asleep if you bring her to him."
+
   "She might need to be bribed with some food before you can pick her up."
-  "With either plan, though, he will wake up, so don't spend too much
-      time in the library."
+
+  "With either plan, though, he will wake up, so don't spend too much time in
+  the library."
+
   "Don't forget to return the key and close the door to the Library."
   ;
 
 
 Option Hint_Library "What should I do in the Library?"
-  class Hintobj
+  class HintObj
   with in_menu HintExLibrary,
 the_hints
   "There's a book that will be very useful to you."
+
   "The Registrum Fratrum."
+
   "There are a few hints there. You can look up monks you learn about."
+
   "The map is worth looking at."
+
   "Read the description carefully and compare it to what your map shows."
+
   "There are two crypts? Examine the crypts."
+
   "A FitzAlan Crypt, hmm? I wonder how you can get to it."
+
   "It'll be below the FitzAlan Chantry, naturally."
   ;
 
@@ -930,22 +1116,29 @@ the_hints
 
 Menu HintExCloister "Cloister";
 
+
 Option Hint_cloister "What should I do in the Cloister areas?"
-  class Hintobj
+  class HintObj
   with in_menu HintExCloister,
 the_hints
   "Mostly, these just connect other areas you want to visit."
+
   "Do notice that interesting door in the northwest part."
+
   "And the gate on the southwest part."
   ;
 
+
 Option Hint_garth "What should I do in the Garth?"
-  class Hintobj
+  class HintObj
   with in_menu HintExCloister,
 the_hints
   "Stop and smell the grass?"
+
   "You can use it to go across the Cloister efficiently."
+
   "The sundial is also useful."
+
   "It can give you a more accurate sense of time."
   ;
 
@@ -956,12 +1149,15 @@ Menu HintExRefectory "Refectory and Kitchen";
 
 
 Option Hint_Kitchen "What should I do in the Kitchen?"
-  class Hintobj
+  class HintObj
   with in_menu HintExRefectory,
 the_hints
   "You can do hardly anything while Martin is here."
+
   "Remigio will let you look around once Martin is gone."
+
   "But there isn't anything you need here."
+
   "But you'd really like to get to the Undercroft below."
   ;
 
@@ -976,53 +1172,72 @@ Option Hint_AccessUndercroft "How can I get into the Undercroft?"
   with in_menu HintExUndercroft,
 the_hints
   "There are stairs going down from Kitchen."
+
   "And also a door from the South Passage."
-  "The door, though, only opens from the inside. You won't be able to get
-      in that way."
+
+  "The door, though, only opens from the inside. You won't be able to get in
+  that way."
+
+
   "You can't go down from the Kitchen while Brother Martin is in the Kitchen."
+
   "Brother Remigio won't let you, either---unless you convince him."
+
   "His English is poor, but perhaps a gift would do?"
+
   "Given what you may have learned about him, is there anything he might
-      appreciate?"
+  appreciate?"
+
   "Aelred was growing something as a treat for him."
+
   "Give him the basil from the Garden."
   ;
 
 
 
 Option Hint_Undercroft "What should I do in the Undercroft?"
-  class Hintobj
+  class HintObj
   with in_menu HintExUndercroft,
 the_hints
   "Search around, of course."
+
   "The ledger is worth reading."
+
   "The barrels should be tempting."
+
   "One in particular, perhaps, depending on what you've seen so far."
+
   "Opening and searching each one will take a long time. If you've found
-      anything in the Crypt Vestry, this could give you a clue which one to
-      search."
+  anything in the Crypt Vestry, this could give you a clue which one to search."
   ;
 
 Option Hint_Barrels "The barrels are too deep to search"
-  class Hintobj
+  class HintObj
   with in_menu HintExUndercroft,
 the_hints
   "With your hands, yes."
+
   "Is there something around that might help?"
+
   "Have you examined the table?"
+
   "The stick is long."
-  "You can DIG IN ___ BARREL WITH STICK or just SEARCH BARREL while holding
-      the stick."
+
+  "You can DIG IN ___ BARREL WITH STICK or just SEARCH BARREL while holding the
+  stick."
   ;
 
 
 Option Hint_WhichBarrel "What barrel should I search?"
-  class Hintobj
+  class HintObj
   with in_menu HintExUndercroft,
 the_hints
   "Have you found some evidence in the Crypt Vestry?"
+
   "If so, examine the sack."
+
   "Burlap stained yellow?"
+
   "A hot take: try the mustard barrel."
   ;
 
@@ -1031,61 +1246,84 @@ the_hints
 Menu HintExPriorSolar "Prior's Solar";
 
 Option Hint_WhatIsSolar "What is a solar?"
-  class Hintobj
+  class HintObj
   with in_menu HintExPriorSolar,
 the_hints
   "A historic name for his private living quarters."
+
   "As the prior, he gets a bit of privacy."
   ;
 
 Option Hint_SolarDoor "How can I get past the lock?"
-  class Hintobj
+  class HintObj
   with in_menu HintExPriorSolar,
-  the_hints
-    "Have you examined the door?"
-  "It's a kind of combination lock---you just need to know the symbols to
-    press and in what order."
+the_hints
+  "Have you examined the door?"
+
+  "It's a kind of combination lock---you just need to know the symbols to press
+  and in what order."
+
   "It was designed by Prior Gordian, the founder."
+
   "First, you'll need to read about him from a book in the library."
+
   "He lived by three creeds, which you can discover."
+
   "Does the entry on him suggest places to look?"
+
   "Have you seen a statue of him around?"
-  "You can find his creed in the stained glass in the Nave, on his
-    statue in the Chapter House, and on the bell in the tower."
+
+  "You can find his creed in the stained glass in the Nave, on his statue in the
+  Chapter House, and on the bell in the tower."
+
   "PUSH CROSS.^PUSH HAMMER.^PUSH SCROLL."
   ;
 
+
 Option Hint_PriorGone "How can I get past Oswald to enter the solar?"
-  class Hintobj
+  class HintObj
   with in_menu HintExPriorSolar,
 the_hints
   "You can't as long as he's there."
+
   "And he's there whenever an office isn't being held."
+
   "Have you seen something that lists the offices and their times?"
+
   "You can find that in the Chapter House."
+
   "You can check the time on the canonical hour candle or the sundial."
+
   "Or you can listen for the bell."
   ;
 
+
 Option Hint_InSolar "What should I do in the Solar?"
-  class Hintobj
+  class HintObj
   with in_menu HintExPriorSolar,
 the_hints
   "Look around."
+
   "Particularly, at the desk."
+
   "Did you find the Chronicle?"
+
   "It sounds like valuable art has been disappearing."
   ;
 
 
 Option Hint_Drawer "How can I get into the desk drawer?"
-  class Hintobj
+  class HintObj
   with in_menu HintExPriorSolar,
 the_hints
   "The drawer doesn't open, but it doesn't have an obvious lock."
+
   "It's another one of the founders' ingenious devices."
+
   "Take a look at the cross on the desk."
+
   "What a nice Latin inscription."
+
   "Try turning the cross."
   ;
 
@@ -1094,60 +1332,80 @@ the_hints
 Menu HintExSolving "Solving the mystery" ;
 
 Option Hint_Solving "How do I accuse someone?"
-  class Hintobj
+  class HintObj
   with in_menu HintExSolving,
 the_hints
   "You'll need to find enough evidence first."
+
   "Once you do, the game will give you two options to share your findings."
+
   "One is publicly announcing at an office."
+
   "Go to the office and SHOUT to get everyone's attention."
-  "The other possibility is to talk about your concerns with a
-      friendly Brother."
+
+  "The other possibility is to talk about your concerns with a friendly
+  Brother."
+
   "Find Wilfred and CONFESS TO WILFRED.",
-has ;
+;
 
 
 Option Hint_Evidence "What are the main pieces of evidence?"
-  class Hintobj
+  class HintObj
   with in_menu HintExSolving,
 the_hints
   "Are you sure you want to see this? This will ruin the game."
+
   "The henbane decoction."
+
   "The hidden sack of coins."
+
   "The treacherous note."
+
   "The stolen psalter."
+
   "Not as central, but there are other pieces that can help you."
+
   "The letters from Rose."
+
   "The rosehips left at the St Jude altar."
+
   "The Prior's Chronicle, discussing the missing psalter."
 ;
 
 
 Option Hint_Solution "What is the full story of the crime?"
-  class Hintobj
+  class HintObj
   with in_menu HintExSolving,
 the_hints
+
   "Are you sure you want to see this? This will ruin the game."
-  "Brother Hugh has a sister, Rose, with a desperately ill son. She's
-    destitute and couldn't afford care for him. So he stole one of
-    Brother Wilfred's illuminated manuscripts and found an outside buyer
-    for it."
-  "He continues to do this, perhaps for greed and perhaps to help pay for
-    future help for Rose. Brothers Wilfred and Oswald assumed that Wilfred
-    had misplaced these works."
-  "He communicates with the outside buyer through leaving notes under the
-    chest in the Bell Tower, since that's a place where outsiders can get
-    to without anyone being suspicious."
-  "He's been hiding his payments in a sack in the Crypt Vestry, since almost
-    no one ever goes there."
-  "Brother Aelred discovered the crime from noticing how stressed
-    Hugh has been lately and from hearing from Wilfred how Hugh had been
-    'helping' him in the Library. He searched and found the letters from Rose
-    and connected this to the rosehips that Hugh has been leaving on the
-    St Jude altar as a form of prayer for her."
-  "Brother Aelred confronted Hugh. Hugh told Aelred that they could
-    discuss this more completely the next day, and then he broke into the
-    Infirmary medicine cabinet and emptied the henbane decoction into a cup."
-  "When they met the morning of the game, after Matins, Hugh forced him
-    to drink the poison."
+
+  "Brother Hugh has a sister, Rose, with a desperately ill son. She's destitute
+  and couldn't afford care for him. So he stole one of Brother Wilfred's
+  illuminated manuscripts and found an outside buyer for it."
+
+  "He continues to do this, perhaps for greed and perhaps to help pay for future
+  help for Rose. Brothers Wilfred and Oswald assumed that Wilfred had misplaced
+  these works."
+
+  "He communicates with the outside buyer through leaving notes under the chest
+  in the Bell Tower, since that's a place where outsiders can get to without
+  anyone being suspicious."
+
+  "He's been hiding his payments in a sack in the Crypt Vestry, since almost no
+  one ever goes there."
+
+  "Brother Aelred discovered the crime from noticing how stressed Hugh has been
+  lately and from hearing from Wilfred how Hugh had been 'helping' him in the
+  Library. He searched and found the letters from Rose and connected this to the
+  rosehips that Hugh has been leaving on the St Jude altar as a form of prayer
+  for her."
+
+  "Brother Aelred confronted Hugh. Hugh told Aelred that they could discuss this
+  more completely the next day, and then he broke into the Infirmary medicine
+  cabinet and emptied the henbane decoction into a cup."
+
+  "When they met the morning of the game, after Matins, Hugh forced him to drink
+  the poison."
   ;
