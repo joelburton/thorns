@@ -4,7 +4,7 @@ Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com> 
 Site: https://lady-of-thorns.netlify.app
-Release 1 / Serial number 260401 / Inform v6.44 PunyInform v6.4.1 DR
+Release 1 / Serial number 260402 / Inform v6.44 PunyInform v6.4.1 DR
 
 
                                                              
@@ -235,7 +235,7 @@ Our Lady of Thorns
 A medieval monastic mystery/tragedy 
 by Joel Burton <joel@joelburton.com> 
 Site: https://lady-of-thorns.netlify.app
-Release 1 / Serial number 260401 / Inform v6.44 PunyInform v6.4.1 DR
+Release 1 / Serial number 260402 / Inform v6.44 PunyInform v6.4.1 DR
 
 > GET UP
 You stand up from the stalls.
@@ -275,7 +275,7 @@ You open the great door.
 Porch
 This covered entrance protects the great door from the winds that come across the sea from the east. Villagers used to gather here before services, but the number who do so has been declining for years. 
 
-You can go south out to the covered walkway the brothers call "The Passage", or you can go east in to the church.
+You can go south out to the covered walkway the brothers call "The Passage", or you can go east into the church.
 
 The great door is open, revealing the Nave to the east.
 
@@ -498,7 +498,7 @@ Brother Wilfred yawns sleepily.
 Brothers Oswald, Hugh, Benedict, Cuthbert and Remigio leave.
 
 > ASK WILFRED ABOUT AELRED
-"What a loss for our community. I knew him his entire adult life, and such a a pleasant acquaintance it was. He was always thoughtful---he began to bring me rosemary sprigs after he learned that that was my mother's name."
+"What a loss for our community. I knew him his entire adult life, and such a pleasant acquaintance it was. He was always thoughtful---he began to bring me rosemary sprigs after he learned that that was my mother's name."
 
 Brothers Wilfred, Martin and Anselm depart, leaving you alone.
 
@@ -1946,7 +1946,7 @@ From a distance, you can hear your brothers singing.
 Porch
 This covered entrance protects the great door from the winds that come across the sea from the east. Villagers used to gather here before services, but the number who do so has been declining for years. 
 
-You can go south out to the covered walkway the brothers call "The Passage", or you can go east in to the church.
+You can go south out to the covered walkway the brothers call "The Passage", or you can go east into the church.
 
 The great door is open, revealing the Nave to the east.
 
@@ -1955,7 +1955,7 @@ The great door is open, revealing the Nave to the east.
 The Passage (North)
 A covered walkway that runs along the west edge of the priory. The stones underfoot are set carefully to make this a clear path. 
 
-You can go north to the Porch or south to the southern end of the Passage. The West Gate, allowing entrance in to the Cloister, is here and closed.
+You can go north to the Porch or south to the southern end of the Passage. The West Gate, allowing entrance into the Cloister, is here and closed.
 
 > OPEN GATE
 You open the West Gate.
@@ -2309,7 +2309,7 @@ There's some serious wrongdoing here. Why was this hidden? This must be related 
 The Passage (North)
 A covered walkway that runs along the west edge of the priory. The stones underfoot are set carefully to make this a clear path. 
 
-You can go north to the Porch or south to the southern end of the Passage. The West Gate, allowing entrance in to the Cloister, is here and open.
+You can go north to the Porch or south to the southern end of the Passage. The West Gate, allowing entrance into the Cloister, is here and open.
 
 > EAST
 You need to drop the pointed stick first. It's much too large and conspicuous to carry around the priory.
