@@ -380,7 +380,7 @@ with description
 
   ^^- Every location in the priory can be reached in-game, though some take
   some effort to access. If you feel stuck and don't know what to do next,
-  try to get into to the unexplored areas on the map.
+  try to get into the unexplored areas on the map.
 
   ^^- In some interactive fiction, you're supposed to try to collect any item
   you find, in case it's important for a puzzle. This isn't a game like that;
@@ -467,7 +467,7 @@ the_hints
     if you do."
   "If you do take things not related to your duties, you'll need to find a
     way to hide them."
-  "There's are two containers that will let you carry things without others
+  "There are two containers that will let you carry things without others
   noticing."
   "One is something you can find in a location Aelred used."
   "Another is something you already have."
@@ -755,7 +755,7 @@ the_hints
   "Look under table: that basket will be useful for carrying things."
   "And particularly: for carrying things without others seeing them."
   "The last thing to search closely is the terracotta pot."
-  "If you haven't already found a key, one will be hidden there."
+  "There may be a clue when you do so for finding something else."
   ;
 
 
@@ -778,12 +778,12 @@ the_hints
   "With a key, of course."
   "Who managed the restricted garden?"
   "Brother Aelred---so the key is somewhere he could control it."
-  "There are two possible ways to find it."
-  "Brother Aelred might have carried the key with him."
-  "And therefore it would still be on his body."
-  "Another possibility is that he hid it somewhere in the Herbarium?"
+  "A possibility is that he hid it somewhere in the Herbarium."
   "Where's a place lots of people hide keys outside their homes?"
   "Look under the terracotta pot."
+  "It's not there, but that will give you a clue."
+  "Brother Aelred might have carried the key with him."
+  "And therefore it would still be on his body."
 ;
 
 

@@ -1,0 +1,86 @@
+
+Constant BOOK_OF_PSALMS "          --- The Book of Psalms";
+
+Array  quote_opening static --> 4 41                            ! >quote_opening
+  "Behold, how good and how pleasant it is"
+  "for brethren to dwell together in unity!"
+  ""
+  ! "            --- The Book of Psalms";
+  BOOK_OF_PSALMS;
+
+Array quote_darkness static --> 3 38                           ! >quote_darkness
+  "They grope in the dark without light."
+  ""
+  "                --- The Book of Job";
+
+Array quote_crypt static --> 3 34                                 ! >quote_crypt
+  "Son of man, can these bones live?"
+  ""
+  "         --- The Book of Ezekiel";
+
+Array quote_stone static --> 3 31                                 ! >quote_stone
+  "Roll a great stone to me here."
+  ""
+  " --- The First Book of Kings";
+
+Array quote_ladder static --> 5 37                               ! >quote_ladder
+  "And he dreamed, and behold"
+  "a ladder set up on the earth,"
+  "and the top of it reached to heaven."
+  ""
+  "            --- The Book of Genesis";
+
+Array quote_locutory static --> 4 24                           ! >quote_locutory
+  "A time to keep silence,"
+  "and a time to speak."
+  ""
+  "      --- Ecclesiastes";
+
+Array quote_sleep static --> 3 33                                 ! >quote_sleep
+  "The sleepy like to make excuses."
+  ""
+  "   --- The Rule of St Benedict";
+
+Array quote_rose static --> 4 29                                   ! >quote_rose
+  "I am the rose of Sharon,"
+  "and the lily of the valleys."
+  ""
+  "        --- Song of Solomon";
+
+Array quote_body static --> 4 34                                   ! >quote_body
+  "Precious in the sight of the Lord"
+  "is the death of his saints."
+  ""
+  BOOK_OF_PSALMS;
+  ! "           --- The Book of Psalms";
+
+Array quote_song static --> 5 35                                   ! >quote_song
+  "O come, let us sing unto the Lord:"
+  "let us make a joyful noise"
+  "to the rock of our salvation."
+  ""
+  BOOK_OF_PSALMS;
+  ! "           --- The Book of Psalms";
+
+Array quote_psalter static --> 6 34                             ! >quote_psalter
+  "Fear them not therefore:"
+  "for there is nothing covered,"
+  "that shall not be revealed;"
+  "and hid, that shall not be known."
+  ""
+  "       --- The Gospel of Matthew";
+
+Array quote_stranger static --> 5 27                           ! >quote_stranger
+  "The stranger that dwelleth"
+  "with you shall be unto you"
+  "as one born among you."
+  ""
+  " --- The Book of Leviticus";
+
+
+#IfDef DEBUG;
+ Array test_quotes table
+    quote_opening quote_darkness quote_crypt quote_stone quote_ladder
+    quote_locutory quote_sleep quote_rose quote_body quote_song quote_psalter
+    quote_stranger;
+#EndIf;
