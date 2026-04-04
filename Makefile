@@ -52,6 +52,7 @@ endef
 	cp $*.z5 html/
 	make $*.debug.z5
 	cp $*.debug.z5 html/$*-debug.z5
+	pygmentize -f html -O full -l inform6 thorns.inf > html/source.html
 	pandoc -H source/styles.html -s docs/puzzles.md > html/puzzles.html
 	pandoc -H source/styles.html -s docs/plot.md > html/plot.html
 	pandoc -H source/styles.html -s docs/style.md > html/style.html

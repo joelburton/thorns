@@ -330,7 +330,7 @@ Constant MSG_GO_DOOR_CLOSED 1011;
 Constant MSG_EMPTY_IS_CLOSED 1012;
 
 [ LibraryMessages p_msg p_arg_1 ; ! p_arg_2;
-	switch(p_msg) {
+  switch(p_msg) {
 
     MSG_PROMPT:
       if (~~f_printed_first_prompt) {
@@ -368,11 +368,11 @@ Constant MSG_EMPTY_IS_CLOSED 1012;
       "I can't see who you are referring to.";
 
     MSG_ENTER_NOT_OPEN, MSG_EXIT_NOT_OPEN, MSG_INSERT_NOT_OPEN,
-	  MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED:
-	    ! p_arg_1 = the object which is closed, thus blocking the player's action.
+    MSG_GO_DOOR_CLOSED, MSG_EMPTY_IS_CLOSED:
+      ! p_arg_1 = the object which is closed, thus blocking the player's action.
       print "You can't, since ", (ObjIs) p_arg_1;
       if (p_arg_1 has locked) " locked."; " closed.";
-	}
+  }
 ];
 
 ! Custom common messages
@@ -1050,7 +1050,7 @@ Class Candle                                                           ! >Candle
         if (self has light) print_ret (The) self, " is already lit.";
         if (NarcInRoom())
           print_ret (string) MSG_DARE_NOT_ANOTHER_BROTHER;
-      	if (ImplicitGrabIfNotHeld(self)) rtrue;
+        if (ImplicitGrabIfNotHeld(self)) rtrue;
 
         helper = -1;
         if (location == NightStairs) helper = TimeCandle;
@@ -2878,18 +2878,18 @@ Object FluffOrFur "Brother Wilfred's habit"
 
 
 Object BrAldwin "you"                                                ! >BrAldwin
-	with
-		name 'me' 'myself' 'self' 'aldwin',
-		short_name  [;
-			if(caps_mode) { print "You"; rtrue; }
-			print "yourself";
-			rtrue;
-		],
+  with
+    name 'me' 'myself' 'self' 'aldwin',
+    short_name  [;
+      if(caps_mode) { print "You"; rtrue; }
+      print "yourself";
+      rtrue;
+    ],
     description
       "You're a novice in your first year, younger than all of the professed
       monks. Your black habit marks you as Benedictine, though you haven't yet
       taken your final vows.",
-		capacity MAX_CARRIED,
+    capacity MAX_CARRIED,
     react_before [;
       ! Putting these in react_before so they'll come before things like blocks
       ! during services
@@ -2919,7 +2919,7 @@ Object BrAldwin "you"                                                ! >BrAldwin
       "Aldwin (1326-). Joined us in 1346, coming from a family serving Lord
       Thornbury. Educated by that Lord. Mother died young. Interested in
       gardening, so he is being mentored by Brother Aelred.",
-	has concealed animate proper transparent convo;
+  has concealed animate proper transparent convo;
 
 
 Object -> MyRobe "your robe"                                     ! >MyRobe
@@ -3500,15 +3500,15 @@ Constant MSG_WILFRED_ASLEEP
 Scene SceneLibraryMandrake "SceneMandrake"               ! >SceneLibraryMandrake
   with
     name 'smoke',
-    #IfDef DEBUG;
       scene_start [;
         self.Scene::scene_start();
+    #IfDef DEBUG;
         if (location ~= Scriptorium) PlayerTo(Scriptorium);
         move MandrakeRoot to ScriptoriumFireplace;
         update_moved = true;
         f_can_complex_wait = true;
-      ],
     #EndIf;
+      ],
     scene_stop [;
       self.Scene::scene_stop();
       give BrWilfred awake;
@@ -3864,15 +3864,15 @@ Scene SceneGoHome "SceneGoHome"                                   ! >SceneGoHome
         (all_monks-->i).walk_index = 0;
       f_can_complex_wait = true;
     ],
-    #IfDef DEBUG;
       scene_stop [ i m ;
         self.Scene::scene_stop();
+#IfDef DEBUG;
         for (i = 1 : i < ALL_MONK_NUM : i++) {  ! skip aelred
           m = all_monks-->i;
           move m to m.home;
         }
+#EndIf;
       ],
-    #EndIf;
     daemon [ _m num_moved i  ;
       self.time_left++;
 
@@ -4821,9 +4821,11 @@ Room Nave "Nave"                                                         ! >Nave
     u_to TowerStairs,
     n_to TowerStairs,
     toward_slype e_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [; HintReady(Hint_Nave); ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_Nave);
+#EndIf;
+    ],
     before [;
       Smell:
         if (noun == nothing)
@@ -4948,9 +4950,11 @@ Room BellTower "Bell Tower"                                         ! >BellTower
       that the priory allows outsiders into this space.",
     d_to TowerStairs,
     toward_slype d_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [; HintReady(Hint_belltower); ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_belltower);
+#EndIf;
+    ],
     before [;
       Going:
         if (SceneWandering has general)
@@ -5628,11 +5632,11 @@ Room FitzAlanChantry "FitzAlan Chantry"                       ! >FitzAlanChantry
       if (FitzAlanAltar has open) return FitzAlanCrypt;
     ],
     toward_slype s_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_chantry);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_chantry);
+#EndIf;
+    ],
     before [;
       Examine:
         if (noun == CheapScenery && cs_match_id == CSP_FLOOR)
@@ -5807,9 +5811,11 @@ Room LadyChapel "Lady Chapel"                                      ! >LadyChapel
     n_to FitzAlanChantry,
     s_to StJudeChapel,
     toward_slype w_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [; HintReady(Hint_Mary); ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_Mary);
+#EndIf;
+    ],
     before [;
       Smell:
         if (noun == nothing)
@@ -5882,9 +5888,11 @@ Room StJudeChapel "St Jude Chapel"                               ! >StJudeChapel
     n_to LadyChapel,
     out_to LadyChapel,
     toward_slype n_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [; HintReady(hint_jude); ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(hint_jude);
+#EndIf;
+    ],
     before [;
       Smell:
         if (noun == nothing)
@@ -6057,12 +6065,12 @@ Cloister CloisterNW "Cloister Northwest"                           ! >CloisterNW
     w_to PriorDoor,
     in_to PriorDoor,
     toward_slype e_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-          HintReady(Hint_SolarDoor);
-          HintReady(Hint_WhatIsSolar);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_SolarDoor);
+      HintReady(Hint_WhatIsSolar);
+#EndIf;
+    ],
     cheap_scenery
       11 'brass' 'plate' [;
         Examine: <<Examine PriorDoor>>;
@@ -6122,11 +6130,11 @@ Cloister CloisterN "Cloister North"                                 ! >CloisterN
     s_to Garth,
     n_to Quire,
     e_to CloisterNE,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_cloister);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_cloister);
+#EndIf;
+    ],
     toward_slype e_to,
     cheap_scenery
       1 'passageway' [;
@@ -6400,11 +6408,11 @@ Room Garth "Garth"                                                      ! >Garth
       "The Cloister walk is raised only a single step. You're already at ground
       level. Just walk in the direction you want to enter it.",
     in_to "Which direction do you want to go?",
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_garth);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_garth);
+#EndIf;
+    ],
     toward_slype e_to,
     before [;
       SitAny:
@@ -6604,11 +6612,11 @@ Room PriorsSolar "Prior's Solar"                                  ! >PriorsSolar
       ^^The only exit is out to the east.",
     e_to PriorDoor,
     out_to PriorDoor,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_InSolar);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_InSolar);
+#EndIf;
+    ],
     before [;
       Sleep:
         "If the prior were to catch you in his bed, you'd be expelled. You
@@ -6918,11 +6926,11 @@ Room ChapterHouse "Chapter House"                                ! >ChapterHouse
       is west, out to the Cloister.",
     w_to CloisterNE,
     out_to CloisterNE,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_ChapterHouse);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_ChapterHouse);
+#EndIf;
+    ],
     before [;
       SitAny: <<Sit ChapterBenches>>;
       Smell:
@@ -7041,11 +7049,9 @@ Room Scriptorium "Scriptorium"                                    ! >Scriptorium
     w_to CloisterE,
     out_to CloisterE,
     in_to LibraryDoor,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_Scriptorium);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_Scriptorium); #EndIf;
+    ],
     each_turn [;
       if (Pax in player && BrWilfred has awake && BrWilfred in self
           && ~~f_wilfred_sees_aldwin_with_pax) {
@@ -7193,7 +7199,7 @@ Fireplace -> ScriptoriumFireplace "fireplace"            ! >ScriptoriumFireplace
           rtrue;
         }
       Receive, ThrownAt:
-      	if(ImplicitGrabIfNotHeld(noun)) rtrue;
+        if(ImplicitGrabIfNotHeld(noun)) rtrue;
 
         if (BrWilfred in Scriptorium && BrWilfred has awake) {
           if (noun == MandrakeRoot) {
@@ -7505,11 +7511,9 @@ Room Infirmary "Infirmary"                                          ! >Infirmary
       ^^The Infirmary Chapel is to the south, and the Slype is out to the
       west.";
     ],
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_Infirmary);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_Infirmary); #EndIf;
+    ],
     s_to InfirmaryChapel,
     out_to Slype,
     w_to Slype,
@@ -7828,11 +7832,9 @@ Room InfirmaryChapel "Infirmary Chapel"                       ! >InfirmaryChapel
     ],
     n_to Infirmary,
     out_to Infirmary,
-    #IfDef HAS_HINTS;
     on_first_entry [;
-      HintReady(Hint_InfirmaryChapel);
+      #IfDef HAS_HINTS; HintReady(Hint_InfirmaryChapel); #EndIf;
     ],
-    #EndIf;
     cheap_scenery
       11 'infirmary' 'chapel' [; "The Infirmary Chapel is this room."; ]
       CS_THEM 17
@@ -7979,12 +7981,12 @@ Room Herbarium "Herbarium"                                          ! >Herbarium
       south.",
     n_to Slype,
     s_to Garden,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_HangingHerbs);
-        HintReady(Hint_Herbarium);
-      ],
-    #EndIf;
+    on_first_entry [;
+#IfDef HAS_HINTS;
+      HintReady(Hint_HangingHerbs);
+      HintReady(Hint_Herbarium);
+#EndIf;
+    ],
     before [;
       Smell:
         if (noun == nothing)
@@ -8386,11 +8388,9 @@ Room Garden "Garden"                                                   ! >Garden
     w_to GardenGate,
     in_to Herbarium,
     time_left 0,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_Garden);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_Garden); #EndIf;
+    ],
     each_turn [;
       self.time_left++;
       if (self.time_left == 5) {
@@ -8623,11 +8623,9 @@ Room RestrictedGarden "Restricted Garden"                    ! >RestrictedGarden
     ],
     e_to GardenGate,
     out_to GardenGate,
-    #IfDef HAS_HINTS;
     on_first_entry [;
-      HintReady(Hint_RestGarden);
+      #IfDef HAS_HINTS; HintReady(Hint_RestGarden); #EndIf;
     ],
-    #EndIf;
     before [;
       Smell:
         if (noun == nothing)
@@ -8870,12 +8868,12 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
       CS_ADD_LIST Core (cs_indoor)
     ,
 
-    #IfDef HAS_HINTS;
     on_first_entry [;
+  #IfDef HAS_HINTS;
       HintReady(Hint_Kitchen);
       HintReady(Hint_AccessUndercroft);
+  #EndIf;
     ],
-    #EndIf;
 
     fish_give [;
       if (action ~= ##Give) new_line;
@@ -9049,11 +9047,11 @@ Room Undercroft "Undercroft"                                       ! >Undercroft
     ],
     u_to Kitchen,
     w_to PassageSouth,
-    #IfDef HAS_HINTS;
       on_first_entry [;
+  #IfDef HAS_HINTS;
         HintReady(Hint_Undercroft);
+  #EndIF;
       ],
-    #EndIF;
     before [;
       Go:
         if (selected_direction == u_to && BrHugh in Kitchen) {
@@ -9519,11 +9517,9 @@ Room FitzAlanCrypt "FitzAlan Crypt"                             ! >FitzAlanCrypt
       if (FitzAlanPanel has open) return Crypt;
     ],
     u_to "Alas, the ladder is raised up and well out of your reach.",
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_FACrypt);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_FACrypt); #EndIf;
+    ],
     before [;
       Going:
         if (selected_direction == n_to) {
@@ -9783,14 +9779,14 @@ Room Crypt                                                              ! >Crypt
     ],
     s_to CryptVestry,
     time_left 0,
-    #IfDef HAS_HINTS;
-      each_turn [;
-          self.time_left++;
-          HintReady(Hint_Crypt);
-          if (self.time_left > 4)
-            HintReady(Hint_CryptEscape);
-      ],
-    #EndIf;
+    each_turn [;
+#IfDef HAS_HINTS;
+      self.time_left++;
+      HintReady(Hint_Crypt);
+      if (self.time_left > 4)
+        HintReady(Hint_CryptEscape);
+#EndIf;
+    ],
     crypt_shout [;
       if (self hasnt general) {
         give self general;
@@ -10298,11 +10294,9 @@ Room Hall "Hall"                                                   ! >Hall
     d_to DayStairs,
     e_to Necessarium,
     toward_slype d_to,
-    #IfDef HAS_HINTS;
     on_first_entry [;
-      HintReady(Hint_Hall);
+      #IfDef HAS_HINTS; HintReady(Hint_Hall); #EndIf;
     ],
-    #EndIf;
     cheap_scenery
       CS_THEM 11 'wooden' 'floorboards' "There's nothing special about them."
       CS_THEM 'dorter' 'dorters' [;
@@ -10349,11 +10343,9 @@ Room Dorter "Dorter"                                                   ! >Dorter
     d_to NightStairs,
     s_to Hall,
     toward_slype d_to,
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_dorters);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_dorters); #EndIf;
+    ],
     before [;
       Smell:
         if (noun == nothing)
@@ -10772,11 +10764,9 @@ Room Necessarium "Necessarium"                                  ! >Necessarium
         if (selected_direction == d_to)
           "You wouldn't fit in a latrine hole, praise be.";
     ],
-    #IfDef HAS_HINTS;
-      on_first_entry [;
-        HintReady(Hint_Nec);
-      ],
-    #EndIf;
+    on_first_entry [;
+      #IfDef HAS_HINTS; HintReady(Hint_Nec); #EndIf;
+    ],
     cheap_scenery
       'dung' 'pit' "Happily, you can only barely see it from up here."
       CS_ADD_LIST Core (cs_church)
@@ -10956,13 +10946,13 @@ Object -> LayCots
     Lady of Thorns must attend office below without delay. Five months a novice
     here, and still you have not yet made peace with the schedule.^^";
 
-  #IfDef HAS_HINTS;
-    objectloop(o ofclass Option) {
-      if (o provides in_menu && o.in_menu == HintGeneral) {
-        HintReady(o);
-      }
+#IfDef HAS_HINTS;
+  objectloop(o ofclass Option) {
+    if (o provides in_menu && o.in_menu == HintGeneral) {
+      HintReady(o);
     }
-  #EndIf;
+  }
+#EndIf;
 
   SceneMatins.scene_start();
 
@@ -12503,8 +12493,8 @@ Verb 'knock'
 
 Extend 'lie' replace
   * 'down'                                     -> LieOnAny
-	* 'on' noun                                  -> LieOn
-	* 'on' 'top' 'of' noun                       -> LieOn
+  * 'on' noun                                  -> LieOn
+  * 'on' 'top' 'of' noun                       -> LieOn
   *                                            -> LieOnAny;
 
 Extend 'light' first
@@ -12575,8 +12565,8 @@ Extend 'set' replace
 
 Extend only 'sit' replace
   * 'down'                                     -> SitAny
-	* 'on'/'in'/'inside' noun                    -> Sit
-	* 'on' 'top' 'of' noun                       -> Sit
+  * 'on'/'in'/'inside' noun                    -> Sit
+  * 'on' 'top' 'of' noun                       -> Sit
   *                                            -> SitAny;
 
 Extend 'turn' first
