@@ -31,17 +31,19 @@ class Hintobj
     ];
 
 [ HintReady h;
-  h.hints_seen = 0;
   ! if ((h.hint_done == 0) && (h hasnt general)) {
   if (h hasnt general) {
-     ! if this is first time we've seen this option, unlock it
-     move h to h.in_menu;
-     give h general;
-     ! if this is first option in a submenu, unlock submenu
-     if (h.in_menu hasnt general) {
-      give h.in_menu general;
-      move h.in_menu to Hints;
-     }
+    ! print "HINT READY ", (the) h, "^";
+    h.hints_seen = 0;
+
+    ! if this is first time we've seen this option, unlock it
+    move h to h.in_menu;
+    give h general;
+    ! if this is first option in a submenu, unlock submenu
+    if (h.in_menu hasnt general) {
+    give h.in_menu general;
+    move h.in_menu to Hints;
+    }
   }
 ];
 

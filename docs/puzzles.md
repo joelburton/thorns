@@ -1,3 +1,7 @@
+---
+title: Lady of Thorns - Puzzles
+---
+
 # Puzzles
 
 ## The rules

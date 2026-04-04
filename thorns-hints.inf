@@ -5,15 +5,19 @@ Menu MenuAbout "About the game";
 
 Option -> About_game "About the game"
 with description
-  "Our Lady of Thorns is ~interactive fiction~ (~IF~), a kind of melding of
-  literature with a game. In this case, you'll be exploring a small monastery in
+  "In this case, you'll be exploring a small monastery in
   the fourteenth century, and investigating a possible murder.
 
   ^^Some games like this focus heavily on difficult puzzles to solve; others
   focus on puzzle-free narrative. This game aims in between those two poles.
 
-  ^^This game uses some non-traditional IF commands; please see the hint section
-  or use the game command HELP to see them.
+  ^^It's difficult to know how difficult puzzles are for different people, or
+  how long games will take. Many testers used a few hints, though a few used
+  none. The amount of time they needed were between 3 and 6 hours.
+
+  ^^This game uses some non-traditional IF commands; use the game command HELP
+  to see them. You may also find the first item shown by HINTS to be very
+  helpful; it provides non-spoiler advice for solving the puzzles.
 
   ^^If you aren't familiar with monastic terms or locations, you may find the
   ~Monastic knowledge~ of the HELP section useful."
@@ -26,16 +30,13 @@ with description
 
   ^^I'm a teacher and software developer in San Francisco, California. This is
   my first attempt at interactive fiction, but I've been playing games like this
-  since the Infocom games of the 1980s. Thank you for your interest in this
-  work!
+  since the Infocom games of the 1980s.
 
-  ^^While I'm the primary author, many others have helped: please see the
-  section of ~Technical information~ for the languages and libraries used and
-  the section on ~Credits~ for those who have contributed, often in very
-  significant ways.
+  ^^While I'm the primary author, many others have helped: see the
+  sectios ~Technical information~ and ~Credits~.
 
-  ^^If you'd like to reach me, you can do so at intfiction.org, where I am
-  ~joelburton~ or through email to joel@@64joelburton.com."
+  ^^You can reach me at intfiction.org, where I am
+  ~joelburton~ or at joel@@64joelburton.com."
 ;
 
 
@@ -46,17 +47,13 @@ with description
   texture of monastic life.
 
   ^^I also wrote this after enjoying the Cadfael television series (which itself
-  was based on books by Edith Pargeter/Ellis Peters). If you enjoy a lighter
-  mystery series in a similar setting, you may enjoy these.
+  was based on books by Edith Pargeter/Ellis Peters).
 
   ^^While they share the setting of a monastery in a very similar time period,
-  this wasn't consciously influenced the earlier IF work ~Vespers~, by Jason
+  this wasn't consciously influenced by the earlier IF work ~Vespers~, by Jason
   Devlin---only because in the 20 years since I briefly played it, I had
-  unfortunately forgotten about it. Having had several testers point out the
-  similarity in theme, I have since played it through and quite enjoyed it.
-  Given when Our Lady of Thorns is set (right before the Black Plague) and
-  Vespers' setting during the plague, you may consider Vespers an excellent
-  pseudo-sequel, though much darker in tone.
+  unfortunately forgotten about it. I have since played it through and
+  enjoyed it.
 
   ^^The piece of IF that I thought of the most in creating this was Gareth
   Reed's excellent ~Christminster~, a medium-length game rich in setting and
@@ -81,18 +78,18 @@ with description
   ^- Allyson Gray (@@64Ally)
   ^- Daniel Stelzer (@@64Draconis)
   ^- Rovarsson (@@64Rovarsson)
-  ^- Garry Francis (@@64Warrigal)
   ^- Robert Eggleston (@@64AERobert)
-  ^- Melissa ~Moth~ Higuchi
+  ^- Garry Francis (@@64Warrigal)
   ^- Andy Galilee (@@64AndyG)
+  ^- Doug Egan (@@64Doug_Egan)
+  ^- Melissa ~Moth~ Higuchi
+  ^- Thomas Mack (@@64tmack)
   ^- rh (@@64rh)
   ^- Hellzon (@@64Hellzon)
-  ^- Doug Egan (@@64Doug_Egan)
   ^- Andrew (@@64andrewj)
   ^- Deborah (@@64dsherwood)
   ^- Javier Garza (@@64Jade)
   ^- Hannah (@@64Hannah31415)
-  ^- tmack (@@64tmack)
 
   ^^TECHNICAL ASSISTANCE:
   ^- Fredrick Ramsberg (@@64fredrik)
@@ -112,10 +109,10 @@ with description
   "The game is written using:
 
   ^^- Inform6, primarily authored by Graham Nelson and now managed by David
-  Kinder
+  Kinder.
 
   ^^- PunyInform, a replacement library particularly focused on retro
-  computers, primarily authored by Johan Berntsson and Fredrik Ramsberg
+  computers, primarily authored by Johan Berntsson and Fredrik Ramsberg.
 
   ^^Special thanks to Garry Francis, who supplied some code for better handling
   of locking/unlocking doors.";

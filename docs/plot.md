@@ -1,4 +1,8 @@
-# Plot Notes
+---
+title: Lady of Thorns - Plot
+---
+
+# Plot
 
 ## Characters
 

@@ -1,4 +1,8 @@
-<img src="lady-of-thorns.jpg">
+---
+title: Our Lady of Thorns
+---
+
+<img src="thorns.jpg">
 
 # Our Lady of Thorns
 
@@ -104,9 +108,10 @@ The monks of Our Lady of Thorns gather eight times each day to pray and sing the
 
 **Compline** *(before sleep)*: The final office, intimate and protective in character. Very short, always the same psalms — so familiar that monks could pray them in near-darkness. **The game ends at the close of Compline.**
 
-## Walkthrough
+## Walkthrough/Transcript
 
-<a href="final.html" class="download-btn">Read Walkthrough</a>
+<a href="walkthrough.txt" class="download-btn">Walkthrough</a>
+<a href="walkthrough.html" class="download-btn">Read Transcript</a>
 
 This shows all of the main endings.
 
