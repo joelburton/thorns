@@ -389,10 +389,10 @@ A domed ceiling rises above this, the area where Prior Oswald leads public Mass.
 You can see the high altar here.
 
 > SOUTH
-You shouldn't be exploring the Sacristy now. Perhaps later, when Brother Cuthbert will be occupied.
+You shouldn't be exploring the Sacristy now. Perhaps later, when Brother Cuthbert is occupied.
 
 > OPEN DOOR
-You shouldn't be exploring the Sacristy now. Perhaps later, when Brother Cuthbert will be occupied.
+You shouldn't be exploring the Sacristy now. Perhaps later, when Brother Cuthbert is occupied.
 
 > EAST
 You shouldn't go to the Lady Chapel now. Brother Benedict will be there and will report you for not working in the Garden with Brother Aelred.
@@ -1030,7 +1030,7 @@ This wooden fence protects access to the dangerous plants. It is closed.
 > X KEY
 Heavy and iron, its surface pitted with rust from years hanging in the damp Herbarium. You know this key from seeing Aelred use it: it opens the gate to the Restricted Garden where the dangerous herbs are grown.
 
-"RING! RING!" You hear the bell ring two times to call the brothers to the Lauds office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING!" You hear the bell ring two times to call the brothers to the Lauds office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 > CLIMB GATE
 The fence is covered with sharp brambles, making it impossible to climb without serious injury. Brother Aelred no doubt encouraged these to grow here to restrict access to the dangerous herbs.
@@ -1404,7 +1404,7 @@ The orange cat continues to rest in your arms.
 > EAST
 
 Scriptorium
-The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the cool morning light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the cool morning light that the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
 The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
@@ -1486,7 +1486,7 @@ Now that you think of it, while you've been in the crypt once for a service, you
 > WEST
 
 Scriptorium
-The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the cool morning light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the cool morning light that the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
 The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
@@ -1742,7 +1742,7 @@ You take it, promising yourself you will return it.
 > CLOSE CHEST
 You close Brother Remigio's chest.
 
-"RING! RING! RING!" You hear the bell ring three times to call the brothers to the Prime office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING!" You hear the bell ring three times to call the brothers to the Prime office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 > NORTH
 
@@ -2015,7 +2015,7 @@ This is a small vaulted chamber, no more than ten feet across. The central tomb 
 
 The walls here are finished stone rather than rough-hewn rock, and a narrow recess has been cut into them---likely once holding offerings or relics. The air is still, undisturbed for decades or longer. A patina of dust covers everything, unmarred by footprints save your own.
 
-Against the southern wall hangs a faded wooden panel depicting an art scene, its Latin inscription barely legible in the gloom.
+Against the southern wall hangs a faded wooden panel depicting a painted scene, its Latin inscription barely legible in the gloom.
 
 > * FitzAlan crypt
 [Comment recorded]
@@ -2140,7 +2140,7 @@ These coins are certainly evidence of wrongdoing, but you're not sure where they
 > GET THEM
 You already have the sack.
 
-"RING! RING! RING! RING!" You hear the bell ring four times to call the brothers to the Terce office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING!" You hear the bell ring four times to call the brothers to the Terce office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 > PUT THEM IN BASKET
 You put the sack of coins into the basket.
@@ -2262,7 +2262,7 @@ Brother Wilfred heads south.
 > WAIT UNTIL NOON
 Time passes.
 
-"RING! RING! RING! RING! RING!" You hear the bell ring five times to call the brothers to the Sext office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING!" You hear the bell ring five times to call the brothers to the Sext office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -2496,7 +2496,7 @@ The chronicle contains the prior's notes on daily affairs. The recent entries:
 
 6 July 1346: Brother Hugh informs me that the sale of our honey and beeswax brought less income than anticipated. Several benefactors who once supported us have redirected their charity elsewhere. Our revenues have declined steadily these past three years.
 
-28 July 1346: Brother Wilfred has misplaced his latest work---a small psalter with illuminations of remarkable quality. He recalls completing the opening of Beatus vir with azure and gold, but cannot remember where he shelved it. At his age, such lapses are not uncommon---this is the second time in this season he's lost a work. This is causing a significant loss of income for us.
+28 July 1346: Brother Wilfred has misplaced his latest work---a small psalter with illuminations of remarkable quality. He recalls completing the opening of Beatus vir with azure and gold, but cannot remember where he shelved it. At his age, such lapses are not uncommon---this is the second time in this season he has lost a work. This is causing a significant loss of income for us.
 
 3 August 1346: The roof above the Refectory shows signs of damage from the autumn storms. Brother Benedict inspected it and says it will require material and builders to repair---funds we can ill afford. I have written to the Bishop requesting assistance, but hold little hope of reply.
 
@@ -2585,7 +2585,7 @@ A doorway to the south leads to the Kitchen, and a wide opening to the north ret
 > WAIT UNTIL 3
 Time passes.
 
-"RING! RING! RING! RING! RING! RING!" You hear the bell ring six times to call the brothers to the None office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING!" You hear the bell ring six times to call the brothers to the None office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -2898,7 +2898,7 @@ The Quire is the heart of monastic worship and the centre of the church. Two sta
 > WAIT UNTIL 5
 Time passes.
 
-"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -3033,7 +3033,7 @@ To the east is the entrance to the Scriptorium. You can also go north to the nor
 > EAST
 
 Scriptorium
-The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light that the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
 The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
@@ -3065,7 +3065,7 @@ What will you do? Choose justice or mercy?
 
 > MERCY
 
-You and Brother Wilfred confront Hugh and tell him to leave. Tonight. Before questions are asked. You give Hugh a shillings-worth of the coins, and tell him to send this to Rose for William's recovery. Hugh takes flight, and you never learn what becomes of him---or of his family. 
+You and Brother Wilfred confront Hugh and tell him to leave. Tonight. Before questions are asked. You give Hugh a shilling's-worth of the coins, and tell him to send this to Rose for William's recovery. Hugh takes flight, and you never learn what becomes of him---or of his family. 
 
 You lied to the prior about your day's activities and received penance for your actions that day. At least you can give Prior Oswald the stolen psalter and the majority of the silver coins, saying you found them after being assigned to organise the Undercroft after the unexplained disappearance of Hugh.
 
@@ -3115,7 +3115,7 @@ To the east is the entrance to the Scriptorium. You can also go north to the nor
 > EAST
 
 Scriptorium
-The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
+The Scriptorium---where brothers create the illuminated manuscripts that are a primary source of priory income---smells of ink, manuscripts, and woodsmoke. High windows admit the bright afternoon light that the season allows, and a modest fire burns in the fireplace, keeping the manuscripts dry despite the sea air. 
 
 The large central table is covered with the materials of the illuminator's art as well as a sample of their work. 
 
@@ -3132,7 +3132,7 @@ Talk with Brother Wilfred about the murder? You can do so with CONFESS TO WILFRE
 > WAIT UNTIL 5
 Time passes.
 
-"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -3153,7 +3153,7 @@ Brother Wilfred arrives from the west, places the silver key on the table, and s
 > WAIT UNTIL 7
 Time passes.
 
-"RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the brothers to the Compline office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the brothers to the Compline office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -3224,7 +3224,7 @@ In the centre is a sundial and a stone well.
 > WAIT UNTIL 5
 Time passes.
 
-"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring seven times to call the brothers to the Vespers office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 
@@ -3269,7 +3269,7 @@ Brother Martin heads south.
 > WAIT UNTIL 8
 Time passes.
 
-"RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the brothers to the Compline office. Prior Oswald excused from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
+"RING! RING! RING! RING! RING! RING! RING! RING!" You hear the bell ring eight times to call the brothers to the Compline office. Prior Oswald excused you from offices today, but you know the choir monks will be in the Quire for the next forty-five minutes or so.
 
 (waiting stopped because the bell rang)
 

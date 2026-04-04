@@ -43,7 +43,7 @@
 ! harder and harder to maintain the z3 version, so removed it. This now only
 ! compiles on z5.
 !
-! It runs decently on a very nice 8-but computer with a z5 interpreter if
+! It runs decently on a very nice 8-bit computer with a z5 interpreter if
 ! USE_HINTS is not defined (I run it on a 10MHz CPM computer decently).
 !
 ! However, some of the evidence of trying to optimize memory can definitely be
@@ -281,8 +281,6 @@ Constant MSG_ATTACK_DEFAULT
   "Peace, Brother. Violence isn't the answer.";
 Constant MSG_BUY_DEFAULT
   "The sin of avarice takes many forms.";
-Constant MSG_CONSULT_NOTHING_INTERESTING = 1005;
-Constant MSG_CUT_NO_USE = 1004;
 Constant MSG_INVENTORY_EMPTY
   "You are without possessions.";
 Constant MSG_JUMP
@@ -294,17 +292,16 @@ Constant MSG_KISS_PLAYER
   "That would start to feel like a mortal sin.";
 Constant MSG_LISTEN_DEFAULT
   "You listen carefully, but don't hear anything unexpected.";
-Constant MSG_LOOK_BEFORE_ROOMNAME = 1002;
 Constant MSG_MILD_DEFAULT
   "Mind your tongue, Brother.";
-Constant MSG_NOW_DARK = 1003;
-Constant MSG_PARSER_NO_NEED_REFER_TO = 1006;
-Constant MSG_PARSER_UNKNOWN_PERSON = 1007;
+Constant MSG_PARSER_NO_INPUT
+  "Come again, Brother?";
+Constant MSG_PARSER_ONLY_TO_ANIMATE
+  "You can do that only to a living creature.";
 Constant MSG_PARSER_UNKNOWN_VERB
   "That is not a verb I recognise.";
 Constant MSG_PRAY_DEFAULT
   "You pray fervently, but nothing apparent happens.";
-Constant MSG_PROMPT = 1001;
 Constant MSG_SHOUT_DEFAULT
   "Novices do not shout.";
 Constant MSG_SING_DEFAULT
@@ -324,11 +321,25 @@ Constant MSG_THINK_DEFAULT
   "Silent reflection is always good.";
 Constant MSG_WAIT_DEFAULT
   "You wait a minute.";
-Constant MSG_ENTER_NOT_OPEN 1008;
-Constant MSG_EXIT_NOT_OPEN 1009;
-Constant MSG_INSERT_NOT_OPEN 1010;
-Constant MSG_GO_DOOR_CLOSED 1011;
-Constant MSG_EMPTY_IS_CLOSED 1012;
+Constant MSG_WAKE_DEFAULT
+  "You are already awake.";
+
+! The actual numbers don't matter; just that they're unique and >1000, so
+! Puny won't include the standard message.
+
+Constant MSG_PROMPT = 1001;
+Constant MSG_LOOK_BEFORE_ROOMNAME = 1002;
+Constant MSG_NOW_DARK = 1003;
+Constant MSG_CUT_NO_USE = 1004;
+Constant MSG_CONSULT_NOTHING_INTERESTING = 1005;
+Constant MSG_PARSER_NO_NEED_REFER_TO = 1006;
+Constant MSG_PARSER_UNKNOWN_PERSON = 1007;
+Constant MSG_ENTER_NOT_OPEN = 1008;
+Constant MSG_EXIT_NOT_OPEN = 1009;
+Constant MSG_INSERT_NOT_OPEN = 1010;
+Constant MSG_GO_DOOR_CLOSED = 1011;
+Constant MSG_EMPTY_IS_CLOSED = 1012;
+Constant MSG_WAVE_DEFAULT = 1013;
 
 [ LibraryMessages p_msg p_arg_1 ; ! p_arg_2;
   switch(p_msg) {
@@ -348,18 +359,18 @@ Constant MSG_EMPTY_IS_CLOSED 1012;
       #IfDef FULL_DEBUG; print (RealTime) the_time, " "; #EndIf;
       print "> ";
 
-    MSG_CONSULT_NOTHING_INTERESTING:
-      "I'm not sure what you're using to research.";
-
-    MSG_CUT_NO_USE:
-      "You have nothing suitable for cutting.";
-
     MSG_LOOK_BEFORE_ROOMNAME:
       new_line;
 
     MSG_NOW_DARK:
       NowInDark();
        "^It is now pitch dark in here.";
+
+    MSG_CUT_NO_USE:
+      "You have nothing suitable for cutting.";
+
+    MSG_CONSULT_NOTHING_INTERESTING:
+      "I'm not sure what you're using to research.";
 
     MSG_PARSER_NO_NEED_REFER_TO:
       "You don't need to refer to ~", (_PrintUnknownWord) 0, "~ here.";
@@ -373,6 +384,9 @@ Constant MSG_EMPTY_IS_CLOSED 1012;
       ! p_arg_1 = the object which is closed, thus blocking the player's action.
       print "You can't, since ", (ObjIs) p_arg_1;
       if (p_arg_1 has locked) " locked."; " closed.";
+
+    MSG_WAVE_DEFAULT:
+      "You wave ", (the) noun, ", feeling self-conscious the entire time.";
   }
 ];
 
@@ -986,7 +1000,7 @@ Class Barrel                                                           ! >Barrel
           if (YesOrNo() == false) "You think better of it.";
           new_line;
         }
-      LookUnder: "You cannot life the barrel to look under it.";
+      LookUnder: "You cannot lift the barrel to look under it.";
       Take: "The barrels are too heavy, and you've no need of the contents.";
       Empty, Pull, Push, Turn:
         "The barrels are too heavy for you to move. Brother Hugh is much
@@ -1321,7 +1335,7 @@ Class DoorButton                                                   ! >DoorButton
         rtrue;
       Pull, SwitchOff:
           if (NarcInRoom())
-          print_ret (string) MSG_NO_BUTTON_USE;
+            print_ret (string) MSG_NO_BUTTON_USE;
         if (self hasnt on)
           "That button is not currently pressed.";
         "You cannot pull the button back out.";
@@ -1714,7 +1728,7 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
         wn = consult_from;
         switch (NextWord()) {
           'himself': <<Ask self self>>;
-          'garden', 'garden':
+          'garden', 'gardens':
             "~Yes, son. Meet me there later this morning.~";
         }
     ],
@@ -1860,7 +1874,7 @@ Object -> BrAelredHand "Brother Aelred's hands"
         if (BrAelredDying hasnt general)
           "You hold one of his hands for a moment, hoping he is comforted by
           this.";
-        "You hold one of this hands for a moment. You hope his soul is at
+        "You hold one of his hands for a moment. You hope his soul is at
         peace.";
       default: "Leave his hands be.";
     ],
@@ -3266,8 +3280,8 @@ Scene SceneFollowRemigio "SceneFollowRemigio"              ! >SceneFollowRemigio
       }
       if (self.time_left == 14) {
         print
-          "^Unfortunately, you arrive at the Slype too late. Brother Aelred died
-          by the time you got there, and you missed his final words. You'll
+          "^Unfortunately, you arrive at the Slype too late. Brother Aelred had
+          died by the time you got there, and you missed his final words. You'll
           never forgive yourself for not comforting him at his end.";
         deadflag = 3;
         return;
@@ -3991,7 +4005,7 @@ Class SceneService                                               ! >SceneService
       }
       if (self.aldwin_joining == 0)
         print
-          " Prior Oswald excused from offices today, but you know the choir
+          " Prior Oswald excused you from offices today, but you know the choir
           monks will be in the Quire for the next forty-five minutes or so.";
       new_line;
 
@@ -5044,10 +5058,10 @@ Room BellTower "Bell Tower"                                         ! >BellTower
       ]
       CS_THEM 11 'dead' 'leaves' [;
         Examine, Search:
-          "The leaves that have settled across the floor are less prominent
+          "The leaves that settled across the floor are less prominent
           immediately around the chest, as though it was moved more recently.";
         Rub, LookUnder, Pull, Push, Turn:
-          "As you start to gather the leaves, you notice that the leaves have
+          "As you start to gather the leaves, you notice that the leaves
           settled across the floor are less prominent immediately around the
           chest (as though it was moved more recently?) You realize that
           gathering the leaves is fruitless---there are too many and more will
@@ -5149,7 +5163,7 @@ Object -> -> BellTools "bell-repairing tools"                       ! >BellTools
     before [;
       Examine: ;
       Take, Remove, Insert:
-        "Leave them be---you have no need of bell-making tools, and Brother
+        "Leave them be---you have no need of bell-repairing tools, and Brother
         Cuthbert will want these left here.";
       Smell: "They smell, naturally, of oil and wood.";
       Search, LookUnder:
@@ -5502,7 +5516,7 @@ Object SacristyDoor "sacristy door"                              ! >SacristyDoor
       Open:
         if (SceneWandering has active) {
           "You shouldn't be exploring the Sacristy now. Perhaps later, when
-          Brother Cuthbert will be occupied.";
+          Brother Cuthbert is occupied.";
         }
     ],
     after [;
@@ -5967,7 +5981,7 @@ Chair -> PrayerMat "prayer mat"                                     ! >PrayerMat
       Kneel: <<Enter self>>;
       Sit:
         "You shouldn't sit or stand on this---those aren't the appropriate
-        gesture.";
+        gestures.";
     ],
     after [;
       Enter: "You kneel on the mat, as many others have done before.";
@@ -6793,7 +6807,7 @@ Object -> -> Chronicle "chronicle"                                  ! >Chronicle
             with illuminations of remarkable quality. He recalls completing the
             opening of Beatus vir with azure and gold, but cannot remember where
             he shelved it. At his age, such lapses are not uncommon---this is
-            the second time in this season he's lost a work. This is causing a
+            the second time in this season he has lost a work. This is causing a
             significant loss of income for us.^^",
 
           (bd) "3 August 1346:",
@@ -7056,9 +7070,9 @@ Room Scriptorium "Scriptorium"                                    ! >Scriptorium
       print
         "The Scriptorium---where brothers create the illuminated manuscripts
         that are a primary source of priory income---smells of ink, manuscripts,
-        and woodsmoke. High windows admit the @(DS_LIGHT) the season allows, and
-        a modest fire burns in the fireplace, keeping the manuscripts dry
-        despite the sea air.
+        and woodsmoke. High windows admit the @(DS_LIGHT) that the season
+        allows, and a modest fire burns in the fireplace, keeping the
+        manuscripts dry despite the sea air.
 
         ^^The large central table is covered with the materials of the
         illuminator's art as well as a sample of their work.
@@ -7835,7 +7849,7 @@ Wheel -> Wheel4 "fourth wheel"                                         ! >Wheel4
 
 
 ! ----------------------------------------------------------- Infirmary Chapel
-! The player can only entere here after the death, so we can
+! The player can only enter here after the death, so we can
 ! write this knowing there will be a body in it, etc.
 
 Room InfirmaryChapel "Infirmary Chapel"                       ! >InfirmaryChapel
@@ -8877,7 +8891,7 @@ Room Kitchen "Kitchen"                                                ! >Kitchen
       CS_THEM 4 'vegetable' 'vegetables' 'leeks' 'food' [;
         Examine:
           "Leeks. Not your favourite. You remember entire weeks as youth
-          where your meals consisted entire of them.";
+          where your meals consisted only of them.";
         Take: "You dare not take food from others.";
       ]
       CS_THEM 'implements' 'various' [;
@@ -9474,7 +9488,7 @@ Object -> StolenPsalter "illuminated psalter"                   ! >StolenPsalter
           "The psalms are beautiful, but what strikes you most is the artistry,
           the hours Wilfred must have spent on each illumination.";
       Search:
-        "You feel the psalter will be filled with much religious learning for
+        "You feel the psalter will be full of much religious learning for
         you---but in terms of searching it now for clues, you find none.";
       Smell: "It smells sharply of mustard.";
       Taste: "You wouldn't do this to such a precious object.";
@@ -9667,7 +9681,7 @@ Object -> FitzAlanPanel "art panel"                             ! >FitzAlanPanel
       if (frame has general)
         "The panel is currently closed flush against the wall.";
 
-      "Against the southern wall hangs a faded wooden panel depicting an art
+      "Against the southern wall hangs a faded wooden panel depicting a painted
       scene, its Latin inscription barely legible in the gloom.";
     ],
     description [;
@@ -11038,7 +11052,7 @@ Object Dark thedark
 
 [ ital s;
   @set_text_style 4;
-  print (string) S;
+  print (string) s;
   style roman;
 ];
 
@@ -11397,7 +11411,7 @@ Constant CLOCK_EVENING 4;
 
     2:
       print "^You should be more careful. If ", (the) g_narc, " had noticed";
-      " you openly carrying ", (the) caught_with, ", you'd have faced severe
+      " you carrying ", (the) caught_with, ", you'd have faced severe
       punishment.";
 
     3:
@@ -11772,7 +11786,7 @@ Object MercyOrJustice
         Before questions are asked.";
       if (ev_rose_letters && IndirectlyContains(player, Coins))
         print
-          " You give Hugh a shillings-worth of the coins, and tell him to
+          " You give Hugh a shilling's-worth of the coins, and tell him to
           send this to Rose for William's recovery.";
       print
         " Hugh takes flight, and you never learn what becomes of him---or of his
