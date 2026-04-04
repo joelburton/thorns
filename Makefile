@@ -55,7 +55,7 @@ endef
 	pandoc -H source/styles.html -s docs/puzzles.md > html/puzzles.html
 	pandoc -H source/styles.html -s docs/plot.md > html/plot.html
 	pandoc -H source/styles.html -s docs/style.md > html/style.html
-	pandoc -H source/styles.html -s docs/help.md > html/index.html
+	pandoc -H source/styles.html -s docs/index.md > html/index.html
 	cp unit/commands.rec html/walkthrough.txt
 	tail +8 unit/current.scr |  awk -f scripts/tidy.awk \
 		| python3 scripts/transcript_to_html.py > html/walkthrough.html
