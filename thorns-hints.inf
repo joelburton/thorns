@@ -13,7 +13,7 @@ with description
 
   ^^It's difficult to know how difficult puzzles are for different people, or
   how long games will take. Many testers used a few hints, though a few used
-  none. The amount of time they needed were between 3 and 6 hours.
+  none. The amount of time they needed was between 3 and 6 hours.
 
   ^^This game uses some non-traditional IF commands; use the game command HELP
   to see them. You may also find the first item shown by HINTS to be very
@@ -33,7 +33,7 @@ with description
   since the Infocom games of the 1980s.
 
   ^^While I'm the primary author, many others have helped: see the
-  sectios ~Technical information~ and ~Credits~.
+  sections ~Technical information~ and ~Credits~.
 
   ^^You can reach me at intfiction.org, where I am
   ~joelburton~ or at joel@@64joelburton.com."
@@ -240,7 +240,7 @@ with description
 
 Option -> -> "What is a ~prior~?"
 with description
-  "The Prior is the the administrator of a priory. They're one of the monks, and
+  "The Prior is the administrator of a priory. They're one of the monks, and
   elected by the other monks.
 
   ^^Brother Oswald is the prior for Our Lady of Thorns.
@@ -297,8 +297,8 @@ with description
 Option -> -> "What is a ~novice~?"
 with description
   "Before taking their full vows as a monk and committing to this life,
-  prospective monks typically undergo a novitiate period, where the perform
-  most of the duties of a monk, but on a trial basis. You are playing at a
+  prospective monks typically undergo a novitiate period, where they perform
+  most of the duties of a monk, but on a trial basis. You are playing as a
   novice in this game."
   ;
 
