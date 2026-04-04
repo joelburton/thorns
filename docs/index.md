@@ -41,6 +41,7 @@ but will be especially useful:
 - `PRAY`
 - `READ` *(thing)*
 - `RING` *(thing)*
+- `SEARCH` *(thing)*
 - `SING`
 - `SMELL`
 - `SMELL` *(thing)*
@@ -133,11 +134,11 @@ It is written in [Inform6 ](https://www.inform-fiction.org) using the [PunyInfor
 - rh (@rh)
 - Hellzon (@Hellzon)
 - Doug Egan (@Doug_Egan)
+- tmack (@tmack)
 - Andrew (@andrewj)
 - Deborah (@dsherwood)
 - Javier Garza (@Jade)
 - Hannah (@Hannah31415)
-- tmack (@tmack)
 
 ### Special Thanks for Tech Help
 
