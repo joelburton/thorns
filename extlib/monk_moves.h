@@ -148,9 +148,13 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
   if (dir == 0) rtrue;  ! not done moving, but pausing at loc
 
   _from = parent(m);
+
   _fakedir = (dir ~= n_to or s_to or w_to or e_to or u_to or d_to);
 
-  if (~~_fakedir) _to = _from.(dir);
+  if (~~_fakedir) {
+    _to = _from.(dir);
+    m.prev_loc = _from;
+  }
   else _to = dir;
 
   ! print "*** m=", (the) m, " dir=", dir, " to=", (name) _to, "^";

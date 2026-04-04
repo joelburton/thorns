@@ -429,6 +429,12 @@ Replace _AskWhichNoun OriginalAskWhichNoun;
 ];
 
 
+[ GamePostRoutine m ;
+  objectloop(m ofclass Monk) m.prev_loc = 0;
+  rfalse;
+];
+
+
 [ PrintTaskName task_number;
   switch (task_number) {
     TASK_EVIDENCE_COINS: "found sack of coins";
@@ -1405,6 +1411,7 @@ Class Monk                                                               ! >Monk
     walk_index 0,
     went_home,
     left_home,
+    prev_loc,
     wont_talk [;
       print_ret
         (The) self, " presses a finger to his lips, reminding you of the rule of
@@ -2227,7 +2234,7 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
     simple_name "Hugh",
     job_title "cellarer",
     home Undercroft,
-    walk_home Quire (s_to) (s_to) (s_to) (s_to) (s_to) (d_to),
+    walk_home Quire (s_to) (s_to) (s_to) (s_to) (s_to) (Undercroft),
     walk_office (u_to) (n_to) (n_to) (n_to) (n_to) (n_to) Stalls,
     walk_matins (d_to) (d_to) Stalls,
     possess 'hugh^s' 'hughs',
@@ -3125,6 +3132,10 @@ Object Pax                                                                ! >Pax
 Class Scene                                                             ! >Scene
   with
     time_left 0,
+    parse_name [;
+      if (action_to_be ~= ##StartScene or ##StopScenes) return 0;
+      if (NextWord() == self.&name-->0) return 1;
+    ],
     scene_start [;
       self.time_left = 0;
       give self general;
@@ -3150,7 +3161,7 @@ Class Scene                                                             ! >Scene
         print "*** SCENE STOP ", (the) self, " at ", (RealTime) the_time,  "^";
       #EndIf;
     ],
-  has proper scenery ;
+  has proper scenery concealed ;
 
 
 ! This is the period after lauds but before the players run into Remigio
@@ -3193,7 +3204,7 @@ Scene SceneFollowRemigio "SceneFollowRemigio"              ! >SceneFollowRemigio
     time_left 0,
     react_before [ dir ;
       Follow:
-        if (noun == BrRemigio) {
+        if (noun == BrRemigio && BrRemigio in location) {
           dir = PropToDir(location.toward_slype);
           <<Go dir>>;
         }
@@ -3224,7 +3235,7 @@ Scene SceneFollowRemigio "SceneFollowRemigio"              ! >SceneFollowRemigio
     ],
     react_after [ ;
       Go:
-        move BrRemigio to location;
+        MovePerson(BrRemigio, location, true);
         if (location == Slype) {
           self.scene_stop();
           SceneDeathInSlype.scene_start();
@@ -3238,7 +3249,7 @@ Scene SceneFollowRemigio "SceneFollowRemigio"              ! >SceneFollowRemigio
     daemon [;
       self.time_left++;
       if (self.time_left == 1) {
-        move BrRemigio to location;
+        MovePerson(BrRemigio, location, true);
         PronounNotice(BrRemigio);
         "^The lay monk, Brother Remigio, runs up to you, his face ashen. ~You!~
         he cries, grabbing your sleeve. ~Come---Frate Aelred, l'erborista, he
@@ -3707,6 +3718,8 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
     rtrue;
   ],
   react_before [;
+    Follow:
+        "You dare not follow anyone right now.";
     WaveTo:
       if (BrCuthbert in location)
         "You dare not do this lest you be discovered.";
@@ -3765,7 +3778,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
           stairs.";
         "^The footsteps sound closer.";
       5:
-        move BrCuthbert to Crypt;
+        MovePerson(BrCuthbert, d_to, true);
         give CryptVestry light;
         if (self.check()) return;
         if (real_location == Crypt or CryptVestry)
@@ -3780,7 +3793,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
         if (self.noises())
           "~Helloooo?~";
       8:
-        move BrCuthbert to CryptVestry;
+        MovePerson(BrCuthbert, s_to, true);
         if (self.check()) return;
         if (real_location == Crypt) {
           print
@@ -3803,7 +3816,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
           "~Must have been a draft from the church above.~ (You hear him
           muttering a brief prayer.)";
       13:
-        move BrCuthbert to Crypt;
+        MovePerson(BrCuthbert, n_to, true);
         if (self.check()) return;
         if (real_location == Crypt) {
           if (action ~= ##Listen) new_line;
@@ -3815,7 +3828,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
         give CryptVestry ~light;
         give Crypt ~light;
         scope_modified = true;
-        move BrCuthbert to CryptStairs;
+        MovePerson(BrCuthbert, u_to, true);
         if (self.check()) return;
         if (real_location == Crypt) {
           if (action ~= ##Listen) new_line;
@@ -3824,7 +3837,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
       15:
         give CryptBell ~general;
         give CryptGate locked ~open;
-        move BrCuthbert to Sanctuary;
+        MovePerson(BrCuthbert, Sanctuary);
         if (location == Sanctuary)
           print
             "^You see Brother Cuthbert at the gate and see him shut the gate.^";
@@ -7904,6 +7917,8 @@ Object -> -> BrAelredBody "Brother Aelred's body"                ! >BrAelredBody
         he can hear you.";
     ],
     before [;
+      Follow:
+        "Brother Aelred only journey is to Heaven.";
       Heal:
         "Brother Aelred is in God's hands now, and needs not mortal healing.";
       Smell:
@@ -9918,6 +9933,7 @@ Tomb -> TombEzra "Brother Ezra's tomb"                               ! >TombEzra
       Blow, Consult, Drink, Transfer, Look, Drop, SwitchOff, Extinguish,
       WaitHours, WaitMinutes, WaitMoves, WaitUntil:
         ;
+
       Go:
         print "You stand.^";
         give self ~general;
@@ -10983,6 +10999,11 @@ Object Dark thedark
         ! Otherwise, player can't turn-off-light and then hide or ring bell.
         PlaceInScope(CryptBell);
         PlaceInScope(TombEzra);
+        PlaceInScope(TombAmbrose);
+        PlaceInScope(TombCrispin);
+        PlaceInScope(TombDunstane);
+        PlaceInScope(TombGodric);
+        PlaceInScope(TombGordian);
         PlaceInScope(BlankPanel);
       }
       if (real_location == FitzAlanCrypt) {
@@ -11853,10 +11874,25 @@ Object MercyOrJustice
 ];
 
 
-[ FollowScope o;
+[ FollowScope ;
   switch (scope_stage) {
     1: rfalse;
-    2: objectloop (o has animate) PlaceInScope(o); rtrue;
+    2:
+      if (BrAelred notin nothing) PlaceInScope(BrAelred);
+      if (location == Slype && BrAelredDying hasnt general)
+        PlaceInScope(BrAelredDying);
+      if (location == InfirmaryChapel)
+        PlaceInScope(BrAelredBody);
+      PlaceInScope(BrAnselm);
+      PlaceInScope(BrBenedict);
+      PlaceInScope(BrCuthbert);
+      PlaceInScope(BrHugh);
+      PlaceInScope(BrMartin);
+      PlaceInScope(BrOswald);
+      PlaceInScope(BrRemigio);
+      PlaceInScope(BrWilfred);
+      rtrue;
+    3: "You can only follow the brothers.";
   }
 ];
 
@@ -12217,8 +12253,26 @@ Extend 'tell' first
 ];
 
 
-[ FollowSub ; ! i mloc ;
-  "[To follow someone, go in the direction they went.]";
+[ FollowSub mloc ;
+  ! "[To follow someone, go in the direction they went.]";
+
+  if (~~noun ofclass Monk)
+    "You cannot follow ", (the) noun, ".";
+
+  mloc = parent(noun);
+  if (parent(mloc) ~= 0) mloc = parent(mloc);
+
+  if (location == mloc)
+    print_ret (The) noun, " is already here.";
+
+  if (~~noun.prev_loc)
+    "You cannot follow ", (the) noun, " now.";
+
+  if (player notin location)
+    "You're not standing.";
+
+  print "You follow ", (the) noun, " to ...^^";
+  PlayerTo(mloc);
 
   ! mloc = parent(noun);
   ! if (mloc == nothing) print_ret (The) noun, " can no longer be followed.";
@@ -12457,9 +12511,8 @@ Verb 'extinguish' 'snuff'
   * 'light'                                    -> Extinguish;
 
 Verb 'follow'
-  * creature                                   -> Follow
-  * 'after' creature                           -> Follow
-  * scope=FollowScope                          -> Follow ;
+  * 'after' scope=FollowScope                  -> Follow
+  * scope=FollowScope                          -> Follow;
 
 Extend only 'fondle' first
   * noun                                       -> Misconcept;
@@ -12714,7 +12767,9 @@ Verb '_ending'          * number               -> Ending;
 
 [ ShowMonksSub m ;
   objectloop (m ofclass Monk) {
-    print (The) m, ": ", (name) parent(m), "^";
+    print (The) m, ": ", (name) parent(m);
+    if (m.prev_loc) print " was ", (name) m.prev_loc;
+    new_line;
   }
 ];
 
