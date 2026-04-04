@@ -280,8 +280,6 @@ Constant MSG_ATTACK_DEFAULT
   "Peace, Brother. Violence isn't the answer.";
 Constant MSG_BUY_DEFAULT
   "The sin of avarice takes many forms.";
-Constant MSG_CONSULT_NOTHING_INTERESTING = 1005;
-Constant MSG_CUT_NO_USE = 1004;
 Constant MSG_INVENTORY_EMPTY
   "You are without possessions.";
 Constant MSG_JUMP
@@ -293,17 +291,16 @@ Constant MSG_KISS_PLAYER
   "That would start to feel like a mortal sin.";
 Constant MSG_LISTEN_DEFAULT
   "You listen carefully, but don't hear anything unexpected.";
-Constant MSG_LOOK_BEFORE_ROOMNAME = 1002;
 Constant MSG_MILD_DEFAULT
   "Mind your tongue, Brother.";
-Constant MSG_NOW_DARK = 1003;
-Constant MSG_PARSER_NO_NEED_REFER_TO = 1006;
-Constant MSG_PARSER_UNKNOWN_PERSON = 1007;
+Constant MSG_PARSER_NO_INPUT
+  "Come again, Brother?";
+Constant MSG_PARSER_ONLY_TO_ANIMATE
+  "You can do only do that to a living creature.";
 Constant MSG_PARSER_UNKNOWN_VERB
   "That is not a verb I recognise.";
 Constant MSG_PRAY_DEFAULT
   "You pray fervently, but nothing apparent happens.";
-Constant MSG_PROMPT = 1001;
 Constant MSG_SHOUT_DEFAULT
   "Novices do not shout.";
 Constant MSG_SING_DEFAULT
@@ -323,11 +320,25 @@ Constant MSG_THINK_DEFAULT
   "Silent reflection is always good.";
 Constant MSG_WAIT_DEFAULT
   "You wait a minute.";
-Constant MSG_ENTER_NOT_OPEN 1008;
-Constant MSG_EXIT_NOT_OPEN 1009;
-Constant MSG_INSERT_NOT_OPEN 1010;
-Constant MSG_GO_DOOR_CLOSED 1011;
-Constant MSG_EMPTY_IS_CLOSED 1012;
+Constant MSG_WAKE_DEFAULT
+  "You are already awake.";
+
+! The actual numbers don't matter; just that they're unique and >1000, so
+! Puny won't include the standard message.
+
+Constant MSG_PROMPT = 1001;
+Constant MSG_LOOK_BEFORE_ROOMNAME = 1002;
+Constant MSG_NOW_DARK = 1003;
+Constant MSG_CUT_NO_USE = 1004;
+Constant MSG_CONSULT_NOTHING_INTERESTING = 1005;
+Constant MSG_PARSER_NO_NEED_REFER_TO = 1006;
+Constant MSG_PARSER_UNKNOWN_PERSON = 1007;
+Constant MSG_ENTER_NOT_OPEN = 1008;
+Constant MSG_EXIT_NOT_OPEN = 1009;
+Constant MSG_INSERT_NOT_OPEN = 1010;
+Constant MSG_GO_DOOR_CLOSED = 1011;
+Constant MSG_EMPTY_IS_CLOSED = 1012;
+Constant MSG_WAVE_DEFAULT = 1013;
 
 [ LibraryMessages p_msg p_arg_1 ; ! p_arg_2;
   switch(p_msg) {
@@ -347,18 +358,18 @@ Constant MSG_EMPTY_IS_CLOSED 1012;
       #IfDef FULL_DEBUG; print (RealTime) the_time, " "; #EndIf;
       print "> ";
 
-    MSG_CONSULT_NOTHING_INTERESTING:
-      "I'm not sure what you're using to research.";
-
-    MSG_CUT_NO_USE:
-      "You have nothing suitable for cutting.";
-
     MSG_LOOK_BEFORE_ROOMNAME:
       new_line;
 
     MSG_NOW_DARK:
       NowInDark();
        "^It is now pitch dark in here.";
+
+    MSG_CUT_NO_USE:
+      "You have nothing suitable for cutting.";
+
+    MSG_CONSULT_NOTHING_INTERESTING:
+      "I'm not sure what you're using to research.";
 
     MSG_PARSER_NO_NEED_REFER_TO:
       "You don't need to refer to ~", (_PrintUnknownWord) 0, "~ here.";
@@ -372,6 +383,9 @@ Constant MSG_EMPTY_IS_CLOSED 1012;
       ! p_arg_1 = the object which is closed, thus blocking the player's action.
       print "You can't, since ", (ObjIs) p_arg_1;
       if (p_arg_1 has locked) " locked."; " closed.";
+
+    MSG_WAVE_DEFAULT:
+      "You wave ", (the) noun, ", feeling self-conscious the entire time.";
   }
 ];
 
