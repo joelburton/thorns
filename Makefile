@@ -1,4 +1,17 @@
+# Makefile for building Inform6 projects.
+#
+# Joel Burton <joel@joelburton.com>
+
+
 FULL_DEBUG = '$$\#FULL_DEBUG'
+
+# Conveniences
+
+test:     thorns.debug.test
+playtest: thorns.playtest.play
+unit:     thorns.unit
+alts:     thorns.alts
+
 
 .PRECIOUS: %.z5 %.debug.z5 %.playtest.z5
 
@@ -17,6 +30,8 @@ define OPEN_OR_ERROR
 	fi
 endef
 
+# Just z5 files
+
 %.z5: %.inf Makefile extlib/*
 	$(call OPEN_OR_ERROR,,echo $@)
 
@@ -26,6 +41,7 @@ endef
 %.playtest.z5: %.inf Makefile extlib/*
 	$(call OPEN_OR_ERROR,-D,echo $@)
 
+# Open in Gargoyle
 
 %.play: %.z5
 	open -a Gargoyle $<
@@ -36,6 +52,7 @@ endef
 %.playtest.play: %.playtest.z5
 	open -a Gargoyle $<
 
+# Open in Frotz
 
 %.test: %.z5
 	frotz_ctrlc $<
@@ -46,6 +63,7 @@ endef
 %.playtest.test: %.playtest.z5
 	frotz_ctrlc $<
 
+# Gather game + all assets and upload
 
 %.html: %.inf docs/*.md Makefile %.unit
 	make $*.z5
@@ -62,50 +80,9 @@ endef
 		| python3 scripts/transcript_to_html.py > html/walkthrough.html
 	cp source/{intro.pdf,thorns.jpg,play.html,styles.html,thorns.png} html/
 
-%.abbrevs: %.inf Makefile
-	rm -f gametext.txt
-	inform -r '$$TRANSCRIPT_FORMAT=1' -v5 $<
-	../zabbrev/zabbrev-osx -n 95 -x3 -v5 $< > $@.inf
-	rm gametext.txt
-
-
 %.upload: %.html
 	cd html && netlify deploy -O -p -d .
 	rm *.z5
-
-define MAKE_TESTS
-	cat $(1)/1[a-z]-*.txt > $(1)/1-start.txt
-	cat $(1)/2[a-z]-*.txt > $(1)/2-initial-investigate.txt
-	cat $(1)/3[a-z]-*.txt > $(1)/3-puzzles-east.txt
-	cat $(1)/4[a-z]-*.txt > $(1)/4-upper.txt
-	cat $(1)/5[a-z]-*.txt > $(1)/5-crypts.txt
-	cat $(1)/6[a-z]-*.txt > $(1)/6-belltower-solar.txt
-	cat $(1)/7[a-z]-*.txt > $(1)/7-undercroft.txt
-	cat $(1)/8[a-z]-*.txt > $(1)/8-endings.txt
-	cat $(1)/{1,2,3,4,5,6,7,8}-* > $(1)/18-combo.txt
-	cat $(1)/18-combo.txt | fgrep -v 'GOCHECK' > $(1)/$(2)
-	cp $(1)/$(2) $(1)/$(patsubst %.txt,%.rec,$(2))
-endef
-
-%.create-unit: Makefile unit/[0-9]*
-	$(call MAKE_TESTS,unit,commands.txt)
-
-%.create-alts: Makefile alts/[0-9]*
-	$(call MAKE_TESTS,alts,commands.txt)
-
-clean:
-	fd -u ".*~" -x rm
-	rm -f *.z5 *.scr
-	rm -f html/*
-	rm -f unit/[0-9][0-9]-combo* unit/[0-9]-* unit/current.*
-	rm -f alts/[0-9][0-9]-combo* alts/[0-9]-* unit/current.*
-	rm -f unit/commands.txt unit/commands.rec
-	rm -f alts/commands.txt alts/commands.rec
-
-%.hint-check: %.inf %-hints.inf Makefile
-	@ggrep -oP '(?<=^Option )\w+' $< | while read id; do \
-		ggrep -qi "$$id" $*.inf || echo "Not found: $$id"; \
-	done
 
 
 # run commands.rec through dfrotz, saving transcript to current.scr
@@ -136,3 +113,55 @@ endef
 %.alts: %.playtest.z5 %.create-alts
 	$(call RUN_WALKTHROUGH,,alts)
 
+# Make roll-up walkthroughs
+
+define MAKE_TESTS
+	cat $(1)/1[a-z]-*.txt > $(1)/1-start.txt
+	cat $(1)/2[a-z]-*.txt > $(1)/2-initial-investigate.txt
+	cat $(1)/3[a-z]-*.txt > $(1)/3-puzzles-east.txt
+	cat $(1)/4[a-z]-*.txt > $(1)/4-upper.txt
+	cat $(1)/5[a-z]-*.txt > $(1)/5-crypts.txt
+	cat $(1)/6[a-z]-*.txt > $(1)/6-belltower-solar.txt
+	cat $(1)/7[a-z]-*.txt > $(1)/7-undercroft.txt
+	cat $(1)/8[a-z]-*.txt > $(1)/8-endings.txt
+	cat $(1)/{1,2,3,4,5,6,7,8}-* > $(1)/18-combo.txt
+	cat $(1)/18-combo.txt | fgrep -v 'GOCHECK' > $(1)/$(2)
+	cp $(1)/$(2) $(1)/$(patsubst %.txt,%.rec,$(2))
+endef
+
+%.create-unit: Makefile unit/[0-9]*
+	$(call MAKE_TESTS,unit,commands.txt)
+
+%.create-alts: Makefile alts/[0-9]*
+	$(call MAKE_TESTS,alts,commands.txt)
+
+# Less common commands
+
+%.hint-check: %.inf %-hints.inf Makefile
+	@ggrep -oP '(?<=^Option )\w+' $< | while read id; do \
+		ggrep -qi "$$id" $*.inf || echo "Not found: $$id"; \
+	done
+
+%.abbrevs: %.inf Makefile
+	rm -f gametext.txt
+	inform -r '$$TRANSCRIPT_FORMAT=1' -v5 $<
+	../zabbrev/zabbrev-osx -n 95 -x3 -v5 $< > $@.inf
+	rm gametext.txt
+
+%.png: Makefile
+	inkscape -w 964 -h 859 -o source/thorns.png -y 255 source/$*.svg
+
+# Tidy
+
+clean:
+	fd -u ".*~" -x rm
+	rm -f *.z5 *.scr
+	rm -f html/*
+	rm -f unit/[0-9][0-9]-combo* unit/[0-9]-* unit/current.*
+	rm -f alts/[0-9][0-9]-combo* alts/[0-9]-* unit/current.*
+	rm -f unit/commands.txt unit/commands.rec
+	rm -f alts/commands.txt alts/commands.rec
+
+distclean: clean
+	rm -f source/thorns.png
+	rm -f thorns-abbrevs.inf
