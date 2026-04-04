@@ -3866,6 +3866,8 @@ Scene SceneGoHome "SceneGoHome"                                   ! >SceneGoHome
     ],
       scene_stop [ i m ;
         self.Scene::scene_stop();
+        i = i;
+        m = m;
 #IfDef DEBUG;
         for (i = 1 : i < ALL_MONK_NUM : i++) {  ! skip aelred
           m = all_monks-->i;
@@ -11781,7 +11783,7 @@ Object MercyOrJustice
       print
         "^Brother Hugh fled in the night, never to be seen again. You had a
         chance to resolve this by sharing what you learned, but you didn't. You
-        cannot meet these eyes of Brother Wilfred without feeling shame.
+        cannot meet the eyes of Brother Wilfred without feeling shame.
 
         ^^In the weeks that followed, Brother Wilfred grew silent and withdrawn.
         He stopped eating, stopped illuminating. One morning, he simply didn't

@@ -199,6 +199,7 @@ with description
   ^- PRAY
   ^- READ thing
   ^- RING thing
+  ^- SEARCH thing
   ^- SING
   ^- SMELL
   ^- SMELL thing
