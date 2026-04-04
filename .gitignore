@@ -1,18 +1,16 @@
 *.z*
 
-html/thorns.png
-html/hints.html
-html/final.html
-html/plans.html
-html/plot.html
-html/puzzles.html
-html/style.html
-html/index.html
-html/walkthrough.txt
-thorns.scr
-walkthrough.rec
-walkthrough.txt
+html/
 transcripts/
+scratch/
+unit/[0-9][0-9]*
+unit/[0-9]-*
+unit/current.*
+unit/commands.*
+alts/[0-9][0-9]*
+alts/[0-9]-*
+alts/current.*
+alts/commands.*
 
 puny/
 

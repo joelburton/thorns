@@ -47,7 +47,7 @@ endef
 	frotz_ctrlc $<
 
 
-%.html: docs/puzzles.md docs/plot.md docs/style.md docs/help.md %.inf Makefile %.unit
+%.html: %.inf docs/*.md Makefile %.unit
 	make $*.z5
 	cp $*.z5 html/
 	make $*.debug.z5
