@@ -32,6 +32,7 @@ but will be especially useful:
 - `DIG IN` *(thing)* `WITH` *(thing)*
 - `CONFESS TO` *(person)*
 - `EXTINGUISH` *(source of light)*
+- `FOLLOW` *(brother)*
 - `HIDE BEHIND` *(thing)*
 - `KNEEL ON` *(thing)*
 - `KNOCK ON` *(thing)*

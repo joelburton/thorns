@@ -154,9 +154,13 @@ Global mm_needs_new_line = false;   ! keeps track of if anything printed
   if (~~_fakedir) {
     _to = _from.(dir);
     m.prev_loc = _from;
+    m.prev_dir = dir;
   }
-  else _to = dir;
-
+  else {
+    _to = dir;
+    m.prev_loc = _from;
+    ! don't set prev_dir --- Aldwin can't follow them here
+  }
   ! print "*** m=", (the) m, " dir=", dir, " to=", (name) _to, "^";
 
   if (~~hush) {
