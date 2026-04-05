@@ -10969,7 +10969,7 @@ Object -> LayCots
       print "^*** FULL DEBUGGING MODE^";
     #IfNot;
       print "^*** PLAYTESTING MODE^";
-      <ScriptOn>;
+      ! <ScriptOn>;
     #EndIf;
   #EndIf;
 
@@ -11183,7 +11183,7 @@ Object Dark thedark
 
 [ StoryPause key ;
   print "^     ----------------------- && -----------------------";
-  if (~~xcommsdir) { print " "; @read_char 1 -> key; }
+  if (0->$1F ~= 'z' && ~~xcommsdir) { print " "; @read_char 1 -> key; }
   new_line;
 ];
 

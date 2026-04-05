@@ -1,10 +1,7 @@
-Start of a transcript of
 
-Our Lady of Thorns
-A medieval monastic mystery/tragedy 
-by Joel Burton <joel@joelburton.com> 
-Site: https://lady-of-thorns.netlify.app
-Release 1 / Serial number 260404 / Inform v6.44 PunyInform v6.4.1 SDR
+The random seed is set to 100.
+
+*** PLAYTESTING MODE
 
 
                                                              
@@ -28,10 +25,6 @@ Dorter (on your cot)
 There are several of your fellow monks here---Brothers Benedict, Hugh and Anselm---along with your mentor, Brother Aelred.
 
 What will you do, Brother?
-> REPLAY
-Do you want MORE prompts? (y/n) >n
-[Replaying commands.]
-
 > * Start
 [Comment recorded]
 
@@ -1204,8 +1197,6 @@ The Refectory lies in to the south. You can also go west to the southwestern cor
 
 You can see an orange cat here.
 
-The orange cat twitches, sensing movement somewhere.
-
 > SOUTH
 
 Refectory
@@ -1309,6 +1300,8 @@ You can see an orange cat here.
 Brother Hugh arrives from the north.
 Brother Martin arrives from the north.
 
+The orange cat twitches, sensing movement somewhere.
+
 > SOUTH
 
 Refectory
@@ -1367,7 +1360,7 @@ The Refectory lies in to the south. You can also go west to the southwestern cor
 
 You can see an orange cat here.
 
-The orange cat twitches, sensing movement somewhere.
+The orange cat wriggles.
 
 > NORTH
 
@@ -1382,7 +1375,7 @@ Purloined.
 > KISS PAX
 Cats usually need to be bribed to let you touch them.
 
-The orange cat purrs contentedly in your arms.
+The orange cat trills happily while you hold her.
 
 > FEED FISH TO PAX
 The orange cat eats the fish hungrily then rubs against you, purring.
@@ -1396,7 +1389,7 @@ This is one of the eight sections of the Cloister. Arched openings admit fresh m
 
 To the east is the entrance to the Scriptorium. You can also go north to the northeastern corner, south to the southeastern corner, or west into the Garth.
 
-The orange cat continues to rest in your arms.
+The orange cat purrs contentedly in your arms.
 
 > * Drug Wilfred with Cat
 [Comment recorded]
@@ -1526,6 +1519,8 @@ This is one of the eight sections of the Cloister. Arched openings admit fresh m
 To the east is the entrance to the Scriptorium. You can also go north to the northeastern corner, south to the southeastern corner, or west into the Garth.
 
 You can see Pax here.
+
+Pax wriggles.
 
 > WEST
 
@@ -1737,7 +1732,7 @@ You open Brother Remigio's chest, revealing a pilgrim badge.
 A small badge, cheaply cast in pewter but carefully kept. It depicts a figure in a monk's robe: St Francis of Assisi, you think, given the birds around him. The kind of thing sold to pilgrims at a shrine. How it ended up in an English priory, in the chest of a Tuscan lay brother, is a story you will never fully know.
 
 > GET BADGE
-You take it, promising yourself you will return it.
+You know it is wrong to take things, but you somehow justify this.
 
 > CLOSE CHEST
 You close Brother Remigio's chest.
@@ -1940,7 +1935,7 @@ The scent of beeswax is stronger here.
 
 > GET CANDLE
 (putting the pilgrim badge into the basket to make room)
-You hesitate before proceeding to steal it. God sees, you think. God sees everything.
+You take it, feeling the weight of this theft.
 
 > DROP IT
 You drop the candle.
@@ -2524,6 +2519,8 @@ This is one of the eight sections of the Cloister. Arched openings admit slanted
 The Locutory lies in to the west. You can also go north to the northwestern corner of the Cloister, south to the southwestern corner, or east into the Garth.
 
 You can see Pax here.
+
+Pax rubs against the walls.
 
 > WEST
 
@@ -3351,4 +3348,9 @@ Previous turn undone.
 > UNDO
 Previous turn undone.
 
-> 
+> * Quit game
+[Comment recorded]
+
+> QUIT
+Are you sure you want to quit? Y
+

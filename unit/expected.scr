@@ -1,10 +1,7 @@
-Start of a transcript of
 
-Our Lady of Thorns
-A medieval monastic mystery/tragedy 
-by Joel Burton <joel@joelburton.com> 
-Site: https://lady-of-thorns.netlify.app
-Release 1 / Serial number 260404 / Inform v6.44 PunyInform v6.4.1 SDR
+The random seed is set to 100.
+
+*** PLAYTESTING MODE
 
 
                                                              
@@ -28,10 +25,6 @@ Dorter (on your cot)
 There are several of your fellow monks here---Brothers Benedict, Hugh and Anselm---along with your mentor, Brother Aelred.
 
 What will you do, Brother?
-> REPLAY
-Do you want MORE prompts? (y/n) >n
-[Replaying commands.]
-
 > * Start
 [Comment recorded]
 
@@ -900,8 +893,6 @@ The Refectory lies in to the south. You can also go west to the southwestern cor
 
 You can see an orange cat here.
 
-The orange cat twitches, sensing movement somewhere.
-
 > SOUTH
 
 Refectory
@@ -1200,6 +1191,8 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 
 You can see an orange cat here.
 
+The orange cat twitches, sensing movement somewhere.
+
 > SOUTH
 
 Cloister Southwest
@@ -1219,7 +1212,7 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 
 You can see an orange cat here.
 
-The orange cat twitches, sensing movement somewhere.
+The orange cat wriggles.
 
 > EAST
 
@@ -1591,7 +1584,7 @@ You find linens, chalices, a pewter platter, and other smaller vestry items usef
 Among the miscellany: a beeswax candle and a brush.
 
 > GET CANDLE
-You take it, promising yourself you will return it.
+You take it, feeling the weight of this theft.
 
 > NORTH
 
@@ -2145,8 +2138,6 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 
 You can see Pax here.
 
-Pax twitches, sensing movement somewhere.
-
 > * Go to kitchen
 [Comment recorded]
 
@@ -2385,6 +2376,8 @@ You can see Pax here.
 
 From a distance, you can hear your brothers singing.
 
+Pax wriggles.
+
 > NORTH
 
 Quire
@@ -2533,8 +2526,6 @@ This is one of the eight sections of the Cloister. Arched openings admit slanted
 To the east is the entrance to the Scriptorium. You can also go north to the northeastern corner, south to the southeastern corner, or west into the Garth.
 
 You can see Pax here.
-
-Pax twitches, sensing movement somewhere.
 
 > EAST
 
@@ -2696,6 +2687,8 @@ The Locutory lies in to the west. You can also go north to the northwestern corn
 
 You can see Pax here.
 
+Pax rubs against the walls.
+
 > SOUTH
 
 Cloister Southwest
@@ -2792,8 +2785,6 @@ This is one of the eight sections of the Cloister. Arched openings admit slanted
 The Refectory lies in to the south. You can also go west to the southwestern corner of the Cloister, east to the southeastern corner, or north to the Garth.
 
 You can see Pax here.
-
-Pax twitches, sensing movement somewhere.
 
 > SOUTH
 
@@ -2916,4 +2907,9 @@ Previous turn undone.
 > UNDO
 Previous turn undone.
 
-> 
+> * Quit game
+[Comment recorded]
+
+> QUIT
+Are you sure you want to quit? Y
+

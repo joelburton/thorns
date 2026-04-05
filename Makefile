@@ -86,16 +86,42 @@ endef
 	rm *.z5
 
 
-# run commands.rec through dfrotz, saving transcript to current.scr
+# For tests:
+#
+# The main tests ("unit") shouldn't use any debugging commands, since these will
+# also be the player-facing final transcripts.
+#
+# The alts/ tests can, since these aren't published.
+#
+# In both cases, these should be checked against the playtest version --- which
+# is compiled with -D and should set a fixed random seed.
+
+# These make recipes:
+#
+# run commands.rec through Bocfel, saving transcript to current.scr
 # if there are differences:
 #   - show diff current.scr <-> expected.scr
 #   - on exiting diff, give them option to "bless"
 #     (which copies current.scr to expected.scr)
 
+# old way used frotz
+# 	printf "$(2)/current.scr\nREPLAY\n$(2)/commands.rec\nn\n" \
+# 		| dfrotz -S1000 -m -p $< ; \
+
+# Bocfel subtleties:
+#
+# -Nz sets interpreter version "z", which can be checked in game to tell
+#     if we're running tests (useful for not pausing for key presses, since
+#     we'd have to put blank lines in the expected.
+#
+# Bocfel doesn't quite at end, so we need a QUIT/Y to end game.
+#
+# Bocfel calculates the window length differently when output piped to
+# /dev/null; this may cause things related to window length to work differently.
+
 define RUN_WALKTHROUGH
-	rm -f $(2)/current.scr
-	printf "$(2)/current.scr\nREPLAY\n$(2)/commands.rec\nn\n" \
-		| dfrotz -S1000 -m -p $< ; \
+	@rm -f $(2)/current.scr
+	@bocfel -Nz -r -R $(2)/commands.rec -t -T $(2)/current.scr $< > /dev/null; \
 	awk -f scripts/test.awk $(2)/current.scr; \
 		diff -N -u3 --color=always $(2)/expected.scr $(2)/current.scr \
 		> /tmp/diff ; \
@@ -117,16 +143,16 @@ endef
 # Make roll-up walkthroughs
 
 define MAKE_TESTS
-	cat $(1)/1[a-z]-*.txt > $(1)/1-start.txt
-	cat $(1)/2[a-z]-*.txt > $(1)/2-initial-investigate.txt
-	cat $(1)/3[a-z]-*.txt > $(1)/3-puzzles-east.txt
-	cat $(1)/4[a-z]-*.txt > $(1)/4-upper.txt
-	cat $(1)/5[a-z]-*.txt > $(1)/5-crypts.txt
-	cat $(1)/6[a-z]-*.txt > $(1)/6-belltower-solar.txt
-	cat $(1)/7[a-z]-*.txt > $(1)/7-undercroft.txt
-	cat $(1)/8[a-z]-*.txt > $(1)/8-endings.txt
-	cat $(1)/{1,2,3,4,5,6,7,8}-* > $(1)/18-combo.txt
-	cat $(1)/18-combo.txt | fgrep -v 'GOCHECK' > $(1)/$(2)
+	@cat $(1)/1[a-z]-*.txt > $(1)/1-start.txt
+	@cat $(1)/2[a-z]-*.txt > $(1)/2-initial-investigate.txt
+	@cat $(1)/3[a-z]-*.txt > $(1)/3-puzzles-east.txt
+	@cat $(1)/4[a-z]-*.txt > $(1)/4-upper.txt
+	@cat $(1)/5[a-z]-*.txt > $(1)/5-crypts.txt
+	@cat $(1)/6[a-z]-*.txt > $(1)/6-belltower-solar.txt
+	@cat $(1)/7[a-z]-*.txt > $(1)/7-undercroft.txt
+	@cat $(1)/8[a-z]-*.txt > $(1)/8-endings.txt
+	@cat $(1)/{1,2,3,4,5,6,7,8}-* > $(1)/18-combo.txt
+	@cat $(1)/18-combo.txt | fgrep -v 'GOCHECK' > $(1)/$(2)
 	cp $(1)/$(2) $(1)/$(patsubst %.txt,%.rec,$(2))
 endef
 
