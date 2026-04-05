@@ -2,18 +2,16 @@
 title: Our Lady of Thorns
 ---
 
-<img src="thorns.jpg">
+<img src="large.jpg">
 
-# Our Lady of Thorns
-
-Welcome! In this Interactive Fiction game, you're playing a novice monk investigating a mysterious death at the priory of Our Lady of Thorns in 1346. Can you find the killer and the motive before the end of Compline?
+Welcome! In this Interactive Fiction game, you're playing a novice monk investigating a mysterious death at the priory of Our Lady of Thorns in 1346. Can you unravel the mystery before the end of Compline?
 
 <a href="thorns.z5" class="download-btn">Download <b>thorns.z5</b></a>
 <a href="play.html" class="download-btn">Play in browser</a>
 
 ## Map
 
-[![Map of Our Lady of Thorns](thorns.png)](thorns.png)
+[![Map of Our Lady of Thorns](map)](map)
 
 ## New to I.F.?
 

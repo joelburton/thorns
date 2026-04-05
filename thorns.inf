@@ -340,6 +340,7 @@ Constant MSG_INSERT_NOT_OPEN = 1010;
 Constant MSG_GO_DOOR_CLOSED = 1011;
 Constant MSG_EMPTY_IS_CLOSED = 1012;
 Constant MSG_WAVE_DEFAULT = 1013;
+Constant MSG_RESTART_RESTORE_OR_QUIT = 1014;
 
 [ LibraryMessages p_msg p_arg_1 ; ! p_arg_2;
   switch(p_msg) {
@@ -387,6 +388,16 @@ Constant MSG_WAVE_DEFAULT = 1013;
 
     MSG_WAVE_DEFAULT:
       "You wave ", (the) noun, ", feeling self-conscious the entire time.";
+
+    MSG_RESTART_RESTORE_OR_QUIT:
+      print "^Would you like to RESTART, RESTORE";
+        if(((HDR_GAMEFLAGS->1) & 16) ~= 0)
+          print ", UNDO the last move";
+      print ", give the FULL score for that game";
+      if (f_enough_evidence)
+        print ", read the full SOLUTION,";
+      print " or QUIT? ";
+      rtrue;
   }
 ];
 
@@ -435,6 +446,16 @@ Replace _AskWhichNoun OriginalAskWhichNoun;
   ! means it will think the user typed "X ST ST JUDE", which is strange, but
   ! works fine, and is easier than removing the period and re-parsing
   ! everything.
+  if (deadflag && f_enough_evidence) {
+    if ((parse-2)-->2 == 'solution') {
+      print_ret "^",
+        (string) Hint_Solution.&the_hints-->1,
+        "^^---^^",
+        (string) Hint_Solution.&the_hints-->2,
+        "^";
+    }
+  }
+
   _len = NumberWords();
   for (_i = 2 : _i < NumberWords(): _i++) {
     if (WordValue(_i) == './/' && WordValue(_i-1) == 'st') {
@@ -690,6 +711,7 @@ Constant DEAD_INACTION 9;
       g_evidence_count = CalculateEvidence();
       if (g_evidence_count >= 18) {
         f_enough_evidence = true;
+        HintReady(Hint_Solution);
         print (bd) "^^Note: ";
         SolveSub();
       }
@@ -3154,8 +3176,10 @@ Class Scene                                                             ! >Scene
   with
     time_left 0,
     parse_name [;
+#IfDef DEBUG;
       if (action_to_be ~= ##StartScene or ##StopScenes) return 0;
       if (NextWord() == self.&name-->0) return 1;
+#EndIf;
     ],
     scene_start [;
       self.time_left = 0;
@@ -3500,7 +3524,6 @@ Scene SceneMeeting "SceneMeeting"                                ! >SceneMeeting
           #IfDef HAS_HINTS;
             HintReady(Hint_Solving);
             HintReady(Hint_Evidence);
-            HintReady(Hint_Solution);
           #EndIf;
 
           self.scene_stop();
@@ -12098,7 +12121,7 @@ Object MercyOrJustice
     default: font on; print "There is no in-game map for this area.^";
   }
   font on;
-  "^Graphical map at https://lady-of-thorns.netlify.app/thorns.png";
+  "^Graphical map at https://lady-of-thorns.netlify.app/map";
 ];
 
 

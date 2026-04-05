@@ -78,7 +78,8 @@ endef
 	cp unit/commands.rec html/walkthrough.txt
 	tail +8 unit/current.scr |  awk -f scripts/tidy.awk \
 		| python3 scripts/transcript_to_html.py > html/walkthrough.html
-	cp source/{intro.pdf,thorns.jpg,play.html,styles.html,thorns.png} html/
+	cp source/{intro.pdf,square.jpg,large.jpg,play.html,styles.html} html/
+	cp source/map.png html/map
 
 %.upload: %.html
 	cd html && netlify deploy -O -p -d .
@@ -151,6 +152,21 @@ endef
 %.png: Makefile
 	inkscape -w 964 -h 859 -o source/thorns.png -y 255 source/$*.svg
 
+
+# EntryTitleNoSpaces.zip
+# -> cover.jpg/png
+# -> cover_small.jpg/png
+# -> (entry materials)
+# -> extras/
+# -> -> (extra materials)
+%.spring:
+	rm -rf /tmp/OurLadyOfThorns
+	mkdir -p /tmp/OurLadyOfThorns/extras
+	cp source/large.jpg /tmp/OurLadyOfThorns/cover.jpg
+	cp source/square.jpg /tmp/OurLadyOfThorns/cover_small.jpg
+	cp thorns.z5 /tmp/OurLadyOfThorns/thorns.z5
+	cp source/map.png /tmp/OurLadyOfThorns/extras
+	cd /tmp/OurLadyOfThorns && zip -r OurLadyOfThorns.zip .
 # Tidy
 
 clean:
