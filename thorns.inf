@@ -852,6 +852,7 @@ Include "extlib/monk_moves.h";
         && action == ##Examine or ##Search) return 3;
 
     ! Think we want this for a default
+    ! TODO: should return 0, "can't offer any guidance"
     return 2;
 
   } else {
@@ -1746,9 +1747,6 @@ Monk BrAelred "Brother Aelred"                                       ! >BrAelred
             "~Son, you must learn to know yourself.~ He smiles.";
           BrAelred:
             "He chuckles gently. ~An old herbalist who talks to plants.~";
-        }
-        wn = consult_from;
-        switch (NextWord()) {
           'himself': <<Ask self self>>;
           'garden', 'gardens':
             "~Yes, son. Meet me there later this morning.~";
@@ -1803,25 +1801,26 @@ Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
         "You consider trying to carry him to the Infirmary---but, clearly, he is
         beyond cure. Instead, you stroke his head.";
     ],
-    life [ w ;
+    life [ ;
       Kiss:
         "You kiss his forehead and hope that this kind gesture might reassure
         him.";
       Ask:
         if (self has general) "It is too late for such things.";
 
-        wn = consult_from;
-        w = NextWord();
-        if (MurderWord(w))
+        if (MurderWord(second))
           "He points to his throat, sputtering.";
-        if (w == 'gathering')
-          "~He wanted, he needed---~. Brother Aelred trails off in pain. You
-          think he added ~Saint Jude~, though he is hard to hear.";
-        if (w == 'brother' or 'appointment' or 'meet' or 'meeting')
-          "He shakes violently. ~Meet---I wanted to help---~. He trails off in
-          pain.";
-        if (w == 'bushes') second = RoseOrHips;
+        if (second ofclass Monk)
+          "He shakes his head, perhaps indicating ~No~. His eyes are even more
+          wild.";
+
         switch (second) {
+          'gathering':
+            "~He wanted, he needed---~. Brother Aelred trails off in pain. You
+            think he added ~Saint Jude~, though he is hard to hear.";
+          'brother', 'appointment', 'meet', 'meeting':
+            "He shakes violently. ~Meet---I wanted to help---~. He trails off in
+            pain.";
           JudeStatue:
             "Even through the jerking of his hand, he tries to make the sign of
             the cross.";
@@ -1829,14 +1828,12 @@ Object BrAelredDying "Brother Aelred"                           ! >BrAelredDying
             "Perhaps in response, he points north. ~They're not alive.~";
           Scriptorium:
             "He nods his head wildly. ~Lost.~";
-          RoseOrHips:
+          RoseOrHips, 'bushes':
             "He coughs violently, and can only get out a word: ~gathering~.";
+          default:
+            "He mumbles something incoherent in response.";
         }
-        if (second ofclass Monk)
-          "He shakes his head, perhaps indicating ~No~. His eyes are even more
-          wild.";
 
-        "He mumbles something incoherent in response.";
 
       default:
         if (self hasnt general)
@@ -1972,12 +1969,10 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
         should talk with Brother Wilfred? He's always been very helpful when I
         needed it.~";
     ],
-    life [ w ;
+    life [ ;
       Tell:
         if (f_enough_evidence) {
-          wn = consult_from;
-          w = NextWord();
-          if (MurderWord(w) || (second == BrHugh or StolenPsalter or
+          if (MurderWord(second) || (second == BrHugh or StolenPsalter or
               Chronicle or Coins or ScribbledNote or HenbaneDecoction or
               Henbane))
             "~This sounds very serious, Aldwin. I'm not the right person to talk
@@ -1991,21 +1986,21 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
               && second has evidence && second has moved)
           print_ret (string) MSG_DOES_SEEM_LIKE_EVIDENCE;
 
-        wn = consult_from;
-        if (MurderWord(NextWord()))
+        if (MurderWord(second))
            print_ret (string) MSG_JUST_HOPE_NOT_MURDER;
 
         print_ret (string) MSG_ANSELM_MORE_INTERESTED;
       Ask:
-        if (metaclass(second) == Object) {
-          switch(second) {
+        if (MurderWord(second)) print_ret (string) MSG_JUST_HOPE_NOT_MURDER;
+
+        switch(second) {
           BrAelred:
             "~He was so kind.~ Anselm's voice catches. ~We're all going to miss
             him terribly.~";
           BrAldwin:
             "He laughs happily. ~You? You're, well, you. I think you're doing
             very well here.~";
-          BrAnselm:
+          BrAnselm, 'himself':
             "He looks puzzled. ~We've talked many times, Aldwin.~";
           BrBenedict:
             "~When I had quinsy last year, he took excellent care of me. We were
@@ -2048,21 +2043,15 @@ Monk BrAnselm "Brother Anselm"                                       ! >BrAnselm
             "~Brother Benedict stores the medicines, that's all I know.~";
           StolenPsalter:
             "~I heard it disappeared, that's all.~";
-          }
-          "~I don't know anything about ", (ItOrThem) second, ".~";
-        } else {
-          wn = consult_from;
-          w = NextWord();
-          if (MurderWord(w)) print_ret (string) MSG_JUST_HOPE_NOT_MURDER;
-          if (w == 'himself') <<Ask self self>>;
-          if (w == 'locutory')
-            "~This is where I often work, planning out our choral pieces.~";
-          if (w == 'sing' or 'song' or 'singing')
+          'locutory':
+              "~This is where I often work, planning out our choral pieces.~";
+          'sing', 'song', 'singing':
             "He makes a kind comment about how your voice is improving.";
+          default:
+            print (string) MSG_ANSELM_MORE_INTERESTED;
+            new_line;
+            return AskFail();
         }
-        print (string) MSG_ANSELM_MORE_INTERESTED;
-        new_line;
-        return AskFail();
     ],
     history_text
       "Anselm (1316-). Entered 1332. Studied under Brother Wilfred as a youth.
@@ -2115,12 +2104,14 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
       "Brother Benedict looks at you kindly, but raises his finger to his lips,
       to remind you of the rule against unnecessary speech.";
     ],
-    life [ w ;
+    life [ ;
       Ask:
         if (location ~= Infirmary or Slype or CloisterSE
             or CloisterE or CloisterNE or CloisterN) rfalse;
-        if (metaclass(second) == Object) {
-          switch(second) {
+
+        if (MurderWord(second)) print_ret (string) BENEDICT_ON_MURDER;
+
+        switch(second) {
           Pax:
             "~Dear brother, I have no time for such stray animals.~";
           BrHugh:
@@ -2144,7 +2135,7 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
             "He only gestures toward the Infirmary Chapel.";
           BrAelredEyes:
             "~They were very dilated. Perhaps he was in pain?~";
-          BrBenedict:
+          BrBenedict, 'himself':
             "~You know me, Brother. I care for the unwell.~";
           InfirmaryCabinet:
             "~The medicines are kept secure here.~";
@@ -2159,15 +2150,9 @@ Monk BrBenedict "Brother Benedict"                                 ! >BrBenedict
             "~Ah, the mirror serves medicine, not pride. I can check if pupils
             respond to light, examine the tongue and throat, see if jaundice
             yellows the eyes. Observation is key to healing.~";
-          }
-        }
-
-        wn = consult_from;
-        w = NextWord();
-        if (w == 'himself') <<Ask self self>>;
-        if (w == 'code' or 'combo' or 'combination' or 'lock' or 'wheels')
+          'code', 'combo', 'combination', 'lock', 'wheels':
             "~It's kept locked and only for my use.~";
-        if (MurderWord(w)) print_ret (string) BENEDICT_ON_MURDER;
+        }
       Tell:
         if (metaclass(second) == Object && second has evidence)
           print_ret (string) MSG_DOES_SEEM_LIKE_EVIDENCE;
@@ -2231,8 +2216,7 @@ Monk BrCuthbert "Brother Cuthbert"                                 ! >BrCuthbert
       WaveTo:
         "Brother Cuthbert purses his lips and does not reply.";
       Ask:
-        wn = consult_from;
-        switch (NextWord()) {
+        switch (second) {
           'candle', 'candles':
             "In a rare act, he speaks. ~You have no need for such. And stay out
             of the Sacristy, Brother Novice.~";
@@ -2279,30 +2263,26 @@ Monk BrHugh "Brother Hugh"                                             ! >BrHugh
     walk_office (u_to) (n_to) (n_to) (n_to) (n_to) (n_to) Stalls,
     walk_matins (d_to) (d_to) Stalls,
     possess 'hugh^s' 'hughs',
-    life [ w ;
+    life [ ;
       if (f_hugh_refuses_talk)
         "It appears Hugh refuses to have further conversation with you.";
 
       Ask, Tell:
-        if (metaclass(second) == Object) {
-          switch (second) {
-            InfirmaryCabinet, HenbaneDecoction,
-            FeverFewDecoction, FoxgloveDecoction:
-              "~I know Benedict stores medicines in the cabinet, that's all.~";
-            Undercroft:
-              "~You stay out of there, Brother Novice.~";
-            MustardBarrel, MustardPackage, StolenPsalter, Coins, Letters:
-              f_hugh_refuses_talk = true;
-              "His mouth opens in shock for a second and then closes. He says
-              nothing.";
-          }
-        }
-        wn = consult_from;
-        w = NextWord();
-        if (MurderWord(w)) "He is dismissive: ~Nonsense.~";
-        if (w == 'rose' or 'william' or 'money' or 'surgeon' or 'payment') {
-          f_hugh_refuses_talk = true;
-          "~I don't see how that's your business.~";
+        if (MurderWord(second)) "He is dismissive: ~Nonsense.~";
+
+        switch (second) {
+          InfirmaryCabinet, HenbaneDecoction,
+          FeverFewDecoction, FoxgloveDecoction:
+            "~I know Benedict stores medicines in the cabinet, that's all.~";
+          Undercroft:
+            "~You stay out of there, Brother Novice.~";
+          MustardBarrel, MustardPackage, StolenPsalter, Coins, Letters:
+            f_hugh_refuses_talk = true;
+            "His mouth opens in shock for a second and then closes. He says
+            nothing.";
+          'rose', 'william', 'money', 'surgeon', 'payment':
+            f_hugh_refuses_talk = true;
+            "~I don't see how that's your business.~";
         }
       Show:
         <<Tell second noun>>;
@@ -2346,8 +2326,10 @@ Monk BrMartin "Brother Martin"                                       ! >BrMartin
         "Brother Martin looks surprised. ~Confess? Perhaps you should talk with
         someone more senior.~";
     ],
-    life [ w ;
+    life [ ;
       Ask:
+        if (MurderWord(second)) print_ret (string) MSG_JUST_HOPE_NOT_MURDER;
+
         switch (second) {
           BrAelred: "~What a tragic day. He was the most gentle of men.~";
           BrRemigio:
@@ -2357,11 +2339,6 @@ Monk BrMartin "Brother Martin"                                       ! >BrMartin
             print "~I see Brother Hugh often ";
             if (location == Kitchen) print "here"; else print "in the Kitchen";
             " since it's directly above the Undercroft.~";
-        }
-        wn = consult_from;
-        w = NextWord();
-        if (MurderWord(w)) print_ret (string) MSG_JUST_HOPE_NOT_MURDER;
-        switch (w) {
           'basil': "~I've no time for such exotic herbs.~";
           'thyme', 'sage', 'mustard':
             "~Of course, I use that often in our cooking.~";
@@ -2430,14 +2407,12 @@ Monk BrOswald "Brother Oswald"                                       ! >BrOswald
       Confess:
         "~We will have time to talk tomorrow, Brother Novice. Be at peace.~";
     ],
-    life [ w ;
+    life [ ;
       Show, Give:
         "Brother Oswald considers even this exchange to break the vow of
         silence, and refuses to even look down at the offer.";
       Tell:
-        wn = consult_from;
-        w = NextWord();
-        if (f_enough_evidence && (MurderWord(w) ||
+        if (f_enough_evidence && (MurderWord(second) ||
               second == BrHugh or StolenPsalter or Coins or ScribbledNote
               or Letters)) {
           if (location ~= Quire)
@@ -2494,7 +2469,7 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
       print "Brother Remigio listens politely, but doesn't understand.^";
       return AskFail();
     ],
-    life [ w ;
+    life [ ;
       if (SceneDeathInSlype has general) {
         if (second == BrAelred)
           "~I come here, and I see him on ground. I try to help, but he---~
@@ -2515,6 +2490,9 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
           "Brother Remigio looks down, uncomfortable answering anything with
           Brother Martin here.";
         }
+
+        if (MurderWord(second)) "~Assassinio?~ He looks terrified.";
+
         switch (second) {
           BrHugh:
             "~Frate Hugh? Good man. He work hard down there, always busy
@@ -2542,7 +2520,7 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
           BrAldwin:
             "~You? You are...~ he grins. ~Come si dice? Tadpole. Small, new.
             But you grow, s@`i?~";
-          BrRemigio:
+          BrRemigio, 'himself':
             "~Me?~ He laughs, a little surprised. ~I am... nobody. A man who
             walk very far.~ He wipes his hands on his habit. ~I find this place,
             they let me stay. I work hard. Is enough, no?~";
@@ -2551,18 +2529,15 @@ Monk BrRemigio "Brother Remigio"                                    ! >BrRemigio
             Always hungry.~";
           Basil:
             "~Ah, it makes me happy.~";
-        }
-
-        wn = consult_from;
-        w = NextWord();
-        if (w == 'himself') <<Ask self self>>;
-        if (w == 'priory') "~It is safe here.~";
-        if (w == 'tuscany' or 'toscana' or 'italy' or 'home')
+          'priory':
+           "~It is safe here.~";
+          'tuscany', 'toscana', 'italy', 'home':
             "~Toscana.~ He is quiet for a moment, his eyes distant. ~Is... how
             to say... the hills, they are gold in summer. The sun, he is warm.
             Not like here.~ He glances at the grey stone walls around him. ~I
             not speak of it. Is better not to.~";
-        if (MurderWord(w)) "~Assassinio?~ He looks terrified.";
+        }
+
       Give:
         if (BrMartin in Kitchen)
           "You daren't give Brother Remigio anything with Brother Martin here.";
@@ -2712,7 +2687,7 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
       ! if (self in Scriptorium) give self transparent;
       ! else give self ~transparent;
     ],
-    life [ w ;
+    life [ ;
       if (action ~= ##WakeOther && BrWilfred hasnt awake)
           print_ret (string) MSG_WILFRED_DEEP_IN_SLEEP;
       WakeOther:
@@ -2720,6 +2695,9 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
         "As you're about to shake Brother Wilfred, his eyes snap open. ~Dear
         child,~ he says, ~I was just resting my eyes.~";
       Ask:
+        if (MurderWord(second))
+          "~Now, none of that kind of talk, dear child.~";
+
         switch (second) {
           BrAelred:
             "~What a loss for our community. I knew him his entire adult life,
@@ -2770,40 +2748,34 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
           Library, LibraryKey:
             "~I'm afraid I can't let you in. The Library is off-limits to
             everyone but me. Strict orders from the prior.~";
-        }
-
-        wn = consult_from;
-        w = NextWord();
-        if (w == 'himself') <<Ask self self>>;
-        if (w == 'valerian')
-          "~Oh, yes. That helped a lot.~";
-        if (w == 'rosemary' or 'mother')
-          "His eyes mist, but he says nothing.";
-        if (w == 'fluff' or 'fur' or 'orange' or 'habit') {
+          'valerian':
+            "~Oh, yes. That helped a lot.~";
+          'rosemary', 'mother':
+            "His eyes mist, but he says nothing.";
+          'fluff', 'fur', 'orange', 'habit':
             print "~Oh.~ He looks abashed, and brushes at his habit.";
             if (Pax has proper)
               " ~Dear old Pax.~";
             "";
+          default:
+            print "Brother Wilfred hushes you kindly. ~Never mind that.~^";
+            return AskFail();
         }
 
-        if (MurderWord(w))
-          "~Now, none of that kind of talk, dear child.~";
-
-        print "Brother Wilfred hushes you kindly. ~Never mind that.~^";
-        return AskFail();
       Tell:
         if (f_enough_evidence) {
           if (location ~= Scriptorium)
             "~My friend, come find me in the Scriptorium and we can talk
             there.~";
-          wn = consult_from;
-          w = NextWord();
-          if (MurderWord(w) || second == BrHugh or StolenPsalter or Coins
+          if (MurderWord(second) || second == BrHugh or StolenPsalter or Coins
               or Chronicle or ScribbledNote or HenbaneDecoction or Henbane
               or Letters)
             "[If you'd like to tell Brother Wilfred about what you found,
             CONFESS TO WILFRED.]";
+        } else if (MurderWord(second)) {
+          "~Now, none of that, my child. Keep your mind on God.~";
         }
+
         switch (second) {
           BrHugh:
             "~I won't listen to gossip.~";
@@ -2814,14 +2786,10 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
               "~Found? I didn't lose it?~ He looks delighted.";
           Library, LibraryKey:
             "~I'm afraid I can't let you in.~";
+          default:
+            self.yawn_check = 0;
+            "Brother Wilfred listens sleepily without response.";
         }
-        wn = consult_from;
-        w = NextWord();
-        if (MurderWord(w))
-          "~Now, none of that, my child. Keep your mind on God.~";
-
-        self.yawn_check = 0;
-        "Brother Wilfred listens sleepily without response.";
 
       Give:
           if (noun == Rosemary) {
@@ -2848,7 +2816,6 @@ Monk BrWilfred "Brother Wilfred"                                    ! >BrWilfred
             "He seems delighted and scratches her on her head.";
           }
         PutOn:
-          print "HERE";
           if (noun == Pax) {
             if (location ~= Scriptorium)
               "Brother Wilfred strokes her head for a moment, but declines.";

@@ -1,4 +1,5 @@
-!% ++puny
+
+!% ++../puny
 
 Constant DEBUG;
 Constant INITIAL_LOCATION_VALUE = TheRoom;
@@ -53,6 +54,10 @@ Object TheRoom "The Room"
   with
     before [;
       print "* before", (PrDebug) self;
+      
+      Jump:
+        meta = true;
+        "You jump.";
     ],
     after [;
       print "* after ", (PrDebug) self;
