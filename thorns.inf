@@ -57,8 +57,8 @@ Constant Headline
   "^A medieval monastic mystery/tragedy
   ^by Joel Burton <joel@@64joelburton.com>
   ^Site: https://lady-of-thorns.netlify.app^";
-! Release 1;
-! Array UUID_ARRAY string "UUID://2BB74FC0-C667-485D-9D4A-0DB142E4FF57";
+Release 2;
+Array UUID_ARRAY string "UUID://2BB74FC0-C667-485D-9D4A-0DB142E4FF57";
 #IfDef UUID_ARRAY; #EndIf;
 
 Constant CUSTOM_ABBREVIATIONS;
@@ -780,7 +780,7 @@ Include "extlib/monk_moves.h";
 ! Needs to be declared AFTER cheap_scenery loaded, since uses cs_match_id
 
 [ ChooseObjects obj code ;
-  ! print "*** CO ", action, " ", (the) obj, " ", code, "^";
+  ! print "*** CO ", (DebugAction) action, " ", (the) obj, " ", code, "^";
 
   if (code == 2) {
     ! This is for comparing which object is best-match; 0=bad-match,
@@ -3769,6 +3769,7 @@ Scene SceneCrypt "SceneCrypt"                                      ! >SceneCrypt
 
     switch (self.time_left) {
       1:
+        BrCuthbert.attending = false;
       2:
         move BrCuthbert to CryptStairs;
         give CryptGate open;
@@ -4542,8 +4543,8 @@ Object Core
 
     cs_indoor
       CSP_FLOOR 12 'stone' 'floor' 'ground' [;
-        Examine: "You see nothing special about it.";
-        Touch: "It feels solid.";
+        Examine: "You see nothing special about the floor.";
+        Touch: "The floor feels solid.";
         LieOn: "This is no respectful place to lie.";
         Enter, Sit: "You sit on the floor for a moment, and then rise up.";
         Kneel: "You kneel on the floor for a minute and then rise up.";
@@ -4593,8 +4594,8 @@ Object Core
         "You can only make out the outline of the church from here.";
       ]
       CSP_FLOOR 4 'grass' 'dirt' 'turf' 'ground' [;
-        Examine: "You see nothing special about it.";
-        Touch: "You feel nothing unexpected.";
+        Examine: "You see nothing special about the ground.";
+        Touch: "You touch the ground, but feel nothing unexpected.";
         LieOn: "This is no respectful place to lie.";
         Enter, Sit: "You sit on the ground for a minute and then rise up.";
         Kneel: "You kneel on the ground for a minute and then rise up.";
@@ -4606,8 +4607,8 @@ Object Core
 
     cs_exposed
       CSP_FLOOR 12 'stone' 'floor' 'ground' [;
-        Examine: "You see nothing special about it.";
-        Touch: "It feels solid.";
+        Examine: "You see nothing special about the ground.";
+        Touch: "The ground feels solid.";
         Sit, Enter:
           "You sit for a minute on the exposed floor and then rise up.";
         LieOn: "This is no respectful place to lie.";
@@ -7182,7 +7183,7 @@ Object -> -> Breviary "breviary"                                 ! >Breviary
   class AdjObject,
   with
     adj_name 'illuminated',
-    noun_name 'breviary' 'manuscript' 'book' 'books' ,
+    noun_name 'breviary' 'manuscript' 'book' 'books' 'work' 'sample' ,
     description
       "Brother Wilfred's current work: an unfinished breviary for the office.
       The Latin text flows in careful Gothic script across vellum pages.
@@ -7308,11 +7309,18 @@ Object -> LibraryDoor "library door"                              ! >LibraryDoor
         }
     ],
     before [;
-      Open, Unlock:
-        if (BrWilfred in location && BrWilfred has awake) {
+      if (BrWilfred in location && BrWilfred has awake) {
+        if (action == ##Open or ##Unlock)
           "You wouldn't dare try to enter the Library with Brother Wilfred
           watching you. Access to the Library is restricted to him.";
-        }
+
+      }
+
+      if (location == Library) {
+        if (action == ##Lock or ##Unlock)
+          "The lock plate on this side of the door doesn't have an opening for
+          a key. It appears to be lockable only from the Scriptorium.";
+      }
     ],
   has
     scenery door openable ~open lockable locked;
@@ -8780,6 +8788,8 @@ Object -> MandrakeRoot "mandrake root"                        ! >MandrakeRoot
       Eat:
         "You've already learned from Brother Aelred enough to know you shouldn't
         eat this.";
+      Prune:
+        <<Take self>>;
     ],
     after [;
       Take:
@@ -9398,7 +9408,7 @@ Barrel -> TallowBarrel "tallow barrel"                          ! >TallowBarrel
 
 Barrel -> MustardBarrel "mustard barrel"                        ! >MustardBarrel
   with
-    name 'mustard',
+    name 'mustard' 'ground',
     simple_name 'mustard',
     description [;
       print
@@ -11974,6 +11984,13 @@ Object MercyOrJustice
 ];
 
 
+[ CommandsSub;
+  Help_specialCmds.description();
+  new_line;
+  Help_actions.description();
+];
+
+
 [ CreditsSub ;
   About_credits.description();
 ];
@@ -12133,6 +12150,7 @@ Verb meta 'about' *                        -> About;
 Verb meta 'accuse' 'solve'
   * topic                                  -> Solve
   *                                        -> Solve;
+Verb meta 'commands' *                     -> Commands;
 Verb meta 'credit' 'credits' *             -> Credits;
 Verb meta 'exits' *                        -> Exits;
 Verb meta 'help' *                         -> Help;

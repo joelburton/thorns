@@ -100,8 +100,12 @@ with description
   ^- Giger Kitty (@@64Giger_Kitty)
   ^- Andrew Plotkin (@@64zarf)
   ^- Pontus I (@@64pontusi)
-  ^- Tara McGrew (@@64vaporware)"
-  ;
+  ^- Tara McGrew (@@64vaporware)
+
+  BUG REPORTS:
+  ^- Phil Riley (@@64rileypb)
+  ^- Tabitha (@@64alyshkalia)
+  ";
 
 
 Option -> About_tech "Technical information"
@@ -1422,7 +1426,7 @@ the_hints
   ^- You are caught in the Undercroft by Hugh with evidence incriminating him
   on you. He kill you.
 
-  ^^- Main endings requiring enough evidence:^
+  ^^Main endings requiring enough evidence:^
   ^- You accuse Hugh during a service (the ~Justice~ end)
   ^- You confess to Wilfred, who offers you a choose between ~Justice~ or
   ~Mercy~. The Mercy ending allows Hugh to escape and not be executed for his
