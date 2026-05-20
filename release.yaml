@@ -1,0 +1,73 @@
+# Release description; use if-release to build site
+
+title: "Our Lady of Thorns"
+author: "Joel Burton"
+description: |
+  Welcome! In this Interactive Fiction game, you’re playing a novice monk
+  investigating a mysterious death at the priory of Our Lady of Thorns in
+  1346. Can you unravel the mystery before the end of Compline?
+ifid: "2BB74FC0-C667-485D-9D4A-0DB142E4FF57"
+story: thorns.z5
+site_cover_image: source/square.jpg
+
+site_colors:
+  bg: "#f5eedc"
+  fg: "#2a1f0e"
+  accent: "#6F4E37"
+source_theme: dracula-soft
+
+custom_templates:
+  index: source/index.njk
+  
+release_with:
+  how_to_play: true
+  postcard: true
+  intro_to_if: true
+  ifdb_link: true
+  walkthrough: unit/commands.rec
+  transcript: unit/current.scr
+  source:
+    - thorns.inf
+    - thorns-hints.inf
+    - thorns-quotes.inf
+    - thorns-abbrevs.inf
+    - extlib/adjectives.h
+    - extlib/hints.h
+    - extlib/menus.h
+    - extlib/monk_moves.h
+    - extlib/my_waittime.h
+    - extlib/printtime.h
+    - extlib/simple_quotes.h
+
+resources:
+  about: source/about.md
+  actions: source/actions.md
+  credits: source/credits.md
+  map: source/map.png
+  plot: source/plot.md
+  puzzles: source/puzzles.md
+  style: source/style.md
+  github: "https://github.com/joelburton/thorns"
+
+nav:
+  - index: "Thorns"
+  - play: "Play in browser"
+  - download: "Download game"
+  -
+  - how_to_play: "How to Play"
+  - postcard: "Postcard"
+  - intro_to_if: "Intro to IF"
+  -
+  - map: "Map"
+  - about: "About Thorns"
+  - actions: "Commands"
+  - credits: "Credits"
+  -
+  - walkthrough: "Walkthrough"
+  - transcript: "Transcript"
+  - ifdb_link: "Thorns at IFDB"
+  - github: "Git Repo"
+  -
+  - source: "Source"
+
+output: _site/

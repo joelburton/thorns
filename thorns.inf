@@ -9,13 +9,6 @@
 !% $ZCODE_COMPACT_GLOBALS=1
 !% $ZCODE_MAX_INLINE_STRING=9999
 
-! Constant DEBUG_GETNEXTNOUN;
-! Constant DEBUG_PARSEANDPERFORM;
-! Constant DEBUG_PARSENOUNPHRASE;
-! Constant DEBUG_PARSEPATTERN;
-! Constant DEBUG_PARSETOKEN;
-! Constant DEBUG_SCOPE;
-
 !===============================================================================
 !=========================================================================== TOC
 !
@@ -58,7 +51,7 @@ Constant Headline
   ^by Joel Burton <joel@@64joelburton.com>
   ^Site: https://lady-of-thorns.netlify.app^";
 Release 2;
-Array UUID_ARRAY string "UUID://2BB74FC0-C667-485D-9D4A-0DB142E4FF57";
+Array UUID_ARRAY string "UUID://2BB74FC0-C667-485D-9D4A-0DB142E4FF57//";
 #IfDef UUID_ARRAY; #EndIf;
 
 Constant CUSTOM_ABBREVIATIONS;

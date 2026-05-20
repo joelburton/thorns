@@ -1,0 +1,29 @@
+{% extends "base.njk" %}
+{% block body %}
+            <div class="title-block">
+{%- if has_cover %}
+                <img class="cover" src="cover{{ cover_ext }}" alt="Cover art for {{ config.title }}">
+{%- endif %}
+                <h1>{{ config.title }}</h1>
+{%- if config.author %}
+                <p class="byline">by {{ config.author }}</p>
+{%- endif %}
+{%- if config.description %}
+                <p class="description">{{ config.description }}</p>
+{%- endif %}
+
+<a href="map.png"><img src="map.png" style="max-width: 25em; border: solid 1px black"></a>
+
+{%- if config.ifid %}
+                <p class="ifid"><small>IFID: <code>{{ config.ifid }}</code></small></p>
+{%- endif %}
+                <div class="cta-buttons">
+{%- if config.release_with.play != false %}
+                    <a class="play-link" href="play.html">Play in browser</a>
+{%- endif %}
+{%- if config.release_with.download != false %}
+                    <a class="download-link" href="{{ story_filename }}" download>Download</a>
+{%- endif %}
+                </div>
+            </div>
+{% endblock %}

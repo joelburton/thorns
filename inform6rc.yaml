@@ -1,0 +1,32 @@
+compiler: ~/if/if-ls3/Inform6/inform6
+switches: -DSG
+libraryPath: ~/if/thorns2/lib/
+externalDefines:
+  - HAS_HINTS
+  - FULL_DEBUG
+  - TARGET_ZCODE
+  - MANUAL_PRONOUNS
+  - COLOR
+  - COLOUR
+  - DIALECT_US
+  - NO_PLACES
+  - OOPS_CHECK
+  - NO_SCORE
+  - INFIX
+  - SERIAL_COMMAS
+  - OPTIONAL_FULL_DIRECTIONS
+  - OPTIONAL_LANGUAGE_NUMBER
+  - NO_TAKE_ALL
+  - TRADITIONAL_TAKE_ALL
+  - WITHOUT_DIRECTIONS
+  - NI_BUILD_COUNT
+  - infix__watching
+  - NOINITIAL_LOOK
+  - PUNYINFORM_MAJOR_VERSION
+  - PUNYINFORM_MINOR_VERSION
+  - VN_1633
+  - VN_1630
+  - VN_1610
+  - NITFOL_HOOKS
+
+thorns.inf:
