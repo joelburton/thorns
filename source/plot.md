@@ -1,7 +1,3 @@
----
-title: Lady of Thorns - Plot
----
-
 # Plot
 
 ## Characters

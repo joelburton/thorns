@@ -35,3 +35,12 @@ The monks of Our Lady of Thorns gather eight times each day to pray and sing the
 
 **Compline** *(before sleep)*: The final office, intimate and protective in character. Very short, always the same psalms — so familiar that monks could pray them in near-darkness. **The game ends at the close of Compline.**
 
+## Deep Background
+
+If you're interested in the authoring process of interactive fiction, you
+might find these useful (but they are full of spoilers, and will ruin the game)
+
+- [Puzzles](puzzles.html): Information about the puzzles
+- [Style Guide](style.html): My style guide for writing this
+- [Plot](plot.html): Where I sketched out the plot
+

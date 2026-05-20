@@ -1,7 +1,3 @@
----
-title: Lady of Thorns - Style
----
-
 # Style
 
 ## Setting

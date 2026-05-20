@@ -65,24 +65,11 @@ endef
 
 # Gather game + all assets and upload
 
-%.html: %.inf docs/*.md Makefile %.unit
-	make $*.z5
-	cp $*.z5 html/
-	make $*.debug.z5
-	cp $*.debug.z5 html/$*-debug.z5
-	pygmentize -f html -O full -l inform6 thorns.inf > html/source.html
-	pandoc -H source/styles.html -s docs/puzzles.md > html/puzzles.html
-	pandoc -H source/styles.html -s docs/plot.md > html/plot.html
-	pandoc -H source/styles.html -s docs/style.md > html/style.html
-	pandoc -H source/styles.html -s docs/index.md > html/index.html
-	cp unit/commands.rec html/walkthrough.txt
-	tail +8 unit/current.scr |  awk -f scripts/tidy.awk \
-		| python3 scripts/transcript_to_html.py > html/walkthrough.html
-	cp source/{intro.pdf,square.jpg,large.jpg,play.html,styles.html} html/
-	cp source/map.png html/map
+%.html: %.inf source/*.md Makefile %.unit
+	if-release build
 
 %.upload: %.html
-	cd html && netlify deploy -O -p -d .
+	cd _site && netlify deploy -O -p -d .
 	rm *.z5
 
 
