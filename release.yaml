@@ -18,7 +18,7 @@ source_theme: dracula-soft
 
 custom_templates:
   index: source/index.njk
-  
+
 release_with:
   how_to_play: true
   postcard: true
@@ -38,6 +38,7 @@ release_with:
     - extlib/my_waittime.h
     - extlib/printtime.h
     - extlib/simple_quotes.h
+    - release.yaml
 
 resources:
   about: source/about.md
